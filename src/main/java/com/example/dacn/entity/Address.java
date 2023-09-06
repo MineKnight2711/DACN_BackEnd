@@ -24,5 +24,5 @@ public class Address {
     private boolean defaultAddress;
     @ManyToOne
     @JoinColumn(name = "accountID")
-    private Account accounts;
+    private Account account;
 }

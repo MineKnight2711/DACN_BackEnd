@@ -43,7 +43,7 @@ public class Account {
     private String address;
     @Column(name = "imageUrl")
     private String imageUrl;
-    @OneToMany (mappedBy = "accounts", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "account", cascade = CascadeType.ALL)
     private List<Address> addresses;
 //    @Column(name = "isFingerPrintAuthenticated")
 //    private boolean isFingerPrintAuthenticated;

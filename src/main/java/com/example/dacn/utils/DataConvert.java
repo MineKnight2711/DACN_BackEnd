@@ -1,5 +1,7 @@
 package com.example.dacn.utils;
 
+import org.springframework.context.annotation.Bean;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
