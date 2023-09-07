@@ -12,12 +12,15 @@ public class AccountService {
     private AccountRepository accountRepository;
 
 
-    public Account createAccount(Account account){
+    public Account createAccount(Account account)
+    {
         DataConvert dataConvert=new DataConvert();
-        if(account.getBirthday()!=null){
+        if(account.getBirthday()!=null)
+        {
             account.setBirthday(dataConvert.parseBirthday(account.getBirthday()));
         }
-        else{
+        else
+        {
             account.setBirthday(null);
         }
         accountRepository.save(account);

@@ -23,17 +23,18 @@ public class DishService {
     {
         try
         {
-            Category category=categoryService.findById(dishDTO.getCategoryID());
-            if(category==null)
+            ResponseModel categoryResponse=categoryService.findById(dishDTO.getCategoryID());
+            if(categoryResponse.getData()==null)
             {
                 return new ResponseModel("CategoryNotFound",null);
             }
             Dish newDish = dishDTO.convertToEntity();
-            newDish.setCategory(category);
+            newDish.setCategory((Category) categoryResponse.getData());
             dishRepository.save(newDish);
 
             return new ResponseModel("Success",newDish);
-        }catch (Exception e)
+        }
+        catch (Exception e)
         {
             return new ResponseModel("Fail",null);
         }

@@ -16,7 +16,8 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
     @PostMapping
-    public Account createAccount(@ModelAttribute Account account){
+    public Account createAccount(@ModelAttribute Account account)
+    {
         return accountService.createAccount(account);
     }
 }
