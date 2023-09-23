@@ -1,11 +1,13 @@
 package com.example.dacn.modules.account.repository;
 
 import com.example.dacn.entity.Account;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long>
+public interface AccountRepository extends JpaRepository<Account, String>
 {
-
+    @Query("SELECT a.password FROM Account a WHERE a.email = :email")
+    String getPasswordByEmail(@Param("email") String email);
 }
