@@ -54,4 +54,9 @@ public class Account {
     @JsonIgnore
     @JsonManagedReference
     private List<VoucherAccount> voucherAccounts;
+
+    @OneToMany
+    @JsonIgnore
+    @JsonManagedReference
+    private List<Cart> carts;
 }

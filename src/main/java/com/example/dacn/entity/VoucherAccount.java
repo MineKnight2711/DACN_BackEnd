@@ -12,14 +12,13 @@ import lombok.Setter;
 @Table(name = "Voucher_Account")
 public class VoucherAccount {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long voucherAccountID;
-
     @ManyToOne
     @JoinColumn(name = "voucherID",nullable = false)
     private Voucher voucher;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "accountID",nullable = false)
     private Account account;
+
 }

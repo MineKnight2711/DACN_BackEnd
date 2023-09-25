@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AccountService {
     @Autowired
@@ -59,4 +61,14 @@ public class AccountService {
         return new ResponseModel("Fail",null);
     }
 
+    public Account findById(String accountID)
+    {
+        Optional<Account> account=accountRepository.findById(accountID);
+
+        if(account.isEmpty())
+        {
+            return null;
+        }
+        return account.get();
+    }
 }
