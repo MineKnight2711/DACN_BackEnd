@@ -28,19 +28,19 @@ public class AccountDTO
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
     private String gender;
-    private String address;
+    private String phoneNumber;
     private String imageUrl;
 
     public AccountDTO() {}
 
-    public AccountDTO(String accountID, String password, String fullName, String email, Date birthday, String gender, String address, String imageUrl) {
+    public AccountDTO(String accountID, String password, String fullName, String email, Date birthday, String gender,String phoneNumber, String imageUrl) {
         this.accountID = accountID;
         this.fullName = fullName;
         this.password=password;
         this.email = email;
         this.birthday = birthday;
+        this.phoneNumber = phoneNumber;
         this.gender = gender;
-        this.address = address;
         this.imageUrl = imageUrl;
     }
     private String encryptPassword(String passWord)
@@ -57,7 +57,7 @@ public class AccountDTO
         account.setEmail(this.email);
         account.setBirthday(this.birthday);
         account.setGender(this.gender);
-        account.setAddress(this.address);
+        account.setPhoneNumber(this.phoneNumber);
         account.setImageUrl(this.imageUrl);
         account.setPassword(encryptPassword(this.password));
         return account;

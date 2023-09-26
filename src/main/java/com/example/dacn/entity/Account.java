@@ -39,21 +39,23 @@ public class Account {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthday")
     private Date birthday;
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
     @Column(name = "gender")
     private String gender;
-    @Column(name = "address")
-    private String address;
     @Column(name = "imageUrl")
     private String imageUrl;
     @OneToMany (mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JsonManagedReference
     private List<Address> addresses;
 //    @Column(name = "isFingerPrintAuthenticated")
 //    private boolean isFingerPrintAuthenticated;
 
-    @OneToMany(mappedBy = "account",cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "account", cascade = CascadeType.ALL)
     @JsonIgnore
     @JsonManagedReference
-    private List<VoucherAccount> voucherAccounts;
+    private List<Voucher> vouchers;
 
     @OneToMany
     @JsonIgnore

@@ -37,8 +37,8 @@ public class Voucher {
     private String voucherName;
     @Column(name = "discount")
     private String discount;
-    @OneToMany(mappedBy = "voucher",cascade = CascadeType.ALL)
-    @JsonIgnore
+    @ManyToOne
     @JsonManagedReference
-    private List<VoucherAccount> voucherAccounts;
+    @JoinColumn(name = "accountID",nullable = true)
+    private Account account;
 }

@@ -17,6 +17,7 @@ public class AccountController {
     @PostMapping
     public ResponseModel createAccount(@ModelAttribute AccountDTO dto)
     {
+        System.out.println(dto.getPassword());
         return accountService.createAccount(dto);
     }
     @GetMapping("/login/{email}")
