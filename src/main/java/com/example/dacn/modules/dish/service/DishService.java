@@ -1,5 +1,6 @@
 package com.example.dacn.modules.dish.service;
 
+import com.example.dacn.entity.Account;
 import com.example.dacn.entity.Category;
 import com.example.dacn.entity.Dish;
 import com.example.dacn.entity.ResponseModel;
@@ -38,5 +39,16 @@ public class DishService {
         {
             return new ResponseModel("Fail",null);
         }
+    }
+
+    public Dish findById(Long dishID)
+    {
+        Optional<Dish> dish=dishRepository.findById(dishID);
+
+        if(dish.isEmpty())
+        {
+            return null;
+        }
+        return dish.get();
     }
 }

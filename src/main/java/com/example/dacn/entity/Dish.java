@@ -1,5 +1,6 @@
 package com.example.dacn.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Min;
+import java.util.List;
 
 @Data
 @Getter
@@ -29,9 +31,14 @@ public class Dish {
     @Column(name = "imageUrl")
     private String imageUrl;
 
+    //Quan hệ 1 nhiều tới bảng category
     @ManyToOne
     @JsonManagedReference
     @JoinColumn(name = "categoryID",nullable = true)
     private Category category;
-
+    //Quan hệ 1 nhiều tới bảng cart
+    @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JsonManagedReference
+    private List<Cart> carts;
 }

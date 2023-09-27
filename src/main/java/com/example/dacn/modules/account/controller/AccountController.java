@@ -1,12 +1,11 @@
 package com.example.dacn.modules.account.controller;
 
 import com.example.dacn.entity.Account;
+import com.example.dacn.entity.ResponseModel;
+import com.example.dacn.modules.account.dto.AccountDTO;
 import com.example.dacn.modules.account.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -16,8 +15,15 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
     @PostMapping
-    public Account createAccount(@ModelAttribute Account account)
+    public ResponseModel createAccount(@ModelAttribute AccountDTO dto)
     {
-        return accountService.createAccount(account);
+        System.out.println(dto.getPassword());
+        return accountService.createAccount(dto);
     }
+    @GetMapping("/login/{email}")
+    public ResponseModel login(@PathVariable String email,@RequestParam String password)
+    {
+        return accountService.login(email,password);
+    }
+
 }

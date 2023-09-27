@@ -1,6 +1,8 @@
 package com.example.dacn.entity;
 
 import com.example.dacn.utils.DatetimeDeserialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
@@ -22,8 +24,8 @@ import java.util.List;
 @Table(name="Account")
 public class Account {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long accountID;
+//    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private String accountID;
     @Column(name = "fullName",length = 200)
     private String fullName;
     @Column(name = "password",length = 500)
@@ -37,14 +39,26 @@ public class Account {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthday")
     private Date birthday;
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
     @Column(name = "gender")
     private String gender;
-    @Column(name = "address")
-    private String address;
     @Column(name = "imageUrl")
     private String imageUrl;
     @OneToMany (mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JsonManagedReference
     private List<Address> addresses;
 //    @Column(name = "isFingerPrintAuthenticated")
 //    private boolean isFingerPrintAuthenticated;
+
+    @OneToMany (mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JsonManagedReference
+    private List<Voucher> vouchers;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JsonManagedReference
+    private List<Cart> carts;
 }
