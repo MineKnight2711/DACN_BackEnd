@@ -30,13 +30,14 @@ public class Dish {
     private int inStock;
     @Column(name = "imageUrl")
     private String imageUrl;
+
     //Quan hệ 1 nhiều tới bảng category
     @ManyToOne
     @JsonManagedReference
     @JoinColumn(name = "categoryID",nullable = true)
     private Category category;
     //Quan hệ 1 nhiều tới bảng cart
-    @OneToMany
+    @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL)
     @JsonIgnore
     @JsonManagedReference
     private List<Cart> carts;
