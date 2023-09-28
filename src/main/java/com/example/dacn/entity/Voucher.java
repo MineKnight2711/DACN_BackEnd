@@ -37,7 +37,7 @@ public class Voucher {
     @Column(name = "voucherName")
     private String voucherName;
     @Column(name = "discount")
-    private String discount;
+    private double discount;
     @ManyToOne
     @JsonManagedReference
     @JoinColumn(name = "accountID",nullable = true)
