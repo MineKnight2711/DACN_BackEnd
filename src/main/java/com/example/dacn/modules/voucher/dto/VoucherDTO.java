@@ -1,45 +1,44 @@
-package com.example.dacn.entity;
+package com.example.dacn.modules.voucher.dto;
 
+import com.example.dacn.entity.Account;
+import com.example.dacn.entity.Review;
+import com.example.dacn.entity.Voucher;
 import com.example.dacn.utils.DatetimeDeserialize;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import java.util.List;
-
 
 @Data
 @Getter
 @Setter
-@Entity(name = "Voucher")
-@Table(name = "Voucher")
-public class Voucher {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class VoucherDTO {
     private Long voucherID;
-    @Column(name = "startDate")
-    @JsonProperty("startDate")
+
     @JsonDeserialize(using = DatetimeDeserialize.class)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
-    @Column(name = "expDate")
-    @JsonProperty("expDate")
+
     @JsonDeserialize(using = DatetimeDeserialize.class)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expDate;
-    @Column(name = "voucherName")
     private String voucherName;
-    @Column(name = "discount")
     private String discount;
-    @ManyToOne
-    @JsonManagedReference
-    @JoinColumn(name = "accountID",nullable = true)
-    private Account account;
+
+    public Voucher toEntity() {
+        Voucher voucher = new Voucher();
+        voucher.setStartDate(this.startDate);
+        voucher.setExpDate(this.expDate);
+        voucher.setVoucherName(this.voucherName);
+        voucher.setDiscount(this.discount);
+        return voucher;
+    }
 }
