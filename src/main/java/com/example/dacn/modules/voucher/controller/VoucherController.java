@@ -19,5 +19,8 @@ public class VoucherController
     public ResponseModel createVoucher(@PathVariable("accountID") String accountID, @ModelAttribute VoucherDTO dto) {
         return voucherService.createVoucher(accountID, dto);
     }
-
+    @GetMapping("/all")
+    public ResponseModel getAllVouchersSortedByDiscount() {
+        return voucherService.getAllVouchersSortedByDiscount();
+    }
 }
