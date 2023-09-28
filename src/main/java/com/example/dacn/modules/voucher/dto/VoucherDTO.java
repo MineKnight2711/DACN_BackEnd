@@ -31,7 +31,7 @@ public class VoucherDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expDate;
     private String voucherName;
-    private String discount;
+    private double discount;
 
     public Voucher toEntity() {
         Voucher voucher = new Voucher();

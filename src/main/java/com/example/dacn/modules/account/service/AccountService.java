@@ -3,6 +3,7 @@ package com.example.dacn.modules.account.service;
 import com.example.dacn.entity.Account;
 import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.modules.account.dto.AccountDTO;
+import com.example.dacn.modules.account.dto.ChangePassDTO;
 import com.example.dacn.modules.account.repository.AccountRepository;
 import com.example.dacn.utils.DataConvert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,27 @@ public class AccountService {
     {
         return BCrypt.checkpw(passwordInput,passwordHashed);
     }
-
+    public ResponseModel changePassword(ChangePassDTO changePassDTO)
+    {
+        String passwordHashed=accountRepository.getPasswordByEmail(changePassDTO.getEmail());
+        if(passwordHashed==null||passwordHashed=="")
+        {
+            return new ResponseModel("AccountNotFound",null);
+        }
+        if(BCrypt.checkpw(changePassDTO.getOldPassword(),passwordHashed))
+        {
+            Account acc=accountRepository.findByEmail(changePassDTO.getEmail());
+            String salt = BCrypt.gensalt();
+            String newHashedPassword= BCrypt.hashpw(changePassDTO.getNewPassword(), salt);
+            acc.setPassword(newHashedPassword);
+            accountRepository.save(acc);
+            return new ResponseModel("Success",null);
+        }
+        else
+        {
+            return new ResponseModel("WrongPass",null);
+        }
+    }
     public ResponseModel login(String email,String password)
     {
         String hashedPassword= accountRepository.getPasswordByEmail(email);

@@ -3,6 +3,7 @@ package com.example.dacn.modules.account.controller;
 import com.example.dacn.entity.Account;
 import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.modules.account.dto.AccountDTO;
+import com.example.dacn.modules.account.dto.ChangePassDTO;
 import com.example.dacn.modules.account.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +26,9 @@ public class AccountController {
     {
         return accountService.login(email,password);
     }
-
+    @PutMapping("/change-password")
+    public ResponseModel changePassword(@ModelAttribute ChangePassDTO changePassDTO)
+    {
+        return accountService.changePassword(changePassDTO);
+    }
 }
