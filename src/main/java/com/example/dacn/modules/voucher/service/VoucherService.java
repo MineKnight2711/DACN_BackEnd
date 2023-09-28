@@ -41,7 +41,7 @@ public class VoucherService {
 
     public ResponseModel getAllVouchersSortedByDiscount() {
 
-        return new ResponseModel("SortList", voucherRepository.findAllByOrderByDiscountDesc());
+        return new ResponseModel("SortList", voucherRepository.f());
     }
 //    private List<VoucherDTO> convertToDTOs(List<Voucher> vouchers) {
 //        List<VoucherDTO> voucherDTOs = new ArrayList<>();
