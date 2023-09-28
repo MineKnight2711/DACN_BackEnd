@@ -3,15 +3,14 @@ package com.example.dacn.modules.address.service;
 import com.example.dacn.entity.Account;
 import com.example.dacn.entity.Address;
 import com.example.dacn.entity.ResponseModel;
-import com.example.dacn.entity.Review;
 import com.example.dacn.modules.account.service.AccountService;
 import com.example.dacn.modules.address.dto.AddressDTO;
 import com.example.dacn.modules.address.repository.AddressRepository;
-import com.example.dacn.modules.review.dto.ReviewDTO;
-import com.example.dacn.modules.review.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class AddressService {
@@ -42,6 +41,18 @@ public class AddressService {
             System.out.println("An error occurred: " + ex.toString());
             return new ResponseModel("SomethingWrong", null);
         }
+    }
+    public List<Address> getAllAddresses() {
+        // lay tat ca danh sach dia chi
+        List<Address> allAddresses = addressRepository.findAll();
+        // Sắp xếp các địa chỉ sao cho defaultAddress là true được đưa lên đầu danh sách
+        Collections.sort(allAddresses, (a1, a2) -> {
+            if (a1.isDefaultAddress() == a2.isDefaultAddress()) {
+                return 0;// Giữ nguyên vị trí nếu defaultAddress giống nhau
+            }
+            return a1.isDefaultAddress() ? -1 : 1; // Đưa địa chỉ với defaultAddress là true lên đầu
+        });
+        return allAddresses;
     }
 }
 
