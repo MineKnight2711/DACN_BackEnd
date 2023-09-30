@@ -43,17 +43,5 @@ public class VoucherService {
 
         return new ResponseModel("SortList", voucherRepository.findAllByOrderByDiscountDesc());
     }
-//    private List<VoucherDTO> convertToDTOs(List<Voucher> vouchers) {
-//        List<VoucherDTO> voucherDTOs = new ArrayList<>();
-//        for (Voucher voucher : vouchers) {
-//            VoucherDTO voucherDTO = new VoucherDTO();
-//            voucherDTO.setVoucherID(voucher.getVoucherID());
-//            voucherDTO.setStartDate(voucher.getStartDate());
-//            voucherDTO.setExpDate(voucher.getExpDate());
-//            voucherDTO.setVoucherName(voucher.getVoucherName());
-//            voucherDTO.setDiscount(voucher.getDiscount());
-//            voucherDTOs.add(voucherDTO);
-//        }
-//        return voucherDTOs;
-//    }
+
 }

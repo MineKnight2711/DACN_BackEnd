@@ -13,3 +13,4 @@ public interface VoucherRepository extends JpaRepository<Voucher,Long> {
     @Query("SELECT v FROM Voucher v ORDER BY v.discount DESC")
     List<Voucher> findAllByOrderByDiscountDesc();
 }
+
