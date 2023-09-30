@@ -1,5 +1,4 @@
 package com.example.dacn.modules.account.service;
-
 import com.example.dacn.entity.Account;
 import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.modules.account.dto.AccountDTO;
@@ -9,7 +8,6 @@ import com.example.dacn.utils.DataConvert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -70,14 +68,14 @@ public class AccountService {
     }
     public ResponseModel login(String email,String password)
     {
-        String hashedPassword= accountRepository.getPasswordByEmail(email);
-        if(hashedPassword==null)
+        Account account= accountRepository.findByEmail(email);
+        if(account==null)
         {
             return new ResponseModel("AccountNotFound",null);
         }
-        if(validatePassword(hashedPassword,password))
+        if(validatePassword(account.getPassword(),password))
         {
-            return new ResponseModel("Success",null);
+            return new ResponseModel("Success",account);
         }
         return new ResponseModel("Fail",null);
     }

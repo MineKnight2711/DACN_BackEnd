@@ -22,8 +22,7 @@ import java.util.List;
 @Table(name = "Voucher")
 public class Voucher {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long voucherID;
+    private String voucherID;
     @Column(name = "startDate")
     @JsonProperty("startDate")
     @JsonDeserialize(using = DatetimeDeserialize.class)
@@ -39,7 +38,11 @@ public class Voucher {
     @Column(name = "discount")
     private double discount;
     @ManyToOne
-    @JsonManagedReference
-    @JoinColumn(name = "accountID",nullable = true)
+    @JoinColumn(name = "accountID",nullable = false)
     private Account account;
+    //Quan hệ 1 nhiều tới bảng order
+    @OneToMany(mappedBy = "voucher", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JsonManagedReference
+    private List<Orders> orders;
 }

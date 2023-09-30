@@ -41,4 +41,9 @@ public class Dish {
     @JsonIgnore
     @JsonManagedReference
     private List<Cart> carts;
+    //Quan hệ 1 nhiều tới bảng orderdetails
+//    @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    @JsonManagedReference
+//    private List<OrderDetail> orderDetails;
 }

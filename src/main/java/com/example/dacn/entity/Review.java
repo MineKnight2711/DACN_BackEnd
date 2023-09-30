@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 
 @Data
@@ -18,8 +17,7 @@ import java.util.Date;
 @Table(name = "Review")
 public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewID;
+    private String reviewID;
     @Column(name = "score")
     private double score;
     @Column(name = "feedBack",length = 500)
@@ -30,6 +28,10 @@ public class Review {
     @Column(name = "dateRecorded",length = 500)
     private Date dateRecorded;
     @ManyToOne
-    @JoinColumn(name = "accountID")
+    @JoinColumn(name = "accountID",nullable = false)
     private Account account;
+    //Quan hệ 1 nhiều tới bảng order
+    @ManyToOne
+    @JoinColumn(name = "orderID", nullable = false)
+    private Orders order_review;
 }
