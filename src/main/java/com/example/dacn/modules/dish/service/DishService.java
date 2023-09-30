@@ -40,6 +40,27 @@ public class DishService {
             return new ResponseModel("Fail",null);
         }
     }
+    public ResponseModel updateDish(DishDTO dishDTO) {
+        try {
+            ResponseModel categoryResponse = categoryService.findById(dishDTO.getCategoryID());
+            if (categoryResponse.getData() == null) {
+                return new ResponseModel("CategoryNotFound", null);
+            }
+
+            Optional<Dish> optionalDish = dishRepository.findById(dishDTO.getDishID());
+            if (optionalDish.isPresent()) {
+                Dish dish = optionalDish.get();
+                dishDTO.updateDishToEntity(dish);
+                dish.setCategory((Category) categoryResponse.getData());
+                dishRepository.save(dish);
+                return new ResponseModel("Success", dish);
+            } else {
+                return new ResponseModel("DishNotFound", null);
+            }
+        } catch (Exception e) {
+            return new ResponseModel("Fail", null);
+        }
+    }
 
     public Dish findById(Long dishID)
     {

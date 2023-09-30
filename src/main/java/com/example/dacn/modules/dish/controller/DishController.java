@@ -5,6 +5,7 @@ import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.modules.dish.dto.DishDTO;
 import com.example.dacn.modules.dish.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,5 +17,10 @@ public class DishController {
     public ResponseModel addDish(@ModelAttribute DishDTO dishDTO)
     {
         return dishService.addDish(dishDTO);
+    }
+    @PutMapping("/{dishId}")
+    public ResponseModel updateDish(@PathVariable("dishId") Long dishId, @ModelAttribute DishDTO dishDTO) {
+        dishDTO.setDishID(dishId);
+        return dishService.updateDish(dishDTO);
     }
 }

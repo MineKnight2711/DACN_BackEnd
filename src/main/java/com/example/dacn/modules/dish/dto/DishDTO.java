@@ -26,4 +26,12 @@ public class DishDTO {
         dish.setImageUrl(this.imageUrl);
         return dish;
     }
+    public void updateDishToEntity(Dish dish) {
+        dish.setDishName(this.dishName);
+        dish.setDescription(this.description);
+        dish.setPrice(this.price);
+        dish.setInStock(this.inStock);
+        dish.setImageUrl(this.imageUrl);
+
+    }
 }
