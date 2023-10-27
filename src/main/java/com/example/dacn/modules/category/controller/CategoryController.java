@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+    @GetMapping
+    public ResponseModel getAllCategory()
+    {
+        return categoryService.getAllCategory();
+    }
     @GetMapping("/{categoryID}")
     public ResponseModel getCategoryById(@PathVariable Long categoryID)
     {

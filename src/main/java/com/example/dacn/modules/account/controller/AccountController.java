@@ -21,6 +21,11 @@ public class AccountController {
         System.out.println(dto.getPassword());
         return accountService.createAccount(dto);
     }
+    @GetMapping("/{accountId}")
+    public ResponseModel getAccountById(@PathVariable String accountId)
+    {
+        return accountService.getAccountById(accountId);
+    }
     @GetMapping("/login/{email}")
     public ResponseModel login(@PathVariable String email,@RequestParam String password)
     {

@@ -10,12 +10,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CategoryDTO {
-    private Long categoryID;
+    private String categoryID;
     private String categoryName;
+    private String imageUrl;
 
     public Category convertToEntity() {
         Category category = new Category();
+        category.setCategoryID(this.categoryID);
         category.setCategoryName(this.categoryName);
+        category.setImageUrl(this.imageUrl);
         return category;
     }
 }

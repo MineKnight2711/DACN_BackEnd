@@ -40,14 +40,14 @@ public class DishService {
             return new ResponseModel("Fail",null);
         }
     }
-    public ResponseModel updateDish(DishDTO dishDTO) {
+    public ResponseModel updateDish(Long dishID,DishDTO dishDTO) {
         try {
             ResponseModel categoryResponse = categoryService.findById(dishDTO.getCategoryID());
             if (categoryResponse.getData() == null) {
                 return new ResponseModel("CategoryNotFound", null);
             }
 
-            Optional<Dish> optionalDish = dishRepository.findById(dishDTO.getDishID());
+            Optional<Dish> optionalDish = dishRepository.findById(dishID);
             if (optionalDish.isPresent()) {
                 Dish dish = optionalDish.get();
                 dishDTO.updateDishToEntity(dish);

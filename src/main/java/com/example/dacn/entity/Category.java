@@ -15,10 +15,11 @@ import java.util.List;
 @Table(name="Category")
 public class Category {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long categoryID;
+    private String categoryID;
     @Column(name = "categoryName")
     private String categoryName;
+    @Column(name = "imageUrl")
+    private String imageUrl;
 
     @OneToMany (mappedBy = "category", cascade = CascadeType.ALL)
     @JsonIgnore

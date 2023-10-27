@@ -20,7 +20,6 @@ public class DishController {
     }
     @PutMapping("/{dishId}")
     public ResponseModel updateDish(@PathVariable("dishId") Long dishId, @ModelAttribute DishDTO dishDTO) {
-        dishDTO.setDishID(dishId);
-        return dishService.updateDish(dishDTO);
+        return dishService.updateDish(dishId,dishDTO);
     }
 }

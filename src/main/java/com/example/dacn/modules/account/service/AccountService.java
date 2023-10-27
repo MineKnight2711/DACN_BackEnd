@@ -15,9 +15,19 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
+    public ResponseModel getAccountById(String id)
+    {
+        Optional<Account> account=accountRepository.findById(id);
+        if(account.isEmpty())
+        {
+            return new ResponseModel("NoAccount",null);
+        }
+        return new ResponseModel("Success",account.get());
+
+    }
+
     public ResponseModel createAccount(AccountDTO dto)
     {
-
         DataConvert dataConvert=new DataConvert();
         dto.setAccountID("");
         if(dto.getBirthday()!=null)
