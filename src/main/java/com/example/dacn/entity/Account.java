@@ -21,7 +21,7 @@ import java.util.List;
 @Table(name="Account")
 public class Account {
     @Id
-//    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "accountid")
     private String accountID;
     @Column(name = "fullName",length = 200)
     private String fullName;

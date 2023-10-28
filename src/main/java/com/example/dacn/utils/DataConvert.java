@@ -1,12 +1,13 @@
 package com.example.dacn.utils;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-
+@Service
 public class DataConvert {
     public Date parseBirthday(Date birthday) {
         TimeZone timeZone = TimeZone.getTimeZone("Asia/Ho_Chi_Minh");
