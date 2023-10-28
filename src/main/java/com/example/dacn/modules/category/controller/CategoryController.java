@@ -18,7 +18,7 @@ public class CategoryController {
         return categoryService.getAllCategory();
     }
     @GetMapping("/{categoryID}")
-    public ResponseModel getCategoryById(@PathVariable Long categoryID)
+    public ResponseModel getCategoryById(@PathVariable String categoryID)
     {
         return categoryService.findById(categoryID);
     }

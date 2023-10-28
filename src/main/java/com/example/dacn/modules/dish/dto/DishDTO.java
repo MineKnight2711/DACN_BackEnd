@@ -15,7 +15,7 @@ public class DishDTO {
     private double price;
     private int inStock;
     private String imageUrl;
-    private Long categoryID;
+    private String categoryID;
 
     public Dish convertToEntity() {
         Dish dish = new Dish();

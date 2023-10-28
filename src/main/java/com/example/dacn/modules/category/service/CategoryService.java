@@ -27,9 +27,9 @@ public class CategoryService {
         }
         return new ResponseModel("Empty",null);
     }
-    public ResponseModel findById(Long categoryID)
+    public ResponseModel findById(String categoryID)
     {
-       Optional<Category>  category=categoryRepository.findById(categoryID);
+       Optional<Category> category=categoryRepository.findById(categoryID);
         if (category.isPresent())
         {
             return new ResponseModel("Found",category.get());
