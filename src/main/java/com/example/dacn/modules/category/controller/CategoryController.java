@@ -5,6 +5,7 @@ import com.example.dacn.modules.category.dto.CategoryDTO;
 import com.example.dacn.modules.category.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/category")
@@ -17,13 +18,13 @@ public class CategoryController {
         return categoryService.getAllCategory();
     }
     @GetMapping("/{categoryID}")
-    public ResponseModel getCategoryById(@PathVariable Long categoryID)
+    public ResponseModel getCategoryById(@PathVariable String categoryID)
     {
         return categoryService.findById(categoryID);
     }
     @PostMapping
-    public ResponseModel createCategory(@ModelAttribute CategoryDTO categoryDTO)
+    public ResponseModel createCategory(@RequestParam("file") MultipartFile file, @ModelAttribute CategoryDTO categoryDTO)
     {
-        return categoryService.createCategory(categoryDTO);
+        return categoryService.createCategory(file,categoryDTO);
     }
 }

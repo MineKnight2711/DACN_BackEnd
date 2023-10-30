@@ -14,6 +14,8 @@ import java.util.Optional;
 public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private DataConvert dataConvert;
 
     public ResponseModel getAccountById(String id)
     {
@@ -25,10 +27,8 @@ public class AccountService {
         return new ResponseModel("Success",account.get());
 
     }
-
-    public ResponseModel createAccount(AccountDTO dto)
+    public ResponseModel  createAccount(AccountDTO dto)
     {
-        DataConvert dataConvert=new DataConvert();
         dto.setAccountID("");
         if(dto.getBirthday()!=null)
         {
@@ -40,6 +40,10 @@ public class AccountService {
         }
         try
         {
+            if(accountRepository.findByEmail(dto.getEmail())!=null)
+            {
+                return new ResponseModel("EmailAlreadyExist",dto.getEmail());
+            }
             Account result= accountRepository.save(dto.toEntity());
             return new ResponseModel("Success",result);
         }
