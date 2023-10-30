@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 public class CartDTO {
-    private Long dishID;
+    private String dishID;
     private String accountID;
     private int quantity;
     private double total;

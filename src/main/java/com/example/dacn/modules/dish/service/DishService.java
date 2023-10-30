@@ -22,6 +22,7 @@ public class DishService {
 
     public ResponseModel addDish(DishDTO dishDTO)
     {
+        dishDTO.setDishID("");
         try
         {
             ResponseModel categoryResponse=categoryService.findById(dishDTO.getCategoryID());
@@ -37,10 +38,11 @@ public class DishService {
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             return new ResponseModel("Fail",null);
         }
     }
-    public ResponseModel updateDish(Long dishID,DishDTO dishDTO) {
+    public ResponseModel updateDish(String dishID,DishDTO dishDTO) {
         try {
             ResponseModel categoryResponse = categoryService.findById(dishDTO.getCategoryID());
             if (categoryResponse.getData() == null) {
@@ -62,7 +64,7 @@ public class DishService {
         }
     }
 
-    public Dish findById(Long dishID)
+    public Dish findById(String dishID)
     {
         Optional<Dish> dish=dishRepository.findById(dishID);
 
