@@ -11,6 +11,7 @@ import com.example.dacn.modules.dish.repository.DishRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -63,7 +64,7 @@ public class DishService {
             return new ResponseModel("Fail", null);
         }
     }
-    public ResponseModel deleteDish(Long dishID) {
+    public ResponseModel deleteDish(String dishID) {
         try {
             Optional<Dish> optionalDish = dishRepository.findById(dishID);
             if (optionalDish.isPresent()) {
@@ -78,6 +79,14 @@ public class DishService {
         }
     }
 
+    public ResponseModel getAllDishes() {
+        List<Dish> dishes = dishRepository.findAll();
+        if(!dishes.isEmpty())
+        {
+            return new ResponseModel("Success", dishes);
+        }
+        return new ResponseModel("NoDish", null);
+    }
     public Dish findById(String dishID)
     {
         Optional<Dish> dish=dishRepository.findById(dishID);

@@ -21,8 +21,8 @@ public class AddressController {
     {
         return addressService.createAddress(accountID,dto);
     }
-    @GetMapping("/all")
-    public List<Address> getAllAddresses() {
+    @GetMapping
+    public ResponseModel getAllAddresses() {
         return addressService.getAllAddresses();
     }
 }

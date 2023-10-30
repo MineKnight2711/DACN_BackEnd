@@ -42,17 +42,19 @@ public class AddressService {
             return new ResponseModel("SomethingWrong", null);
         }
     }
-    public List<Address> getAllAddresses() {
-        // lay tat ca danh sach dia chi
-        List<Address> allAddresses = addressRepository.findAll();
-        // Sắp xếp các địa chỉ sao cho defaultAddress là true được đưa lên đầu danh sách
-        Collections.sort(allAddresses, (a1, a2) -> {
-            if (a1.isDefaultAddress() == a2.isDefaultAddress()) {
-                return 0;// Giữ nguyên vị trí nếu defaultAddress giống nhau
-            }
-            return a1.isDefaultAddress() ? -1 : 1; // Đưa địa chỉ với defaultAddress là true lên đầu
-        });
-        return allAddresses;
+    public ResponseModel getAllAddresses() {
+        List<Address> addresses = addressRepository.findAll();
+        if (!addresses.isEmpty()) {
+            // Sắp xếp các địa chỉ sao cho defaultAddress là true được đưa lên đầu danh sách
+            Collections.sort(addresses, (a1, a2) -> {
+                if (a1.isDefaultAddress() == a2.isDefaultAddress()) {
+                    return 0; // Giữ nguyên vị trí nếu defaultAddress giống nhau
+                }
+                return a1.isDefaultAddress() ? -1 : 1; // Đưa địa chỉ với defaultAddress là true lên đầu
+            });
+            return new ResponseModel("Success", addresses);
+        }
+        return new ResponseModel("NoAddress", null);
     }
 }
 

@@ -7,7 +7,7 @@ import com.example.dacn.modules.dish.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 @RestController
 @RequestMapping("/api/dish")
 public class DishController {
@@ -23,8 +23,12 @@ public class DishController {
         return dishService.updateDish(dishId,dishDTO);
     }
     @DeleteMapping("/{dishId}")
-    public ResponseModel deleteDish(@PathVariable("dishId") Long dishId) {
+    public ResponseModel deleteDish(@PathVariable("dishId") String dishId) {
         ResponseModel response = dishService.deleteDish(dishId);
         return response;
+    }
+    @GetMapping
+    public ResponseModel getAllDishes() {
+        return dishService.getAllDishes();
     }
 }
