@@ -61,6 +61,20 @@ public class DishService {
             return new ResponseModel("Fail", null);
         }
     }
+    public ResponseModel deleteDish(Long dishID) {
+        try {
+            Optional<Dish> optionalDish = dishRepository.findById(dishID);
+            if (optionalDish.isPresent()) {
+                Dish dish = optionalDish.get();
+                dishRepository.delete(dish); // Xóa món ăn
+                return new ResponseModel("Success", null);
+            } else {
+                return new ResponseModel("DishNotFound", null);
+            }
+        } catch (Exception e) {
+            return new ResponseModel("Fail", null);
+        }
+    }
 
     public Dish findById(Long dishID)
     {

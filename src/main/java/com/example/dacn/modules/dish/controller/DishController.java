@@ -22,4 +22,9 @@ public class DishController {
     public ResponseModel updateDish(@PathVariable("dishId") Long dishId, @ModelAttribute DishDTO dishDTO) {
         return dishService.updateDish(dishId,dishDTO);
     }
+    @DeleteMapping("/{dishId}")
+    public ResponseModel deleteDish(@PathVariable("dishId") Long dishId) {
+        ResponseModel response = dishService.deleteDish(dishId);
+        return response;
+    }
 }
