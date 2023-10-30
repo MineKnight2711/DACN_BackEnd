@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DishDTO {
-    private Long dishID;
+    private String dishID;
     private String dishName;
     private String description;
     private double price;
@@ -19,6 +19,7 @@ public class DishDTO {
 
     public Dish convertToEntity() {
         Dish dish = new Dish();
+        dish.setDishID(this.dishID);
         dish.setDishName(this.dishName);
         dish.setDescription(this.description);
         dish.setPrice(this.price);

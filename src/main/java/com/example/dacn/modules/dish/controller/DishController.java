@@ -19,7 +19,7 @@ public class DishController {
         return dishService.addDish(dishDTO);
     }
     @PutMapping("/{dishId}")
-    public ResponseModel updateDish(@PathVariable("dishId") Long dishId, @ModelAttribute DishDTO dishDTO) {
+    public ResponseModel updateDish(@PathVariable("dishId") String dishId, @ModelAttribute DishDTO dishDTO) {
         return dishService.updateDish(dishId,dishDTO);
     }
     @DeleteMapping("/{dishId}")
