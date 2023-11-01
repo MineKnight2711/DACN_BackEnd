@@ -25,8 +25,6 @@ public class Account {
     private String accountID;
     @Column(name = "fullName",length = 200)
     private String fullName;
-    @Column(name = "password",length = 500)
-    private String password;
     @Column(name = "email",length = 200)
     private String email;
     @Temporal(TemporalType.TIMESTAMP)

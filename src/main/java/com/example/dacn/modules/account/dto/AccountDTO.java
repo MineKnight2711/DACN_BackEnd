@@ -59,7 +59,6 @@ public class AccountDTO
         account.setGender(this.gender);
         account.setPhoneNumber(this.phoneNumber);
         account.setImageUrl(this.imageUrl);
-        account.setPassword(encryptPassword(this.password));
         return account;
     }
 }
