@@ -58,4 +58,19 @@ public class CategoryService {
             return new ResponseModel("Fail",null);
         }
     }
+
+    public ResponseModel updateCategory(String categoryID, CategoryDTO categoryDTO) {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryID);
+
+        if (categoryOptional.isPresent()) {
+            Category existingCategory = categoryOptional.get();
+            existingCategory.setCategoryName(categoryDTO.getCategoryName());
+
+            categoryRepository.save(existingCategory);
+
+            return new ResponseModel("Success", existingCategory);
+        } else {
+            return new ResponseModel("Category not found", null);
+        }
+    }
 }
