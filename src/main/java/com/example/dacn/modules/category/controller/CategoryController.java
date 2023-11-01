@@ -27,4 +27,9 @@ public class CategoryController {
     {
         return categoryService.createCategory(file,categoryDTO);
     }
+    @PutMapping("/{categoryID}")
+    public ResponseModel updateCategory(@PathVariable String categoryID, @ModelAttribute CategoryDTO categoryDTO) {
+        return categoryService.updateCategory(categoryID, categoryDTO);
+    }
+
 }
