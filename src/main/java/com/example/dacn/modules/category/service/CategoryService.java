@@ -20,9 +20,11 @@ public class CategoryService {
     @Autowired
     private ImageService imageService;
 
-    public ResponseModel getAllCategory(){
+    public ResponseModel getAllCategory()
+    {
         List<Category> listCategory=categoryRepository.findAll();
-        if(!listCategory.isEmpty()){
+        if(!listCategory.isEmpty())
+        {
             return new ResponseModel("Success",listCategory);
         }
         return new ResponseModel("Empty",null);
@@ -59,18 +61,20 @@ public class CategoryService {
         }
     }
 
-    public ResponseModel updateCategory(String categoryID, CategoryDTO categoryDTO) {
+    public ResponseModel updateCategory(String categoryID, CategoryDTO categoryDTO)
+    {
         Optional<Category> categoryOptional = categoryRepository.findById(categoryID);
 
-        if (categoryOptional.isPresent()) {
+        if (!categoryOptional.isEmpty())
+        {
             Category existingCategory = categoryOptional.get();
             existingCategory.setCategoryName(categoryDTO.getCategoryName());
 
             categoryRepository.save(existingCategory);
 
             return new ResponseModel("Success", existingCategory);
-        } else {
-            return new ResponseModel("Category not found", null);
         }
+        return new ResponseModel("Category not found", null);
+
     }
 }
