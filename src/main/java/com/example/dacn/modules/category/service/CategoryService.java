@@ -77,4 +77,23 @@ public class CategoryService {
         return new ResponseModel("Category not found", null);
 
     }
+    public ResponseModel deleteCategory(String categoryID)
+    {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryID);
+
+        if (!categoryOptional.isEmpty())
+        {
+            Category existingCategory = categoryOptional.get();
+            if(imageService.deleteExistImage("categoryImage/",existingCategory.getCategoryName()))
+            {
+                System.out.println("Đã xoá hình"+ existingCategory.getCategoryName());
+                categoryRepository.delete(existingCategory);
+                return new ResponseModel("Success", existingCategory);
+            }
+
+            return new ResponseModel("Fail", "Lỗi khi xoá ảnh của danh mục");
+        }
+        return new ResponseModel("CategoryNotFound", "Không tìm thấy danh mục");
+
+    }
 }
