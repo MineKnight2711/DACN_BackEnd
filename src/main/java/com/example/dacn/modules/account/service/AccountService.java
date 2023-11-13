@@ -55,7 +55,7 @@ public class AccountService {
         return new ResponseModel("Success",account);
 
     }
-    public ResponseModel  createAccount(AccountDTO dto)
+    public ResponseModel createAccount(AccountDTO dto)
     {
         dto.setAccountID("");
         if(dto.getBirthday()!=null)
@@ -135,16 +135,10 @@ public class AccountService {
         // Execute the request
         HttpResponse response = httpClient.execute(httpPost);
 
-        // Handle the response here and convert it into your ResponseModel
-        // You may need to read the response content and parse it into the desired format
-
         // For example, you can use the EntityUtils to read the response content
         String responseContent = EntityUtils.toString(response.getEntity());
 
-        // Process the responseContent and create your ResponseModel object
-//        ResponseModel responseModel = processResponse(responseContent);
-
-        return new ResponseModel("SignInTest",responseContent);
+        return new ResponseModel("Success",responseContent);
     }
 
     public ResponseModel signOutUser(String userId) {
