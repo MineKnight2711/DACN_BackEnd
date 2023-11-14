@@ -8,8 +8,10 @@ import com.example.dacn.modules.category.repository.CategoryRepository;
 import com.example.dacn.modules.category.service.CategoryService;
 import com.example.dacn.modules.dish.dto.DishDTO;
 import com.example.dacn.modules.dish.repository.DishRepository;
+import com.example.dacn.utils.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +22,10 @@ public class DishService {
     private DishRepository dishRepository;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ImageService imageService;
 
-    public ResponseModel addDish(DishDTO dishDTO)
+    public ResponseModel addDish(MultipartFile image, DishDTO dishDTO)
     {
         dishDTO.setDishID("");
         try
@@ -31,8 +35,10 @@ public class DishService {
             {
                 return new ResponseModel("CategoryNotFound",null);
             }
+            String imageUrl=imageService.uploadImage(image,"dishImage/",dishDTO.getDishName());
             Dish newDish = dishDTO.convertToEntity();
             newDish.setCategory((Category) categoryResponse.getData());
+            newDish.setImageUrl(imageUrl);
             dishRepository.save(newDish);
 
             return new ResponseModel("Success",newDish);
