@@ -26,10 +26,10 @@ public class AccountController {
     {
         return accountService.getAccountById(accountId);
     }
-    @GetMapping("/{email}")
+    @GetMapping("/get-by-email/{email}")
     public ResponseModel getAccountByEmail(@PathVariable String email)
     {
-        return accountService.getAccountById(email);
+        return accountService.getAccountByEmail(email);
     }
     @PutMapping("/{email}")
     public ResponseModel changePassword(
@@ -58,9 +58,12 @@ public class AccountController {
     ) {
         return accountService.changeImage(accountId, newImageUrl);
     }
-//    @PutMapping("/change-password")
-//    public ResponseModel changePassword(@ModelAttribute ChangePassDTO changePassDTO)
-//    {
-//        return accountService.changePassword(changePassDTO);
-//    }
+    @PostMapping("/sign-in")
+    public ResponseModel managerSignIn(@RequestBody String requestLogin) throws IOException {
+        return accountService.signInUser(requestLogin);
+    }
+    @PostMapping("/sign-out/{userId}")
+    public ResponseModel signOut(@PathVariable("userId") String userId) {
+        return accountService.signOutUser(userId);
+    }
 }

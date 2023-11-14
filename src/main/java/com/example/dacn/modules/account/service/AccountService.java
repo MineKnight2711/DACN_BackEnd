@@ -2,21 +2,27 @@ package com.example.dacn.modules.account.service;
 import com.example.dacn.entity.Account;
 import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.modules.account.dto.AccountDTO;
-import com.example.dacn.modules.account.dto.ChangePassDTO;
+
 import com.example.dacn.modules.account.repository.AccountRepository;
 import com.example.dacn.utils.DataConvert;
-import com.google.cloud.firestore.DocumentReference;
+
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
+
 
 @Service
 public class AccountService {
@@ -26,6 +32,8 @@ public class AccountService {
     private DataConvert dataConvert;
     @Autowired
     private FirebaseAuth firebaseAuth;
+
+
 
     public ResponseModel getAccountById(String id)
     {
@@ -37,7 +45,17 @@ public class AccountService {
         return new ResponseModel("Success",account.get());
 
     }
-    public ResponseModel  createAccount(AccountDTO dto)
+    public ResponseModel getAccountByEmail(String email)
+    {
+       Account account=accountRepository.findByEmail(email);
+        if(account==null)
+        {
+            return new ResponseModel("NoAccount",null);
+        }
+        return new ResponseModel("Success",account);
+
+    }
+    public ResponseModel createAccount(AccountDTO dto)
     {
         dto.setAccountID("");
         if(dto.getBirthday()!=null)
@@ -98,6 +116,40 @@ public class AccountService {
         }
         return new ResponseModel("Success",account);
     }
+    public ResponseModel signInUser(String requestLoginJson) throws IOException {
+        // Your API key
+        String apiKey = "AIzaSyA-_uiCdzqybddZNo5sB-oJcwPXhDmrUHs";
+
+        // Construct the URL
+        String url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + apiKey;
+
+        // Create an instance of HttpClient
+        HttpClient httpClient = HttpClients.createDefault();
+
+        // Create an HTTP POST request
+        HttpPost httpPost = new HttpPost(url);
+
+
+        httpPost.setEntity(new StringEntity(requestLoginJson, "application/json", "UTF-8"));
+
+        // Execute the request
+        HttpResponse response = httpClient.execute(httpPost);
+
+        // For example, you can use the EntityUtils to read the response content
+        String responseContent = EntityUtils.toString(response.getEntity());
+
+        return new ResponseModel("Success",responseContent);
+    }
+
+    public ResponseModel signOutUser(String userId) {
+        try {
+            firebaseAuth.revokeRefreshTokens(userId);
+            return new ResponseModel("Success",null);
+        } catch (FirebaseAuthException e) {
+            return new ResponseModel(e.getErrorCode().toString(),e.getMessage());
+        }
+    }
+
 
     public Account findById(String accountID)
     {
@@ -165,7 +217,7 @@ public class AccountService {
             accountRepository.save(acc);
             return new ResponseModel(
                     "Success",
-                    newUrl
+                    acc
             );
         }
         return new ResponseModel(
@@ -174,4 +226,5 @@ public class AccountService {
         );
 
     }
+
 }

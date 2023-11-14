@@ -27,6 +27,8 @@ public class Account {
     private String fullName;
     @Column(name = "email",length = 200)
     private String email;
+    @Column(name = "role")
+    private String role;
     @Temporal(TemporalType.TIMESTAMP)
     @Past(message = "NgaySinh phai nho hon ngay hien tai")
     @JsonProperty("birthday")
