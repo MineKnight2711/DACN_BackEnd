@@ -31,5 +31,8 @@ public class CategoryController {
     public ResponseModel updateCategory(@PathVariable String categoryID, @ModelAttribute CategoryDTO categoryDTO) {
         return categoryService.updateCategory(categoryID, categoryDTO);
     }
-
+    @DeleteMapping("/{categoryID}")
+    public ResponseModel deleteCategory(@PathVariable String categoryID) {
+        return categoryService.deleteCategory(categoryID);
+    }
 }

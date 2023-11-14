@@ -34,4 +34,17 @@ public class ImageService {
         }
         return null;
     }
+    public boolean deleteExistImage(String path,String fileName) {
+        String storagePath = path+fileName+".jpg";
+        System.out.println(storagePath);
+        BlobId blobId = BlobId.of(bucketUrl, storagePath);
+        boolean deleted = storage.delete(blobId);
+        if (deleted) {
+            System.out.println("File " + fileName + " deleted successfully from Firebase Storage.");
+            return true;
+        } else {
+            System.out.println("Failed to delete file " + fileName + " from Firebase Storage.");
+            return false;
+        }
+    }
 }
