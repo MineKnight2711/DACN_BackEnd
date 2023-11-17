@@ -2,7 +2,6 @@ package com.example.dacn.utils;
 
 import com.google.cloud.storage.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
