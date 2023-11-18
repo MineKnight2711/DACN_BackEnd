@@ -9,8 +9,6 @@ import com.example.dacn.modules.review.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-
-
 @RestController
 @RequestMapping("/api/address")
 public class AddressController {
@@ -22,7 +20,14 @@ public class AddressController {
         return addressService.createAddress(accountID,dto);
     }
     @GetMapping
-    public ResponseModel getAllAddresses() {
+    public ResponseModel getAllAddresses()
+    {
         return addressService.getAllAddresses();
+    }
+
+    @DeleteMapping("/{addressID}")
+    public ResponseModel deleteAddress(@PathVariable String addressID)
+    {
+        return addressService.deleteAddress(addressID);
     }
 }

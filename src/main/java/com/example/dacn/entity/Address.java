@@ -13,7 +13,7 @@ import lombok.Setter;
 public class Address {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long addressID;
+    private String addressID;
     @Column(name = "address")
     private String address;
     @Column(name = "receiverName")

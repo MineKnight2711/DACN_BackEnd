@@ -21,16 +21,19 @@ public class DishController {
         return dishService.addDish(image,dishDTO);
     }
     @PutMapping("/{dishId}")
-    public ResponseModel updateDish(@PathVariable("dishId") String dishId, @ModelAttribute DishDTO dishDTO) {
+    public ResponseModel updateDish(@PathVariable("dishId") String dishId, @ModelAttribute DishDTO dishDTO)
+    {
         return dishService.updateDish(dishId,dishDTO);
     }
     @DeleteMapping("/{dishId}")
-    public ResponseModel deleteDish(@PathVariable("dishId") String dishId) {
+    public ResponseModel deleteDish(@PathVariable("dishId") String dishId)
+    {
         ResponseModel response = dishService.deleteDish(dishId);
         return response;
     }
     @GetMapping
-    public ResponseModel getAllDishes() {
+    public ResponseModel getAllDishes()
+    {
         return dishService.getAllDishes();
     }
 }

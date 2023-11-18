@@ -52,7 +52,8 @@ public class DishService {
     public ResponseModel updateDish(String dishID,DishDTO dishDTO) {
         try {
             ResponseModel categoryResponse = categoryService.findById(dishDTO.getCategoryID());
-            if (categoryResponse.getData() == null) {
+            if (categoryResponse.getData() == null)
+            {
                 return new ResponseModel("CategoryNotFound", null);
             }
 
@@ -63,7 +64,9 @@ public class DishService {
                 dish.setCategory((Category) categoryResponse.getData());
                 dishRepository.save(dish);
                 return new ResponseModel("Success", dish);
-            } else {
+            }
+            else
+            {
                 return new ResponseModel("DishNotFound", null);
             }
         } catch (Exception e) {

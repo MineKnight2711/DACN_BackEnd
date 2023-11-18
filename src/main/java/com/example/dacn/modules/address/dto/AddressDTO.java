@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 public class AddressDTO {
 
-    private Long addressID;
+    private String addressID;
     private String address;
     private String receiverName;
     private String receiverPhone;

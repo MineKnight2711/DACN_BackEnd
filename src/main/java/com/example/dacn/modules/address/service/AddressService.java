@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AddressService {
@@ -44,10 +45,12 @@ public class AddressService {
     }
     public ResponseModel getAllAddresses() {
         List<Address> addresses = addressRepository.findAll();
-        if (!addresses.isEmpty()) {
+        if (!addresses.isEmpty())
+        {
             // Sắp xếp các địa chỉ sao cho defaultAddress là true được đưa lên đầu danh sách
             Collections.sort(addresses, (a1, a2) -> {
-                if (a1.isDefaultAddress() == a2.isDefaultAddress()) {
+                if (a1.isDefaultAddress() == a2.isDefaultAddress())
+                {
                     return 0; // Giữ nguyên vị trí nếu defaultAddress giống nhau
                 }
                 return a1.isDefaultAddress() ? -1 : 1; // Đưa địa chỉ với defaultAddress là true lên đầu
@@ -56,5 +59,23 @@ public class AddressService {
         }
         return new ResponseModel("NoAddress", null);
     }
+    public ResponseModel deleteAddress(String addressID) {
+        Optional<Address> optionalAddress = addressRepository.findById(addressID);
+        if (optionalAddress.isPresent())
+        {
+            Address address = optionalAddress.get();
+            if (address.isDefaultAddress())
+            {
+                return new ResponseModel("Cannot delete default address", null);
+            }
+            addressRepository.delete(address);
+            return new ResponseModel("Address deleted successfully", null);
+        }
+        else
+        {
+            return new ResponseModel("Address not found", null);
+        }
+    }
 }
+
 
