@@ -15,7 +15,7 @@ import java.net.http.HttpResponse;
 public class MapService {
      private final String apiListLocation="https://rsapi.goong.io/geocode?address=";
     private final String apiAutoCompleteLocation="https://rsapi.goong.io/Place/AutoComplete";
-    final String apiKey="1D1TShB6BE7zzAKPIlT7GF61V0wa6KnsO8UAnl1P";
+    final String apiKey="OZBPCTmWt2BYBrbR26LivZEyB9zcPp8VP0ZtoCrb";
     //Sửa chuỗi nhập vào khi có khoảng trắng
     public String fixString(String string)  {return string.replace(" ", "%20");}
     private HttpResponse<String>  sendGetRequest(String apiUrl) throws Exception

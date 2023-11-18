@@ -25,7 +25,6 @@ public class LocationResponse {
         @Setter
         public class Geometry {
             private Location location;
-            private String boundary;
             @Data
             @Getter
             @Setter
