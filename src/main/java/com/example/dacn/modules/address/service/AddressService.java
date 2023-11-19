@@ -22,6 +22,8 @@ public class AddressService {
 
 
     public ResponseModel createAddress(String accountID, AddressDTO dto) {
+        dto.setAddressID("");
+
         try {
             // Try to retrieve the account
             Account acc = accountService.findById(accountID);
@@ -34,10 +36,60 @@ public class AddressService {
             newAddress.setAccount(acc);
 
             // Save the address
-            addressRepository.save(newAddress);
+            Address getAddress= addressRepository.save(newAddress);
+            String newAddressId=addressRepository.findLatestAddressId();
+            getAddress.setAddressID(newAddressId);
 
-            return new ResponseModel("Success", newAddress);
+            return new ResponseModel("Success", getAddress);
         } catch (Exception ex) {
+            ex.printStackTrace();
+            // Handle any exception and log the error
+            System.out.println("An error occurred: " + ex.toString());
+            return new ResponseModel("SomethingWrong", null);
+        }
+    }
+    public ResponseModel updateAddress(String accountID,String addressID, AddressDTO dto) {
+        try {
+            Address add = addressRepository.findByAddressIdAndAccountId(addressID,accountID);
+            if(add==null)
+            {
+                return new ResponseModel("AddressNotFound", null);
+            }
+            Account acc = accountService.findById(accountID);
+            if (acc == null) {
+                return new ResponseModel("AccountNotFound", null);
+            }
+            // Convert DTO to entity and set the account
+            add = dto.toEntity();
+            add.setAddressID(addressID);
+            add.setAccount(acc);
+            if(dto.isDefaultAddress())
+            {
+                Address updatedAddress= addressRepository.save(add);
+
+                Address defaultAddressButUnlikeUpdatedOne=addressRepository.findDefaultAddressNotEqualsAddressId(accountID,addressID);
+
+                if(defaultAddressButUnlikeUpdatedOne!=null)
+                {
+                    defaultAddressButUnlikeUpdatedOne.setDefaultAddress(false);
+                    addressRepository.save(defaultAddressButUnlikeUpdatedOne);
+                    return new ResponseModel("Success", updatedAddress);
+                }
+
+                return new ResponseModel("Success", updatedAddress);
+            }
+            else
+            {
+                Address defaultAddressButUnlikeUpdatedOne=addressRepository.findDefaultAddressNotEqualsAddressId(accountID,addressID);
+                if(defaultAddressButUnlikeUpdatedOne==null)
+                {
+                    return new ResponseModel("Fail", "Bạn phải có ít nhất 1 địa chỉ mặc định!");
+                }
+                Address updatedAddress= addressRepository.save(add);
+                return new ResponseModel("Success", updatedAddress);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
             // Handle any exception and log the error
             System.out.println("An error occurred: " + ex.toString());
             return new ResponseModel("SomethingWrong", null);

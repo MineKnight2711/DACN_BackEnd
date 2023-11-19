@@ -21,6 +21,7 @@ public class AddressDTO {
 
     public Address toEntity(){
         Address address = new Address();
+        address.setAddressID(this.addressID);
         address.setAddress(this.address);
         address.setReceiverName(this.receiverName);
         address.setReceiverPhone(this.receiverPhone);
