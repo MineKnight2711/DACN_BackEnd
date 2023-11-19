@@ -24,7 +24,13 @@ public class AddressController {
     {
         return addressService.getAllAddresses();
     }
-
+    @PutMapping("/{accountID}")
+    public ResponseModel updateAddress(@PathVariable("accountID") String accountID,
+                                       @RequestParam("addressId") String addressId,
+                                       @ModelAttribute AddressDTO dto)
+    {
+        return addressService.updateAddress(accountID,addressId,dto);
+    }
     @DeleteMapping("/{addressID}")
     public ResponseModel deleteAddress(@PathVariable String addressID)
     {
