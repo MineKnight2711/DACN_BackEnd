@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AddressRepository extends JpaRepository<Address,String>
 {
@@ -16,4 +18,7 @@ public interface AddressRepository extends JpaRepository<Address,String>
 
     @Query("SELECT a FROM Address a WHERE a.defaultAddress = true AND a.account.accountID = :accountId AND a.addressID != :addressId")
     Address findDefaultAddressNotEqualsAddressId(String accountId,String addressId);
+
+    @Query("SELECT a FROM Address a WHERE a.account.accountID = :accountId")
+    List<Address> findAllByAccountId(String accountId);
 }

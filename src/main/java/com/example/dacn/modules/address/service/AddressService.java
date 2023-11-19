@@ -28,7 +28,7 @@ public class AddressService {
             // Try to retrieve the account
             Account acc = accountService.findById(accountID);
             if (acc == null) {
-                return new ResponseModel("AccountNotFound", null);
+                return new ResponseModel("AccountNotFound", "Không tìm thấy tài khoản!");
             }
 
             // Convert DTO to entity and set the account
@@ -45,7 +45,7 @@ public class AddressService {
             ex.printStackTrace();
             // Handle any exception and log the error
             System.out.println("An error occurred: " + ex.toString());
-            return new ResponseModel("SomethingWrong", null);
+            return new ResponseModel("SomethingWrong", "Lỗi chưa xác định!");
         }
     }
     public ResponseModel updateAddress(String accountID,String addressID, AddressDTO dto) {
@@ -53,11 +53,11 @@ public class AddressService {
             Address add = addressRepository.findByAddressIdAndAccountId(addressID,accountID);
             if(add==null)
             {
-                return new ResponseModel("AddressNotFound", null);
+                return new ResponseModel("AddressNotFound", "Không tìm thấy địa chỉ!");
             }
             Account acc = accountService.findById(accountID);
             if (acc == null) {
-                return new ResponseModel("AccountNotFound", null);
+                return new ResponseModel("AccountNotFound", "Không tìm thấy tài khoản!");
             }
             // Convert DTO to entity and set the account
             add = dto.toEntity();
@@ -92,11 +92,11 @@ public class AddressService {
             ex.printStackTrace();
             // Handle any exception and log the error
             System.out.println("An error occurred: " + ex.toString());
-            return new ResponseModel("SomethingWrong", null);
+            return new ResponseModel("SomethingWrong", "Lỗi chưa xác định!");
         }
     }
-    public ResponseModel getAllAddresses() {
-        List<Address> addresses = addressRepository.findAll();
+    public ResponseModel getAllAddresses(String accountId) {
+        List<Address> addresses = addressRepository.findAllByAccountId(accountId);
         if (!addresses.isEmpty())
         {
             // Sắp xếp các địa chỉ sao cho defaultAddress là true được đưa lên đầu danh sách
@@ -109,7 +109,7 @@ public class AddressService {
             });
             return new ResponseModel("Success", addresses);
         }
-        return new ResponseModel("NoAddress", null);
+        return new ResponseModel("NoAddress", "Không tìm thấy địa chỉ nào!");
     }
     public ResponseModel deleteAddress(String addressID) {
         Optional<Address> optionalAddress = addressRepository.findById(addressID);
@@ -118,14 +118,14 @@ public class AddressService {
             Address address = optionalAddress.get();
             if (address.isDefaultAddress())
             {
-                return new ResponseModel("Cannot delete default address", null);
+                return new ResponseModel("IsDefaultAddress", "Không thể xoá địa chỉ mặc định");
             }
             addressRepository.delete(address);
-            return new ResponseModel("Address deleted successfully", null);
+            return new ResponseModel("Success", null);
         }
         else
         {
-            return new ResponseModel("Address not found", null);
+            return new ResponseModel("AddressNotFound", "Không tìm thấy tài khoản!");
         }
     }
 }
