@@ -21,7 +21,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class VoucherDTO {
-    private Long voucherID;
+    private String voucherID;
 
     @JsonDeserialize(using = DatetimeDeserialize.class)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -35,7 +35,7 @@ public class VoucherDTO {
 
     public Voucher toEntity() {
         Voucher voucher = new Voucher();
-
+        voucher.setVoucherID(this.voucherID);
         voucher.setStartDate(this.startDate);
         voucher.setExpDate(this.expDate);
         voucher.setVoucherName(this.voucherName);

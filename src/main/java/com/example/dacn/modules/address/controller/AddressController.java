@@ -19,10 +19,10 @@ public class AddressController {
     {
         return addressService.createAddress(accountID,dto);
     }
-    @GetMapping
-    public ResponseModel getAllAddresses()
+    @GetMapping("/{accountId}")
+    public ResponseModel getAllAddresses(@PathVariable("accountId") String accountId)
     {
-        return addressService.getAllAddresses();
+        return addressService.getAllAddresses(accountId);
     }
     @PutMapping("/{accountID}")
     public ResponseModel updateAddress(@PathVariable("accountID") String accountID,

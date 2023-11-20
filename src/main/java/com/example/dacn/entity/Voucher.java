@@ -37,9 +37,12 @@ public class Voucher {
     private String voucherName;
     @Column(name = "discount")
     private double discount;
-    @ManyToOne
-    @JoinColumn(name = "accountID",nullable = false)
-    private Account account;
+    @ManyToMany
+    @JoinTable(name = "account_voucher",
+            joinColumns = @JoinColumn(name = "voucher_id"),
+            inverseJoinColumns = @JoinColumn(name = "account_id"))
+    private List<Account> accounts;
+
     //Quan hệ 1 nhiều tới bảng order
     @OneToMany(mappedBy = "voucher", cascade = CascadeType.ALL)
     @JsonIgnore
