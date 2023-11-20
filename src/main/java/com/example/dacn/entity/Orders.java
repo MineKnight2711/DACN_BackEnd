@@ -33,8 +33,13 @@ public class Orders {
     private String paymentMethod;
     @Column(name = "deliveryInfo")
     private String deliveryInfo;
-
-
+    // quan he nhieu nhieu toi bang dish
+    @ManyToMany
+    @JoinTable(name = "OrderDetail",
+            joinColumns = @JoinColumn(name = "dish_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id"))
+    @JsonIgnore
+    private List<Dish> dishes;
 
 //    Quan hệ 1 nhiều tới bảng voucher
     @ManyToOne

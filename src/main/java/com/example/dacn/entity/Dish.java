@@ -29,6 +29,14 @@ public class Dish {
     private int inStock;
     @Column(name = "imageUrl")
     private String imageUrl;
+    // quan he nhieu nhieu tới bảng orders
+    @ManyToMany
+    @JoinTable(name = "OrderDetail",
+            joinColumns = @JoinColumn(name = "dish_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id"))
+    @JsonIgnore
+    private List<Orders> orders;
+
 
     //Quan hệ 1 nhiều tới bảng category
     @ManyToOne
