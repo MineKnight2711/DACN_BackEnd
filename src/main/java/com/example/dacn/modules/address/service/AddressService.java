@@ -118,7 +118,7 @@ public class AddressService {
             Address address = optionalAddress.get();
             if (address.isDefaultAddress())
             {
-                return new ResponseModel("Cannot delete default address", null);
+                return new ResponseModel("IsDefaultAddress", null);
             }
             addressRepository.delete(address);
             return new ResponseModel("Address deleted successfully", null);

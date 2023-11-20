@@ -27,7 +27,7 @@ public class CategoryService {
         {
             return new ResponseModel("Success",listCategory);
         }
-        return new ResponseModel("Empty",null);
+        return new ResponseModel("CategoryEmpty","Lỗi danh mục trống");
     }
     public ResponseModel findById(String categoryID)
     {
@@ -38,7 +38,7 @@ public class CategoryService {
         }
         else
         {
-            return new ResponseModel("NotFound",null);
+            return new ResponseModel("NotFound","Không tìm thấy danh mục");
         }
     }
 
@@ -57,7 +57,7 @@ public class CategoryService {
         catch (Exception e)
         {
             e.printStackTrace();
-            return new ResponseModel("Fail",null);
+            return new ResponseModel("Fail","Không thể thêm mới danh mục");
         }
     }
 
@@ -74,7 +74,7 @@ public class CategoryService {
 
             return new ResponseModel("Success", existingCategory);
         }
-        return new ResponseModel("Category not found", null);
+        return new ResponseModel("CategoryNotFound", "Không tìm thấy danh mục chỉnh sửa");
 
     }
     public ResponseModel deleteCategory(String categoryID)

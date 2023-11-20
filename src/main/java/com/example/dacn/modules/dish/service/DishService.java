@@ -33,7 +33,7 @@ public class DishService {
             ResponseModel categoryResponse=categoryService.findById(dishDTO.getCategoryID());
             if(categoryResponse.getData()==null)
             {
-                return new ResponseModel("CategoryNotFound",null);
+                return new ResponseModel("CategoryNotFound","Không tìm thấy danh mục");
             }
             String imageUrl=imageService.uploadImage(image,"dishImage/",dishDTO.getDishName());
             Dish newDish = dishDTO.convertToEntity();
@@ -46,7 +46,7 @@ public class DishService {
         catch (Exception e)
         {
             e.printStackTrace();
-            return new ResponseModel("Fail",null);
+            return new ResponseModel("Fail","Thêm món thất bại");
         }
     }
     public ResponseModel updateDish(String dishID,DishDTO dishDTO) {
@@ -54,7 +54,7 @@ public class DishService {
             ResponseModel categoryResponse = categoryService.findById(dishDTO.getCategoryID());
             if (categoryResponse.getData() == null)
             {
-                return new ResponseModel("CategoryNotFound", null);
+                return new ResponseModel("CategoryNotFound", "Không tìm thấy danh mục");
             }
 
             Optional<Dish> optionalDish = dishRepository.findById(dishID);
@@ -67,10 +67,10 @@ public class DishService {
             }
             else
             {
-                return new ResponseModel("DishNotFound", null);
+                return new ResponseModel("DishNotFound", "Không tìm thấy món ăn");
             }
         } catch (Exception e) {
-            return new ResponseModel("Fail", null);
+            return new ResponseModel("Fail", "Sửa món ăn thất bại");
         }
     }
     public ResponseModel deleteDish(String dishID) {
@@ -79,12 +79,12 @@ public class DishService {
             if (optionalDish.isPresent()) {
                 Dish dish = optionalDish.get();
                 dishRepository.delete(dish); // Xóa món ăn
-                return new ResponseModel("Success", null);
+                return new ResponseModel("Success", "Đã xoá món ăn");
             } else {
-                return new ResponseModel("DishNotFound", null);
+                return new ResponseModel("DishNotFound", "Không tìm thấy món ăn");
             }
         } catch (Exception e) {
-            return new ResponseModel("Fail", null);
+            return new ResponseModel("Fail", "Xoá món ăn thất bại");
         }
     }
 
@@ -94,7 +94,7 @@ public class DishService {
         {
             return new ResponseModel("Success", dishes);
         }
-        return new ResponseModel("NoDish", null);
+        return new ResponseModel("NoDish", "Không có món ăn");
     }
     public Dish findById(String dishID)
     {
