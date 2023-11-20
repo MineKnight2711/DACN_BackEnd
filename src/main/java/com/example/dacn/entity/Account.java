@@ -46,9 +46,11 @@ public class Account {
     @JsonManagedReference
     private List<Address> addresses;
     @ManyToMany
-    @JoinTable(name = "account_voucher",
+    @JoinTable(name = "AccountVoucher",
             joinColumns = @JoinColumn(name = "account_id"),
             inverseJoinColumns = @JoinColumn(name = "voucher_id"))
+    @JsonIgnore
+//    @JsonManagedReference
     private List<Voucher> vouchers;
 
     @OneToMany (mappedBy = "account", cascade = CascadeType.ALL)
