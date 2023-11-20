@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VoucherService {
@@ -22,8 +23,6 @@ public class VoucherService {
     private VoucherRepository voucherRepository;
     @Autowired
     private AccountService accountService;
-    @Autowired
-    private AccountVoucherService accountVoucherService;
 
     public ResponseModel createVoucher(String accountID, VoucherDTO dto) {
         dto.setVoucherID("");
@@ -35,20 +34,6 @@ public class VoucherService {
 
             Voucher newVoucher = dto.toEntity();
             voucherRepository.save(newVoucher);
-            String newVoucherID=voucherRepository.findLatestVoucherId();
-            newVoucher.setVoucherID(newVoucherID);
-
-            AccountVoucher newAccountVoucher=new AccountVoucher();
-            AccountVoucherId newAccountVoucherId=new AccountVoucherId();
-
-            newAccountVoucherId.setAccount_id(acc.getAccountID());
-            newAccountVoucherId.setVoucher_id(newVoucherID);
-
-            newAccountVoucher.setAccountVoucherId(newAccountVoucherId);
-            newAccountVoucher.setVoucher(newVoucher);
-            newAccountVoucher.setAccount(acc);
-
-            accountVoucherService.createNewAccountVoucher(newAccountVoucher);
 
             return new ResponseModel("Success", newVoucher);
         } catch (Exception ex) {
@@ -61,4 +46,8 @@ public class VoucherService {
         return new ResponseModel("SortList", voucherRepository.findAllByOrderByDiscountDesc());
     }
 
+    public Voucher findById(String voucherId)
+    {
+        return voucherRepository.findById(voucherId).orElse(null);
+    }
 }

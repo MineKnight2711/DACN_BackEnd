@@ -38,9 +38,11 @@ public class Voucher {
     @Column(name = "discount")
     private double discount;
     @ManyToMany
-    @JoinTable(name = "account_voucher",
+    @JoinTable(name = "AccountVoucher",
             joinColumns = @JoinColumn(name = "voucher_id"),
             inverseJoinColumns = @JoinColumn(name = "account_id"))
+    @JsonIgnore
+//    @JsonManagedReference
     private List<Account> accounts;
 
     //Quan hệ 1 nhiều tới bảng order
