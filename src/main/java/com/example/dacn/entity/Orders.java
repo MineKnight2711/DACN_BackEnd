@@ -34,7 +34,13 @@ public class Orders {
     @Column(name = "deliveryInfo")
     private String deliveryInfo;
 
-
+    // quan he nhieu nhieu toi bang dish
+    @ManyToMany
+    @JoinTable(name = "OrderDetail",
+            joinColumns = @JoinColumn(name = "dish_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id"))
+    @JsonIgnore
+    private List<Dish> dishes;
 
 //    Quan hệ 1 nhiều tới bảng voucher
     @ManyToOne
@@ -43,11 +49,11 @@ public class Orders {
     @ManyToOne
     @JoinColumn(name = "accountID",nullable = false)
     private Account account;
-//
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    @JsonIgnore
-    @JsonManagedReference
-    private List<OrderDetail> orderDetails;
+
+//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    @JsonManagedReference
+//    private List<OrderDetail> orderDetails;
 //    Quan hệ 1 nhiều tới bảng review
     @OneToMany(mappedBy = "order_review", cascade = CascadeType.ALL)
     @JsonIgnore
