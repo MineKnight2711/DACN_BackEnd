@@ -45,12 +45,10 @@ public class Account {
     @JsonIgnore
     @JsonManagedReference
     private List<Address> addresses;
-//    @Column(name = "isFingerPrintAuthenticated")
-//    private boolean isFingerPrintAuthenticated;
-
-    @OneToMany (mappedBy = "account", cascade = CascadeType.ALL)
-    @JsonIgnore
-    @JsonManagedReference
+    @ManyToMany
+    @JoinTable(name = "account_voucher",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "voucher_id"))
     private List<Voucher> vouchers;
 
     @OneToMany (mappedBy = "account", cascade = CascadeType.ALL)

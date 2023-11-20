@@ -9,7 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface VoucherRepository extends JpaRepository<Voucher,Long> {
+public interface VoucherRepository extends JpaRepository<Voucher,String> {
+    @Query(value = "SELECT @generated_id", nativeQuery = true)
+    String findLatestVoucherId();
     @Query("SELECT v FROM Voucher v ORDER BY v.discount DESC")
     List<Voucher> findAllByOrderByDiscountDesc();
 }
