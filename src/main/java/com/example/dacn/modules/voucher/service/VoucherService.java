@@ -4,6 +4,7 @@ import com.example.dacn.entity.Account;
 import com.example.dacn.entity.AccountVoucher;
 import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.entity.Voucher;
+import com.example.dacn.entity.ids.AccountVoucherId;
 import com.example.dacn.modules.account.service.AccountService;
 
 import com.example.dacn.modules.voucher.dto.VoucherDTO;
@@ -38,7 +39,7 @@ public class VoucherService {
             newVoucher.setVoucherID(newVoucherID);
 
             AccountVoucher newAccountVoucher=new AccountVoucher();
-            AccountVoucher.AccountVoucherId newAccountVoucherId=new AccountVoucher.AccountVoucherId();
+            AccountVoucherId newAccountVoucherId=new AccountVoucherId();
 
             newAccountVoucherId.setAccount_id(acc.getAccountID());
             newAccountVoucherId.setVoucher_id(newVoucherID);
@@ -46,8 +47,6 @@ public class VoucherService {
             newAccountVoucher.setAccountVoucherId(newAccountVoucherId);
             newAccountVoucher.setVoucher(newVoucher);
             newAccountVoucher.setAccount(acc);
-
-
 
             accountVoucherService.createNewAccountVoucher(newAccountVoucher);
 

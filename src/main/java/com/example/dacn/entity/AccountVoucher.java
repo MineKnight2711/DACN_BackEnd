@@ -1,5 +1,6 @@
 package com.example.dacn.entity;
 
+import com.example.dacn.entity.ids.AccountVoucherId;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.io.Serializable;
 public class AccountVoucher {
     @EmbeddedId
     private AccountVoucherId accountVoucherId;
+
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false,insertable=false, updatable=false)
     private Account account;
@@ -22,16 +24,7 @@ public class AccountVoucher {
     @ManyToOne
     @JoinColumn(name = "voucher_id",nullable = false,insertable=false, updatable=false)
     private Voucher voucher;
-    @Data
-    @Getter
-    @Setter
-    @Embeddable
-    public static class AccountVoucherId implements Serializable {
-        @Column(name = "account_id")
-        private String account_id;
-        @Column(name = "voucher_id")
-        private String voucher_id;
-    }
+
 }
 
 
