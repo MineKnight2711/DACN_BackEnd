@@ -13,8 +13,9 @@ public class OrdersController {
     @Autowired
     private OrdersService ordersService;
 
-//    @PostMapping("/{accountId}")
-//    public ResponseModel createOrder(@PathVariable("accountId") String accountId, @ModelAttribute OrdersDTO ordersDTO) {
-//        return ordersService.createOrder(accountId,ordersDTO);
-//    }
+    @PostMapping("/{accountId}")
+    public ResponseModel createOrder(@PathVariable("accountId") String accountId,
+                                     @RequestBody OrdersDTO ordersDTO) {
+        return ordersService.createOrder(accountId,ordersDTO);
+    }
 }

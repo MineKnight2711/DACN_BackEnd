@@ -44,7 +44,7 @@ public class Orders {
 
 //    Quan hệ 1 nhiều tới bảng voucher
     @ManyToOne
-    @JoinColumn(name = "voucherID",nullable = false)
+    @JoinColumn(name = "voucherID")
     private Voucher voucher;
     @ManyToOne
     @JoinColumn(name = "accountID",nullable = false)
