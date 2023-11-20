@@ -33,6 +33,7 @@ public class Orders {
     private String paymentMethod;
     @Column(name = "deliveryInfo")
     private String deliveryInfo;
+
     // quan he nhieu nhieu toi bang dish
     @ManyToMany
     @JoinTable(name = "OrderDetail",
@@ -48,11 +49,11 @@ public class Orders {
     @ManyToOne
     @JoinColumn(name = "accountID",nullable = false)
     private Account account;
-//
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    @JsonIgnore
-    @JsonManagedReference
-    private List<OrderDetail> orderDetails;
+
+//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    @JsonManagedReference
+//    private List<OrderDetail> orderDetails;
 //    Quan hệ 1 nhiều tới bảng review
     @OneToMany(mappedBy = "order_review", cascade = CascadeType.ALL)
     @JsonIgnore
