@@ -30,6 +30,14 @@ public class CartService {
                 newCartItem.setCartID("");
                 newCartItem.setAccount(acc);
                 newCartItem.setDish(dish);
+                Cart isUniqueCart=cartRepository.findCartByAccountAndDishId(dto.getAccountID(),dto.getDishID());
+                if(isUniqueCart!=null){
+                    //Save giỏ hàng đã tồn tại món ăn của 1 tài khoản
+                    int newQuantity=isUniqueCart.getQuantity()+dto.getQuantity();
+                    isUniqueCart.setQuantity(newQuantity);
+                    cartRepository.save(isUniqueCart);
+                    return new ResponseModel("UpdatedCart",newCartItem);
+                }
                 cartRepository.save(newCartItem);
                 return new ResponseModel("Success",newCartItem);
             }
@@ -41,6 +49,25 @@ public class CartService {
         else
         {
             return new ResponseModel("AccountNotFound","không tìm thấy tài khoản");
+        }
+    }
+    public ResponseModel updateCart(CartDTO dto)
+    {
+        try
+        {
+            Cart isUniqueCart=cartRepository.findCartByAccountAndDishId(dto.getAccountID(),dto.getDishID());
+            if(isUniqueCart!=null)
+            {
+                int newQuantity=isUniqueCart.getQuantity()+dto.getQuantity();
+                isUniqueCart.setQuantity(newQuantity);
+                cartRepository.save(isUniqueCart);
+                return new ResponseModel("UpdatedCart",isUniqueCart);
+            }
+            return new ResponseModel("NotCartToUpdate","Không tìm thấy sản phẩm để cập nhật!");
+        }
+        catch (Exception ex)
+        {
+            return new ResponseModel("Fail","Lỗi chưa xác định");
         }
     }
 }

@@ -11,7 +11,6 @@ public class CartDTO {
     private String accountID;
     private int quantity;
     private double total;
-
     public Cart toEntity() {
         Cart cart = new Cart();
         cart.setQuantity(this.quantity);
