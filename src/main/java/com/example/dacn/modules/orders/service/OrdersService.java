@@ -44,7 +44,6 @@ public class OrdersService {
                 if(dish!=null)
                 {
 
-
                     newOrderDetailsId.setOrder_id(newOrderId);
                     newOrderDetailsId.setDish_id(dish.getDishID());
 

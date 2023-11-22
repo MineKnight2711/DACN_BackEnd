@@ -6,15 +6,15 @@ import lombok.*;
 @Data
 @Getter
 @Setter
-public class CartDTO {
+public class CartDTO
+{
     private String dishID;
     private String accountID;
     private int quantity;
-    private double total;
-    public Cart toEntity() {
+    public Cart toEntity()
+    {
         Cart cart = new Cart();
         cart.setQuantity(this.quantity);
-        cart.setTotal(this.total);
         return cart;
     }
 }
