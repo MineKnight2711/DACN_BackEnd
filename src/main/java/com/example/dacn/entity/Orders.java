@@ -59,4 +59,8 @@ public class Orders {
     @JsonIgnore
     @JsonManagedReference
     private List<Review> reviews;
+
+    @ManyToOne
+    @JoinColumn(name = "paymentID")
+    private Payment payment;
 }
