@@ -1,5 +1,6 @@
 package com.example.dacn.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -18,10 +19,12 @@ public class Cart {
     private String cartID;
 
     @ManyToOne
+
     @JoinColumn(name = "dishID",nullable = false)
     private Dish dish;
 
     @ManyToOne
+
     @JoinColumn(name = "accountID",nullable = false)
     private Account account;
 
