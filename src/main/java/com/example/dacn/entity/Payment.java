@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -14,7 +15,8 @@ import java.util.List;
 @Table(name="Payment")
 public class Payment {
     @Id
-    private String paymentID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long paymentID;
 
     @Column(name = "payment_method")
     private String paymentMethod;
@@ -28,8 +30,9 @@ public class Payment {
     @Column(name = "amount")
     private double amount;
 
-    @Column(name = "paid_time")
-    private String paidTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="paid_time")
+    private Date paidTime;
 
     @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
     private List<Orders> orders;
