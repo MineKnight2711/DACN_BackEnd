@@ -17,3 +17,4 @@ public interface CartRepository extends JpaRepository<Cart,String>
     @Query("SELECT c FROM Cart c WHERE c.account.accountID = :accountId")
     List<Cart> findCartByAccountId(String accountId);
 }
+
