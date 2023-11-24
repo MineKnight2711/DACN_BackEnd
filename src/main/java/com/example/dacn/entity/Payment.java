@@ -1,5 +1,7 @@
 package com.example.dacn.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -15,26 +17,14 @@ import java.util.List;
 @Table(name="Payment")
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long paymentID;
+    private String paymentID;
 
     @Column(name = "payment_method")
     private String paymentMethod;
 
-    @Column(name = "info")
-    private String info;
-
-    @Column(name = "status")
-    private String status;
-
-    @Column(name = "amount")
-    private double amount;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="paid_time")
-    private Date paidTime;
-
     @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
-    private List<Orders> orders;
+    @JsonIgnore
+    @JsonManagedReference
+    private List<PaymentDetails> paymentDetails;
 
 }

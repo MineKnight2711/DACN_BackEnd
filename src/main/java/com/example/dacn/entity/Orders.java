@@ -29,11 +29,10 @@ public class Orders {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "orderDate")
     private Date orderDate;
-    @Column(name = "paymentMethod")
-    private String paymentMethod;
     @Column(name = "deliveryInfo")
     private String deliveryInfo;
-
+    @Column(name = "quantity")
+    private int quantity;
     // quan he nhieu nhieu toi bang dish
     @ManyToMany
     @JoinTable(name = "OrderDetail",
@@ -60,7 +59,10 @@ public class Orders {
     @JsonManagedReference
     private List<Review> reviews;
 
-    @ManyToOne
-    @JoinColumn(name = "paymentID")
-    private Payment payment;
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JsonManagedReference
+    private List<PaymentDetails> paymentDetails;
+
+
 }

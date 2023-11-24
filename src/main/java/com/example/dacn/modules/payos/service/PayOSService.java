@@ -51,15 +51,10 @@ public class PayOSService
             ResponseEntity<String> response = restTemplate.exchange(Constant.GET_PAYMENT_LINK, HttpMethod.POST, request, String.class);
 
             // Handle the response as needed
-            HttpStatusCode statusCode = response.getStatusCode();
+//            HttpStatusCode statusCode = response.getStatusCode();
             String responseBody = response.getBody();
 
             PaymentResponse paymentResponse=new Gson().fromJson(responseBody,PaymentResponse.class);
-            if(statusCode.equals(200))
-            {
-
-                return paymentResponse;
-            }
             return paymentResponse;
     }
 }
