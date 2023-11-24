@@ -24,21 +24,23 @@ public class OrdersDTO {
 
     private String orderID;
     private String status;
-
+    private int quantity;
     @JsonProperty("orderDate")
     @JsonDeserialize(using = DatetimeDeserialize.class)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date orderDate;
-    private String paymentMethod;
     private String deliveryInfo;
 
-    private List<String> dishes;
+    private List<OrderDishDTO> dishes;
     public Orders toEntity() {
         Orders orders = new Orders();
         orders.setOrderID(this.orderID);
         orders.setStatus(this.status);
+        for(OrderDishDTO dish : dishes)
+        {
+            orders.setQuantity(this.quantity+=dish.getQuantity());
+        }
         orders.setOrderDate(this.orderDate);
-        orders.setPaymentMethod(this.paymentMethod);
         orders.setDeliveryInfo(this.deliveryInfo);
         return orders;
     }
