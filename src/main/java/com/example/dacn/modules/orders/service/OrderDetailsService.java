@@ -3,6 +3,7 @@ package com.example.dacn.modules.orders.service;
 import com.example.dacn.entity.Dish;
 import com.example.dacn.entity.OrderDetail;
 import com.example.dacn.entity.Orders;
+import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.entity.ids.OrderDetailsId;
 import com.example.dacn.modules.dish.service.DishService;
 import com.example.dacn.modules.orders.dto.OrderDishDTO;
@@ -41,5 +42,15 @@ public class OrderDetailsService
             }
 
         }
+    }
+
+    public ResponseModel getOrderDetails(String orderID)
+    {
+        List<OrderDetail> orderDetails=orderDetailRepository.getOrderDetailByOrderId(orderID);
+        if(!orderDetails.isEmpty())
+        {
+            return new ResponseModel("Success",orderDetails);
+        }
+        return new ResponseModel("Fail","Không tìm thấy chi tiết đơn hàng!");
     }
 }
