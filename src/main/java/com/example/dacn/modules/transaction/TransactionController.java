@@ -1,11 +1,9 @@
 package com.example.dacn.modules.transaction;
 
 import com.example.dacn.entity.ResponseModel;
+import com.example.dacn.modules.apikey.ApiKeyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/transaction")
@@ -13,9 +11,16 @@ public class TransactionController
 {
     @Autowired
     private TransactionService transactionService;
+    @Autowired
+    private ApiKeyService apiKeyService;
     @PostMapping
-    public ResponseModel transaction(@RequestBody TransactionDTO dto)
+    public ResponseModel transaction(@RequestHeader(name="X-Client-Id") String clientId,
+                                     @RequestHeader(name="X-Api-Key") String apiKey,@RequestBody TransactionDTO dto)
     {
-        return transactionService.beginTransaction(dto);
+        if(apiKeyService.isApiValid(clientId,apiKey))
+        {
+            return transactionService.beginTransaction(dto);
+        }
+        return new ResponseModel("401","Bạn không có quyền sử dụng API này!");
     }
 }
