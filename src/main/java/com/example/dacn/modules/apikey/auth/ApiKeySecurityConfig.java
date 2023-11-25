@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableWebSecurity
 @EnableMethodSecurity
 public class ApiKeySecurityConfig  {
-
     @Autowired
     private ApiKeyService apiKeyService;
     @Bean
@@ -28,7 +27,8 @@ public class ApiKeySecurityConfig  {
         return new BCryptPasswordEncoder();
     }
     @Bean
-    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    protected SecurityFilterChain configure(HttpSecurity http) throws Exception
+    {
          return http.csrf().disable()
                 .addFilterBefore(apiKeyAuthFilter(),
                         BasicAuthenticationFilter.class)

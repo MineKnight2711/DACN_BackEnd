@@ -24,7 +24,8 @@ public class CartController
     }
 
     @PutMapping("/{cartId}")
-    public ResponseModel updateCart(@PathVariable("cartId") String cartId, @RequestParam("newQuantity") int newQuantity)
+    public ResponseModel updateCart(@PathVariable("cartId") String cartId,
+                                    @RequestParam("newQuantity") int newQuantity)
     {
         return cartService.updateCart(cartId,newQuantity);
     }
