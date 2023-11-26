@@ -25,7 +25,7 @@ public class DishService {
     @Autowired
     private ImageService imageService;
 
-    public ResponseModel addDish(MultipartFile image, DishDTO dishDTO)
+    public ResponseModel addDish(DishDTO dishDTO)
     {
         dishDTO.setDishID("");
         try
@@ -35,13 +35,17 @@ public class DishService {
             {
                 return new ResponseModel("CategoryNotFound","Không tìm thấy danh mục");
             }
-            String imageUrl=imageService.uploadImage(image,"dishImage/",dishDTO.getDishName());
+
             Dish newDish = dishDTO.convertToEntity();
             newDish.setCategory((Category) categoryResponse.getData());
-            newDish.setImageUrl(imageUrl);
-            dishRepository.save(newDish);
 
-            return new ResponseModel("Success",newDish);
+            dishRepository.save(newDish);
+            String dishId=dishRepository.findLatestAddressId();
+            String imageUrl=imageService.uploadImage(dishDTO.getImage(),"dishImage/",dishId);
+            newDish.setDishID(dishId);
+            newDish.setImageUrl(imageUrl);
+            Dish savedDish = dishRepository.save(newDish);
+            return new ResponseModel("Success",savedDish);
         }
         catch (Exception e)
         {
@@ -57,13 +61,22 @@ public class DishService {
                 return new ResponseModel("CategoryNotFound", "Không tìm thấy danh mục");
             }
 
-            Optional<Dish> optionalDish = dishRepository.findById(dishID);
-            if (optionalDish.isPresent()) {
-                Dish dish = optionalDish.get();
-                dishDTO.updateDishToEntity(dish);
-                dish.setCategory((Category) categoryResponse.getData());
-                dishRepository.save(dish);
-                return new ResponseModel("Success", dish);
+            Dish optionalDish = dishRepository.findById(dishID).orElse(null);
+            if (optionalDish!=null) {
+                dishDTO.setDishID(optionalDish.getDishID());
+                Dish updatedDish=dishDTO.convertToEntity();
+                updatedDish.setCategory((Category) categoryResponse.getData());
+                if(dishDTO.getImage()!=null)
+                {
+                    String imageUrl=imageService.uploadImage(dishDTO.getImage(),"dishImage/",optionalDish.getDishID());
+                    updatedDish.setImageUrl(imageUrl);
+                }
+                else
+                {
+                    updatedDish.setImageUrl(optionalDish.getImageUrl());
+                }
+                dishRepository.save(updatedDish);
+                return new ResponseModel("Success", updatedDish);
             }
             else
             {

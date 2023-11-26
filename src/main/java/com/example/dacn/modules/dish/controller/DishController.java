@@ -16,9 +16,9 @@ public class DishController {
     @Autowired
     private DishService dishService;
     @PostMapping
-    public ResponseModel addDish(@RequestParam("image") MultipartFile image,@ModelAttribute DishDTO dishDTO)
+    public ResponseModel addDish(@ModelAttribute DishDTO dishDTO)
     {
-        return dishService.addDish(image,dishDTO);
+        return dishService.addDish(dishDTO);
     }
     @PutMapping("/{dishId}")
     public ResponseModel updateDish(@PathVariable("dishId") String dishId, @ModelAttribute DishDTO dishDTO)
