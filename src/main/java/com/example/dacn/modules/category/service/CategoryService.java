@@ -44,7 +44,7 @@ public class CategoryService
         }
     }
 
-    public ResponseModel createCategory(MultipartFile file, CategoryDTO categoryDTO)
+    public ResponseModel createCategory( CategoryDTO categoryDTO)
     {
         categoryDTO.setCategoryID("");
 
@@ -55,7 +55,7 @@ public class CategoryService
 
             categoryRepository.save(newCategory);
             String categoryId=categoryRepository.findLatestAddressId();
-            String imageUrl=imageService.uploadImage(file,"categoryImage/",categoryId);
+            String imageUrl=imageService.uploadImage(categoryDTO.getImage(), "categoryImage/",categoryId);
             newCategory.setCategoryID(categoryId);
             newCategory.setImageUrl(imageUrl);
             Category savedCate=categoryRepository.save(newCategory);
