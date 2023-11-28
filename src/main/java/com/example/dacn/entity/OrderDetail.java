@@ -23,7 +23,6 @@ public class OrderDetail {
     @ManyToOne
     @JoinColumn(name = "order_id",nullable = false,insertable=false,updatable=false)
     private Orders order;
-
     @Column(name = "amount")
     private int amount;
 

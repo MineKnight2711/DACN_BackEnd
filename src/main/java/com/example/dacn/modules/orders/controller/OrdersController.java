@@ -13,8 +13,15 @@ public class OrdersController {
     @Autowired
     private OrdersService ordersService;
 
-//    @PostMapping("/{accountId}")
-//    public ResponseModel createOrder(@PathVariable("accountId") String accountId, @ModelAttribute OrdersDTO ordersDTO) {
-//        return ordersService.createOrder(accountId,ordersDTO);
-//    }
+    @PostMapping("/{accountId}")
+    public ResponseModel createOrder(@PathVariable("accountId") String accountId,
+                                     @RequestBody OrdersDTO ordersDTO) {
+        Orders orders=ordersService.createOrder(accountId,ordersDTO);
+        if(orders!=null)
+        {
+            return new ResponseModel("Result",orders);
+        }
+        return new ResponseModel("Fail","Không thể tạo đơn hàng");
+    }
+
 }

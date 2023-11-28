@@ -1,39 +1,46 @@
 package com.example.dacn.modules.orders.service;
 
-import com.example.dacn.entity.Account;
-import com.example.dacn.entity.Dish;
-import com.example.dacn.entity.Orders;
-import com.example.dacn.entity.ResponseModel;
+import com.example.dacn.entity.*;
+
 import com.example.dacn.modules.account.service.AccountService;
+
 import com.example.dacn.modules.orders.dto.OrdersDTO;
-import com.example.dacn.modules.orders.repository.OrderDetailRepository;
+
 import com.example.dacn.modules.orders.repository.OrdersRepository;
+
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class OrdersService {
 
     @Autowired
     private OrdersRepository ordersRepository;
-
-    @Autowired
-    private OrderDetailRepository orderDetailRepository;
-
     @Autowired
     private AccountService accountService;
 
-//    public ResponseModel createOrder(String accountID, OrdersDTO ordersDTO) {
-//        try{
-//            Account acc=accountService.findById(accountID);
-//            if(acc==null)
-//            {
-//                return new ResponseModel("AccountNotFound", "Không tìm thấy tài khoản");
-//            }
-//
-//        }
+
+    public Orders createOrder(String accountID, OrdersDTO ordersDTO) {
+        ordersDTO.setOrderID("");
+
+            Account acc = accountService.findById(accountID);
+            if (acc == null) {
+                return null;
+            }
+            Orders newOrder=ordersDTO.toEntity();
+            newOrder.setAccount(acc);
+            ordersRepository.save(newOrder);
+            String newOrderId=ordersRepository.findLatestOrderId();
+            newOrder.setOrderID(newOrderId);
+            System.out.println("Order id :"+newOrder.getOrderID());
+            return newOrder;
+
+    }
+
+
 //
 //
 //    }

@@ -1,10 +1,13 @@
 package com.example.dacn.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -19,19 +22,9 @@ public class Payment {
     @Column(name = "payment_method")
     private String paymentMethod;
 
-    @Column(name = "info")
-    private String info;
-
-    @Column(name = "status")
-    private String status;
-
-    @Column(name = "amount")
-    private double amount;
-
-    @Column(name = "paid_time")
-    private String paidTime;
-
     @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
-    private List<Orders> orders;
+    @JsonIgnore
+    @JsonManagedReference
+    private List<PaymentDetails> paymentDetails;
 
 }

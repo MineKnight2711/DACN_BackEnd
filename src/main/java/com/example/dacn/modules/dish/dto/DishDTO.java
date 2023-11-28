@@ -4,6 +4,7 @@ import com.example.dacn.entity.Dish;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Getter
@@ -14,7 +15,7 @@ public class DishDTO {
     private String description;
     private double price;
     private int inStock;
-    private String imageUrl;
+    private MultipartFile image;
     private String categoryID;
 
     public Dish convertToEntity() {
@@ -24,15 +25,6 @@ public class DishDTO {
         dish.setDescription(this.description);
         dish.setPrice(this.price);
         dish.setInStock(this.inStock);
-        dish.setImageUrl(this.imageUrl);
         return dish;
-    }
-    public void updateDishToEntity(Dish dish) {
-        dish.setDishName(this.dishName);
-        dish.setDescription(this.description);
-        dish.setPrice(this.price);
-        dish.setInStock(this.inStock);
-        dish.setImageUrl(this.imageUrl);
-
     }
 }

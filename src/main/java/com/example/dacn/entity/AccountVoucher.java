@@ -11,8 +11,8 @@ import java.io.Serializable;
 @Data
 @Getter
 @Setter
-@Entity(name="account_voucher")
-@Table(name="account_voucher")
+@Entity(name="AccountVoucher")
+@Table(name="AccountVoucher")
 public class AccountVoucher {
     @EmbeddedId
     private AccountVoucherId accountVoucherId;
@@ -24,7 +24,6 @@ public class AccountVoucher {
     @ManyToOne
     @JoinColumn(name = "voucher_id",nullable = false,insertable=false, updatable=false)
     private Voucher voucher;
-
 }
 
 

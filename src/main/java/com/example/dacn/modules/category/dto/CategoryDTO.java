@@ -4,12 +4,14 @@ import com.example.dacn.entity.Category;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Getter
 @Setter
 public class CategoryDTO {
     private String categoryID;
+    private MultipartFile image;
     private String categoryName;
 
     public Category convertToEntity() {
