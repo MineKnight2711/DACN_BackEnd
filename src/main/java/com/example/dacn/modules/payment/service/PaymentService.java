@@ -19,7 +19,7 @@ public class PaymentService
     @Autowired
     private PaymentDetailsRepository paymentDetailsRepository;
 
-    public boolean savePayment(Orders order, PaymentDetailsDTO dto)
+    public PaymentDetails savePayment(Orders order, PaymentDetailsDTO dto)
     {
         Payment payment=paymentRepository.findById(dto.getPaymentId()).orElse(null);
         if(payment!=null)
@@ -27,10 +27,10 @@ public class PaymentService
             PaymentDetails newPaymentDetails = dto.toEntity();
             newPaymentDetails.setOrders(order);
             newPaymentDetails.setPayment(payment);
-            paymentDetailsRepository.save(newPaymentDetails);
-            return true;
+            PaymentDetails savedPamentDetails= paymentDetailsRepository.save(newPaymentDetails);
+            return savedPamentDetails;
         }
-        return false;
+        return null;
     }
 //    public ResponseModel savePayment(PaymentDTO dto)
 //    {

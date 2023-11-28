@@ -3,6 +3,7 @@ package com.example.dacn.modules.transaction;
 import com.example.dacn.modules.orders.dto.OrdersDTO;
 import com.example.dacn.modules.payment.dto.PaymentDTO;
 import com.example.dacn.modules.payment.dto.PaymentDetailsDTO;
+import com.example.dacn.modules.payos.model.PaymentRequestBody;
 import com.example.dacn.utils.DatetimeDeserialize;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -24,4 +25,5 @@ public class TransactionDTO
     private String accountId;
     private OrdersDTO ordersDTO;
     private PaymentDetailsDTO paymentDetailsDTO;
+    private PaymentRequestBody paymentRequestBody;
 }
