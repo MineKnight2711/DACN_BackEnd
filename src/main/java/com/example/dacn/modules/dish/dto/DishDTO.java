@@ -27,3 +27,4 @@ public class DishDTO {
         dish.setInStock(this.inStock);
         return dish;
     }
+}
