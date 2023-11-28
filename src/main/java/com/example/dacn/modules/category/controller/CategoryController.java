@@ -23,9 +23,9 @@ public class CategoryController {
         return categoryService.findById(categoryID);
     }
     @PostMapping
-    public ResponseModel createCategory(@RequestParam("file") MultipartFile file, @ModelAttribute CategoryDTO categoryDTO)
+    public ResponseModel createCategory( @ModelAttribute CategoryDTO categoryDTO)
     {
-        return categoryService.createCategory(file,categoryDTO);
+        return categoryService.createCategory(categoryDTO);
     }
     @PutMapping("/{categoryID}")
     public ResponseModel updateCategory(@PathVariable String categoryID, @ModelAttribute CategoryDTO categoryDTO) {
