@@ -33,10 +33,10 @@ public class CategoryService
     }
     public ResponseModel findById(String categoryID)
     {
-       Optional<Category> category=categoryRepository.findById(categoryID);
-        if (category.isPresent())
+        Category category=categoryRepository.findById(categoryID).orElse(null);
+        if (category!=null)
         {
-            return new ResponseModel("Found",category.get());
+            return new ResponseModel("Found",category);
         }
         else
         {

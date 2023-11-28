@@ -83,6 +83,7 @@ public class DishService {
                 return new ResponseModel("DishNotFound", "Không tìm thấy món ăn");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseModel("Fail", "Sửa món ăn thất bại");
         }
     }
