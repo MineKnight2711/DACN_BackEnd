@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, String> {
-//    @Query("SELECT c FROM Category c WHERE c.categoryID = ?1")
-//    Category getById(Long id);
+    @Query(value = "SELECT @generated_id", nativeQuery = true)
+    String findLatestAddressId();
 }
