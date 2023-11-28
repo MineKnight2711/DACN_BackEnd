@@ -7,6 +7,7 @@ import com.example.dacn.modules.account.repository.AccountRepository;
 import com.example.dacn.utils.DataConvert;
 
 
+import com.example.dacn.utils.ImageService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
@@ -19,6 +20,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -30,6 +32,8 @@ public class AccountService {
     private AccountRepository accountRepository;
     @Autowired
     private DataConvert dataConvert;
+    @Autowired
+    private ImageService imageService;
     @Autowired
     private FirebaseAuth firebaseAuth;
 
@@ -209,22 +213,28 @@ public class AccountService {
             );
         }
     }
-    public ResponseModel changeImage(String accountId,String newUrl){
-        Account acc = findById(accountId);
-        if(acc!=null){
-            acc.setImageUrl(newUrl);
-            System.out.println(newUrl);
-            accountRepository.save(acc);
+    public ResponseModel changeImage(String accountId, MultipartFile image){
+        try {
+            Account acc = findById(accountId);
+            if(acc!=null){
+                String imageUrl=imageService.uploadImage(image,"userImage/",accountId);
+                acc.setImageUrl(imageUrl);
+                System.out.println(imageUrl);
+                accountRepository.save(acc);
+                return new ResponseModel(
+                        "Success",
+                        acc
+                );
+            }
             return new ResponseModel(
-                    "Success",
-                    acc
+                    "Fail",
+                    null
             );
         }
-        return new ResponseModel(
-                "Fail",
-                null
-        );
 
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
