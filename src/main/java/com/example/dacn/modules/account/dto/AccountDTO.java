@@ -1,7 +1,8 @@
 package com.example.dacn.modules.account.dto;
 
 import com.example.dacn.entity.Account;
-import com.example.dacn.utils.DatetimeDeserialize;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.Temporal;
@@ -24,30 +25,13 @@ public class AccountDTO
     @Temporal(TemporalType.TIMESTAMP)
     @Past(message = "NgaySinh phai nho hon ngay hien tai")
     @JsonProperty("birthday")
-    @JsonDeserialize(using = DatetimeDeserialize.class)
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
     private String gender;
     private String phoneNumber;
     private String imageUrl;
 
-    public AccountDTO() {}
-
-    public AccountDTO(String accountID, String password, String fullName, String email, Date birthday, String gender,String phoneNumber, String imageUrl) {
-        this.accountID = accountID;
-        this.fullName = fullName;
-        this.password=password;
-        this.email = email;
-        this.birthday = birthday;
-        this.phoneNumber = phoneNumber;
-        this.gender = gender;
-        this.imageUrl = imageUrl;
-    }
-    private String encryptPassword(String passWord)
-    {
-        String salt = BCrypt.gensalt();
-        return BCrypt.hashpw(passWord, salt);
-    }
 
     public Account toEntity()
     {

@@ -41,17 +41,7 @@ public class AccountService {
 
     public ResponseModel getAccountById(String id)
     {
-        Optional<Account> account=accountRepository.findById(id);
-        if(account.isEmpty())
-        {
-            return new ResponseModel("NoAccount",null);
-        }
-        return new ResponseModel("Success",account.get());
-
-    }
-    public ResponseModel getAccountByEmail(String email)
-    {
-       Account account=accountRepository.findByEmail(email);
+        Account account=accountRepository.findById(id).orElse(null);
         if(account==null)
         {
             return new ResponseModel("NoAccount",null);
@@ -64,7 +54,7 @@ public class AccountService {
         dto.setAccountID("");
         if(dto.getBirthday()!=null)
         {
-            dto.setBirthday(dataConvert.parseBirthday(dto.getBirthday()));
+            dto.setBirthday(DataConvert.parseBirthday(dto.getBirthday()));
         }
         else
         {
@@ -76,6 +66,7 @@ public class AccountService {
             {
                 return new ResponseModel("EmailAlreadyExist",dto.getEmail());
             }
+
             Account result= accountRepository.save(dto.toEntity());
             return new ResponseModel("Success",result);
         }
@@ -157,13 +148,14 @@ public class AccountService {
 
     public Account findById(String accountID)
     {
-        Optional<Account> account=accountRepository.findById(accountID);
+        Account account=accountRepository.findById(accountID).orElse(null);
 
-        if(account.isEmpty())
+        if(account==null)
         {
             return null;
         }
-        return account.get();
+        account.setBirthday(DataConvert.parseBirthday(account.getBirthday()));
+        return account;
     }
 
     public ResponseModel changePassword(String email, String newPassword)
@@ -236,5 +228,19 @@ public class AccountService {
             throw new RuntimeException(e);
         }
     }
+    public ResponseModel updateAccount(AccountDTO dto){
+        Account acc=accountRepository.findById(dto.getAccountID()).orElse(null);
+        if(acc!=null)
+        {
+            dto.setEmail(acc.getEmail());
+            dto.setGender(acc.getGender());
+            dto.setImageUrl(acc.getImageUrl());
+//            dto.setBirthday(DataConvert.parseBirthday(dto.getBirthday()));
+            acc=dto.toEntity();
 
+            Account updatedAccount=accountRepository.save(acc);
+            return new ResponseModel("Success",updatedAccount);
+        }
+        return new ResponseModel("AccountNotFound","Không tìm thấy tài khoản!");
+    }
 }

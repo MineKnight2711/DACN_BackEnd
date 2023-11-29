@@ -19,18 +19,12 @@ public class AccountController {
     @PostMapping
     public ResponseModel createAccount(@ModelAttribute AccountDTO dto)
     {
-        System.out.println(dto.getPassword());
         return accountService.createAccount(dto);
     }
     @GetMapping("/{accountId}")
     public ResponseModel getAccountById(@PathVariable String accountId)
     {
         return accountService.getAccountById(accountId);
-    }
-    @GetMapping("/get-by-email/{email}")
-    public ResponseModel getAccountByEmail(@PathVariable String email)
-    {
-        return accountService.getAccountByEmail(email);
     }
     @PutMapping("/{email}")
     public ResponseModel changePassword(
@@ -56,7 +50,13 @@ public class AccountController {
     public ResponseModel changeImage(
             @PathVariable("accountId") String accountId,
             @RequestParam("image") MultipartFile image) {
+        System.out.println("accountId"+accountId);
         return accountService.changeImage(accountId, image);
+    }
+    @PutMapping("/update-account")
+    public ResponseModel updateAccount(
+            @ModelAttribute AccountDTO dto) {
+        return accountService.updateAccount(dto);
     }
     @PostMapping("/sign-in")
     public ResponseModel managerSignIn(@RequestBody String requestLogin) throws IOException {
