@@ -1,6 +1,5 @@
 package com.example.dacn.entity;
 
-import com.example.dacn.utils.DatetimeDeserialize;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,12 +24,11 @@ public class Voucher {
     private String voucherID;
     @Column(name = "startDate")
     @JsonProperty("startDate")
-    @JsonDeserialize(using = DatetimeDeserialize.class)
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
     @Column(name = "expDate")
     @JsonProperty("expDate")
-    @JsonDeserialize(using = DatetimeDeserialize.class)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expDate;
     @Column(name = "voucherName")

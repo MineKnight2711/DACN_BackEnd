@@ -1,6 +1,5 @@
 package com.example.dacn.entity;
 
-import com.example.dacn.utils.DatetimeDeserialize;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
@@ -23,7 +22,6 @@ public class Review {
     @Column(name = "feedBack",length = 500)
     private String feedBack;
     @JsonProperty("birthday")
-    @JsonDeserialize(using = DatetimeDeserialize.class)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "dateRecorded",length = 500)
     private Date dateRecorded;

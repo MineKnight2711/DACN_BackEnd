@@ -34,30 +34,45 @@ public class TransactionService
 
             Orders savedOrder = orderService.createOrder(dto.getAccountId(),dto.getOrdersDTO());
 
-            System.out.println("Order ::"+savedOrder.getOrderID());
             if(savedOrder==null)
             {
-                return new ResponseModel("SaveOrderFail","Có lỗi xảy ra khi lưu order");
+                return catchTransactionError("SaveOrderFail");
             }
             detailService.saveOrderDetails(savedOrder,dto.getOrdersDTO().getDishes());
-            System.out.println("Saved OrderId ::"+savedOrder.getOrderID());
-            PaymentDetails savedPamentDetails = paymentService.savePayment(savedOrder,dto.getPaymentDetailsDTO());
-            if(savedPamentDetails==null)
+            PaymentDetails savedPaymentDetails = paymentService.savePayment(savedOrder,dto.getPaymentDetailsDTO());
+            if(savedPaymentDetails==null)
             {
-                return new ResponseModel("FailToSavePayment","Không thể lưu giao dịch!");
+                return catchTransactionError("SavePaymentFail");
             }
             PaymentRequestBody paymentRequestBody=dto.getPaymentRequestBody();
-            paymentRequestBody.setOrderCode(savedPamentDetails.getPaymentDetailsId());
+            paymentRequestBody.setOrderCode(savedPaymentDetails.getPaymentDetailsId());
             PaymentResponse response= payOSService.getPaymentLink(paymentRequestBody);
+            if(response.getCode().equals("231"))
+            {
 
+                return catchTransactionError("OrderCodeExisted");
+
+            }
             return new ResponseModel("Success",response);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            return new ResponseModel("Fail","Có lỗi xảy ra");
+            return catchTransactionError("");
         }
 
 
+    }
+    private ResponseModel catchTransactionError(String error){
+        switch (error) {
+            case "SaveOrderFail":
+                return new ResponseModel("SaveOrderFail","Lỗi khi lưu đơn hàng!");
+            case "SavePaymentFail":
+                return new ResponseModel("SavePaymentFail","Lỗi khi lưu giao dịch!");
+            case "OrderCodeExisted":
+                return new ResponseModel("OrderCodeExisted","Mã giao địch đã tồn tại trên hệ thống payos!");
+            default:
+                return new ResponseModel("Unknown","Lỗi chưa xác định");
+        }
     }
 }

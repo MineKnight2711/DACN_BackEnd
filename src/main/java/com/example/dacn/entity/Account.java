@@ -1,6 +1,6 @@
 package com.example.dacn.entity;
 
-import com.example.dacn.utils.DatetimeDeserialize;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,8 +31,7 @@ public class Account {
     @Temporal(TemporalType.TIMESTAMP)
     @Past(message = "NgaySinh phai nho hon ngay hien tai")
     @JsonProperty("birthday")
-    @JsonDeserialize(using = DatetimeDeserialize.class)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone="Asia/Ho_Chi_Minh")
     @Column(name = "birthday")
     private Date birthday;
     @Column(name = "phoneNumber")
