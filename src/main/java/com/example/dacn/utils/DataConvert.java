@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.TimeZone;
 @Service
 public class DataConvert {
-    public Date parseBirthday(Date birthday) {
+    public static Date parseBirthday(Date birthday) {
         TimeZone timeZone = TimeZone.getTimeZone("Asia/Ho_Chi_Minh");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setTimeZone(timeZone);
