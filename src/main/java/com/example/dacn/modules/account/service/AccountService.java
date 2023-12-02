@@ -43,8 +43,6 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
-    private DataConvert dataConvert;
-    @Autowired
     private ImageService imageService;
     @Autowired
     private FirebaseAuth firebaseAuth;
@@ -80,7 +78,7 @@ public class AccountService {
             {
                 return new ResponseModel("EmailAlreadyExist",dto.getEmail());
             }
-
+            dto.setImageUrl(Constant.DEFAULT_AVATAR);
             Account result= accountRepository.save(dto.toEntity());
             return new ResponseModel("Success",result);
         }

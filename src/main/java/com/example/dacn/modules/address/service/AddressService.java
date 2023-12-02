@@ -7,8 +7,11 @@ import com.example.dacn.modules.account.service.AccountService;
 import com.example.dacn.modules.address.dto.AddressDTO;
 import com.example.dacn.modules.address.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -42,9 +45,16 @@ public class AddressService {
 
             return new ResponseModel("Success", getAddress);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            // Handle any exception and log the error
-            System.out.println("An error occurred: " + ex.toString());
+
+            if(ex.getCause().getCause() instanceof SQLException){
+
+                SQLException sqlEx = (SQLException) ex.getCause().getCause();
+
+                if(sqlEx.getSQLState().equals("45000") && sqlEx.getErrorCode() == 1644) {
+                    return new ResponseModel("DefaultAddressLimit", "Bạn chỉ có thể có 1 duy nhất 1 địa chỉ mặc định!");
+                }
+
+            }
             return new ResponseModel("SomethingWrong", "Lỗi chưa xác định!");
         }
     }

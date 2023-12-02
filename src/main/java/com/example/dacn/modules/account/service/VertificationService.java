@@ -42,7 +42,7 @@ public class VertificationService {
             return new ResponseModel("Succes",verificationLink) ;
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
-            return new ResponseModel("Succes",e.getMessage());
+            return new ResponseModel("Fail                                                     cxx",e.getMessage());
         }
 
     }
