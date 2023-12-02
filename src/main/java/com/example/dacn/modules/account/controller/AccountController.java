@@ -5,6 +5,7 @@ import com.example.dacn.modules.account.dto.AccountDTO;
 import com.example.dacn.modules.account.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -18,18 +19,12 @@ public class AccountController {
     @PostMapping
     public ResponseModel createAccount(@ModelAttribute AccountDTO dto)
     {
-        System.out.println(dto.getPassword());
         return accountService.createAccount(dto);
     }
     @GetMapping("/{accountId}")
     public ResponseModel getAccountById(@PathVariable String accountId)
     {
         return accountService.getAccountById(accountId);
-    }
-    @GetMapping("/get-by-email/{email}")
-    public ResponseModel getAccountByEmail(@PathVariable String email)
-    {
-        return accountService.getAccountByEmail(email);
     }
     @PutMapping("/{email}")
     public ResponseModel changePassword(
@@ -51,12 +46,17 @@ public class AccountController {
     {
         return accountService.login(email);
     }
-    @PutMapping("/updateImage/{accountId}")
+    @PutMapping("/update-image/{accountId}")
     public ResponseModel changeImage(
             @PathVariable("accountId") String accountId,
-            @RequestParam String newImageUrl
-    ) {
-        return accountService.changeImage(accountId, newImageUrl);
+            @RequestParam("image") MultipartFile image) {
+        System.out.println("accountId"+accountId);
+        return accountService.changeImage(accountId, image);
+    }
+    @PutMapping("/update-account")
+    public ResponseModel updateAccount(
+            @ModelAttribute AccountDTO dto) {
+        return accountService.updateAccount(dto);
     }
     @PostMapping("/sign-in")
     public ResponseModel managerSignIn(@RequestBody String requestLogin) throws IOException {

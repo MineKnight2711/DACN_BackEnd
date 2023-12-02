@@ -7,6 +7,7 @@ import com.example.dacn.modules.account.repository.AccountRepository;
 import com.example.dacn.utils.DataConvert;
 
 
+import com.example.dacn.utils.ImageService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
@@ -19,6 +20,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -31,23 +33,15 @@ public class AccountService {
     @Autowired
     private DataConvert dataConvert;
     @Autowired
+    private ImageService imageService;
+    @Autowired
     private FirebaseAuth firebaseAuth;
 
 
 
     public ResponseModel getAccountById(String id)
     {
-        Optional<Account> account=accountRepository.findById(id);
-        if(account.isEmpty())
-        {
-            return new ResponseModel("NoAccount",null);
-        }
-        return new ResponseModel("Success",account.get());
-
-    }
-    public ResponseModel getAccountByEmail(String email)
-    {
-       Account account=accountRepository.findByEmail(email);
+        Account account=accountRepository.findById(id).orElse(null);
         if(account==null)
         {
             return new ResponseModel("NoAccount",null);
@@ -60,7 +54,7 @@ public class AccountService {
         dto.setAccountID("");
         if(dto.getBirthday()!=null)
         {
-            dto.setBirthday(dataConvert.parseBirthday(dto.getBirthday()));
+            dto.setBirthday(DataConvert.parseBirthday(dto.getBirthday()));
         }
         else
         {
@@ -72,6 +66,7 @@ public class AccountService {
             {
                 return new ResponseModel("EmailAlreadyExist",dto.getEmail());
             }
+
             Account result= accountRepository.save(dto.toEntity());
             return new ResponseModel("Success",result);
         }
@@ -153,13 +148,14 @@ public class AccountService {
 
     public Account findById(String accountID)
     {
-        Optional<Account> account=accountRepository.findById(accountID);
+        Account account=accountRepository.findById(accountID).orElse(null);
 
-        if(account.isEmpty())
+        if(account==null)
         {
             return null;
         }
-        return account.get();
+        account.setBirthday(DataConvert.parseBirthday(account.getBirthday()));
+        return account;
     }
 
     public ResponseModel changePassword(String email, String newPassword)
@@ -209,22 +205,42 @@ public class AccountService {
             );
         }
     }
-    public ResponseModel changeImage(String accountId,String newUrl){
-        Account acc = findById(accountId);
-        if(acc!=null){
-            acc.setImageUrl(newUrl);
-            System.out.println(newUrl);
-            accountRepository.save(acc);
+    public ResponseModel changeImage(String accountId, MultipartFile image){
+        try {
+            Account acc = findById(accountId);
+            if(acc!=null){
+                String imageUrl=imageService.uploadImage(image,"userImage/",accountId);
+                acc.setImageUrl(imageUrl);
+                System.out.println(imageUrl);
+                accountRepository.save(acc);
+                return new ResponseModel(
+                        "Success",
+                        acc
+                );
+            }
             return new ResponseModel(
-                    "Success",
-                    acc
+                    "Fail",
+                    null
             );
         }
-        return new ResponseModel(
-                "Fail",
-                null
-        );
 
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+    public ResponseModel updateAccount(AccountDTO dto){
+        Account acc=accountRepository.findById(dto.getAccountID()).orElse(null);
+        if(acc!=null)
+        {
+            dto.setEmail(acc.getEmail());
+            dto.setGender(acc.getGender());
+            dto.setImageUrl(acc.getImageUrl());
+//            dto.setBirthday(DataConvert.parseBirthday(dto.getBirthday()));
+            acc=dto.toEntity();
 
+            Account updatedAccount=accountRepository.save(acc);
+            return new ResponseModel("Success",updatedAccount);
+        }
+        return new ResponseModel("AccountNotFound","Không tìm thấy tài khoản!");
+    }
 }
