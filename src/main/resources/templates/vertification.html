@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Xác thực email</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+    <body>
+        <p th:text="'Kính chào ' + ${name} + ','" />
+            <p>Cảm ơn v đã đăng ký tài khoản trên nền tảng ứng dụng của chúng tôi:</p>
+
+                <p>
+                    Nhấp vào <a th:href="${activationLink}" th:text="đây"> để xác thực email</a>
+                </p>
+
+            <p>Trân trọng,</p>
+        <p th:text="${appName}"/>
+    </body>
+</html>
