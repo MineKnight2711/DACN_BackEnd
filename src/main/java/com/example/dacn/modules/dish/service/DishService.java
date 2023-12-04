@@ -110,6 +110,14 @@ public class DishService {
         }
         return new ResponseModel("NoDish", "Không có món ăn");
     }
+    public ResponseModel getByCategoryId(String categoryId) {
+        List<Dish> dishes = dishRepository.getByCategory(categoryId);
+        if(!dishes.isEmpty())
+        {
+            return new ResponseModel("Success", dishes);
+        }
+        return new ResponseModel("NoDish", "Không có món ăn");
+    }
     public Dish findById(String dishID)
     {
         Optional<Dish> dish=dishRepository.findById(dishID);
