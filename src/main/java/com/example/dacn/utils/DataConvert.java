@@ -10,17 +10,19 @@ import java.util.TimeZone;
 @Service
 public class DataConvert {
     public static Date parseBirthday(Date birthday) {
+        try {
         TimeZone timeZone = TimeZone.getTimeZone("Asia/Ho_Chi_Minh");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setTimeZone(timeZone);
 
         String formattedDate = dateFormat.format(birthday);
-        Date parsedBirthday;
-        try {
-            parsedBirthday = dateFormat.parse(formattedDate);
+        Date parsedBirthday = dateFormat.parse(formattedDate);
+        return parsedBirthday;
+
+
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        return parsedBirthday;
+
     }
 }

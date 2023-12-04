@@ -3,14 +3,23 @@ import com.example.dacn.entity.Account;
 import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.modules.account.dto.AccountDTO;
 
+import com.example.dacn.modules.account.dto.UserDTO;
+import com.example.dacn.modules.account.dto.UserLookUpResponse;
+import com.example.dacn.modules.account.dto.UserSignInResponse;
 import com.example.dacn.modules.account.repository.AccountRepository;
+import com.example.dacn.utils.Constant;
 import com.example.dacn.utils.DataConvert;
 
 
 import com.example.dacn.utils.ImageService;
+import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.zaxxer.hikari.util.ClockSource;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -19,11 +28,14 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 
 @Service
@@ -31,12 +43,11 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
-    private DataConvert dataConvert;
-    @Autowired
     private ImageService imageService;
     @Autowired
     private FirebaseAuth firebaseAuth;
-
+    @Autowired
+    private Gson gson;
 
 
     public ResponseModel getAccountById(String id)
@@ -49,6 +60,7 @@ public class AccountService {
         return new ResponseModel("Success",account);
 
     }
+
     public ResponseModel createAccount(AccountDTO dto)
     {
         dto.setAccountID("");
@@ -66,7 +78,7 @@ public class AccountService {
             {
                 return new ResponseModel("EmailAlreadyExist",dto.getEmail());
             }
-
+            dto.setImageUrl(Constant.DEFAULT_AVATAR);
             Account result= accountRepository.save(dto.toEntity());
             return new ResponseModel("Success",result);
         }
@@ -111,12 +123,41 @@ public class AccountService {
         }
         return new ResponseModel("Success",account);
     }
-    public ResponseModel signInUser(String requestLoginJson) throws IOException {
+    public ResponseModel lookupUserByEmail(String email, String idToken) {
+        try {
+            String url = "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=" + Constant.FIREBASE_API_KEY;
+            HttpClient httpClient = HttpClients.createDefault();
+
+            // Create an HTTP POST request
+            HttpPost httpPost = new HttpPost(url);
+
+            String requestBody = "{\"idToken\": \"" + idToken + "\"}";
+            httpPost.setEntity(new StringEntity(requestBody, "application/json", "UTF-8"));
+
+            // Execute the request
+            HttpResponse response = httpClient.execute(httpPost);
+
+            // For example, you can use the EntityUtils to read the response content
+            String responseContent = EntityUtils.toString(response.getEntity());
+            String cleanedResponseContent = responseContent.replaceAll("\\n", "").replaceAll("\\\"", "\"");
+            if(!cleanedResponseContent.contains("error"))
+            {
+                UserLookUpResponse userLookUpResponse=gson.fromJson(cleanedResponseContent,UserLookUpResponse.class);
+                return new ResponseModel("Success",userLookUpResponse);
+            }
+
+            return new ResponseModel("Result",cleanedResponseContent); // Return response body as string
+        }catch (IOException ex)
+        {
+            ex.printStackTrace();
+            return new ResponseModel("Result","Không thể look up user trên firebase");
+        }
+    }
+    public ResponseModel signInUser(UserDTO dto) throws IOException {
         // Your API key
-        String apiKey = "AIzaSyA-_uiCdzqybddZNo5sB-oJcwPXhDmrUHs";
 
         // Construct the URL
-        String url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + apiKey;
+        String url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + Constant.FIREBASE_API_KEY;
 
         // Create an instance of HttpClient
         HttpClient httpClient = HttpClients.createDefault();
@@ -125,15 +166,21 @@ public class AccountService {
         HttpPost httpPost = new HttpPost(url);
 
 
-        httpPost.setEntity(new StringEntity(requestLoginJson, "application/json", "UTF-8"));
+        httpPost.setEntity(new StringEntity(gson.toJson(dto), "application/json", "UTF-8"));
 
         // Execute the request
         HttpResponse response = httpClient.execute(httpPost);
 
         // For example, you can use the EntityUtils to read the response content
         String responseContent = EntityUtils.toString(response.getEntity());
+        String cleanedResponseContent = responseContent.replaceAll("\\n", "").replaceAll("\\\"", "\"");
+        if(!cleanedResponseContent.contains("error"))
+        {
+            UserSignInResponse userSignInResponse=gson.fromJson(cleanedResponseContent,UserSignInResponse.class);
+            return new ResponseModel("Success",userSignInResponse);
+        }
 
-        return new ResponseModel("Success",responseContent);
+        return new ResponseModel("Fail",cleanedResponseContent);
     }
 
     public ResponseModel signOutUser(String userId) {

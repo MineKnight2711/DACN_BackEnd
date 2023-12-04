@@ -13,8 +13,16 @@ import lombok.Setter;
 public class Address {
     @Id
     private String addressID;
-    @Column(name = "address")
-    private String address;
+    @Column(name = "ward")
+    private String ward;
+    @Column(name = "district")
+    private String district;
+    @Column(name = "province")
+    private String province;
+    @Column(name = "details")
+    private String details;
+    @Column(name = "addressName")
+    private String addressName;
     @Column(name = "receiverName")
     private String receiverName;
     @Column(name = "receiverPhone")

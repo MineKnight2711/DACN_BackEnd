@@ -37,12 +37,17 @@ public class Dish {
     @JsonIgnore
     private List<Orders> orders;
 
-
     //Quan hệ 1 nhiều tới bảng category
     @ManyToOne
     @JsonManagedReference
     @JoinColumn(name = "categoryID",nullable = true)
     private Category category;
+
+    @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JsonManagedReference
+    private List<Favorite> favorites;
+
     //Quan hệ 1 nhiều tới bảng cart
     @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL)
     @JsonIgnore

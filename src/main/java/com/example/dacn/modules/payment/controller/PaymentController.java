@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/payment")
-public class PaymentController {
+public class PaymentController
+{
     @Autowired
     private PaymentService paymentService;
     @GetMapping
-    public ResponseModel getAllPayment(){
+    public ResponseModel getAllPayment()
+    {
         return paymentService.getAllPayment();
     }
 }
