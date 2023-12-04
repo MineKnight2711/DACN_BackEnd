@@ -18,7 +18,8 @@ public class DishDTO {
     private MultipartFile image;
     private String categoryID;
 
-    public Dish convertToEntity() {
+    public Dish convertToEntity()
+    {
         Dish dish = new Dish();
         dish.setDishID(this.dishID);
         dish.setDishName(this.dishName);
