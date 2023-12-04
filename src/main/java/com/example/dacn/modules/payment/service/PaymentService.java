@@ -11,6 +11,8 @@ import com.example.dacn.modules.payment.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PaymentService
 {
@@ -31,6 +33,11 @@ public class PaymentService
             return savedPamentDetails;
         }
         return null;
+    }
+    public ResponseModel getAllPayment()
+    {
+        List<Payment> listPayment=paymentRepository.findAll();
+        return new ResponseModel("Success",listPayment);
     }
 //    public ResponseModel savePayment(PaymentDTO dto)
 //    {

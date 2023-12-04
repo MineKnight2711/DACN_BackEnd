@@ -16,18 +16,12 @@ import java.util.Date;
 public class PaymentDTO
 {
     private String paymentMethod;
-//    private String info;
-//    private double amount;
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date paidTime;
+
     public Payment toEntity()
     {
         Payment newPayment=new Payment();
         newPayment.setPaymentMethod(this.paymentMethod);
-//        newPayment.setInfo(this.info);
-//        newPayment.setAmount(this.getAmount());
-//        newPayment.setPaidTime(this.paidTime);
+
         return newPayment;
     }
 }
