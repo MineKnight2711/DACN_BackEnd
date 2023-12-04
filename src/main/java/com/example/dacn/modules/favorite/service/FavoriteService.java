@@ -58,23 +58,36 @@ public class FavoriteService {
             }
 }
 
-    public ResponseModel removeFromFavorites(FavoriteDTO favoriteDTO)
+    public ResponseModel removeFromFavorites(String dishID,String accountID)
     {
         try
         {
-            Favorite favorite = favoriteDTO.convertToEntity();
+            Favorite favorite = favoriteRepository.getDuplicateFavorite(accountID,dishID);
+            if(favorite!=null)
+            {
+                favoriteRepository.delete(favorite);
+                return new ResponseModel("Success", null);
+            }
+            return new ResponseModel("Fail", null);
 
-            favoriteRepository.delete(favorite);
-
-            return new ResponseModel("Success", null);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseModel("SomethingWrong", null);
+            return new ResponseModel("SomethingWrong", "Có lỗi xảy ra");
         }
     }
     public ResponseModel getFavoritesByAccountID(String accountID)
     {
         return new ResponseModel("Success",favoriteRepository.getFavoriteById(accountID));
+    }
+
+    public ResponseModel getAccountFavoriteDish(String dishID, String accountID)
+    {
+        Favorite favorite = favoriteRepository.getDuplicateFavorite(accountID,dishID);
+        if(favorite!=null)
+        {
+            return new ResponseModel("Success", favorite);
+        }
+        return new ResponseModel("NotFound", null);
     }
 }
 

@@ -19,6 +19,12 @@ import java.util.Map;
 public class FavoriteController {
     @Autowired
     private FavoriteService favoriteService;
+    @GetMapping
+    public ResponseModel getAccountFavoriteDish(@RequestParam("dishID") String dishID,
+                                                @RequestParam("accountID") String accountID)
+    {
+        return favoriteService.getAccountFavoriteDish(dishID,accountID);
+    }
     @GetMapping("/get-by-accountId/{accountId}")
     public ResponseModel getFavoritesByAccountID(@PathVariable("accountId") String accountID)
     {
@@ -31,10 +37,9 @@ public class FavoriteController {
         return favoriteService.addToFavorites(favoriteDTO);
     }
 
-    @DeleteMapping("/{favoriteID}")
-    public ResponseModel removeFromFavorites(@PathVariable("favoriteID") String favoriteID) {
-        FavoriteDTO favoriteDTO = new FavoriteDTO();
-        favoriteDTO.setFavoriteID(favoriteID);
-        return favoriteService.removeFromFavorites(favoriteDTO);
+    @DeleteMapping
+    public ResponseModel removeFromFavorites(@RequestParam("dishID") String dishID,@RequestParam("accountID") String accountID) {
+
+        return favoriteService.removeFromFavorites(dishID,accountID);
     }
 }
