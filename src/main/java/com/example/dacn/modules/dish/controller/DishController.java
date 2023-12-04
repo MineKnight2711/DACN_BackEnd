@@ -36,4 +36,9 @@ public class DishController {
     {
         return dishService.getAllDishes();
     }
+    @GetMapping("/get-by-categoryId/{categoryID}")
+    public ResponseModel getByCategoryID(@PathVariable("categoryID") String categoryID)
+    {
+        return dishService.getByCategoryId(categoryID);
+    }
 }

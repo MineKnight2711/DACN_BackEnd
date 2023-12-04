@@ -32,8 +32,8 @@ public class PaymentService
         }
         return null;
     }
-//    public ResponseModel savePayment(PaymentDTO dto)
-//    {
-//
-//    }
+    public ResponseModel getAllPayment()
+    {
+        return new ResponseModel("Success",paymentRepository.findAll());
+    }
 }

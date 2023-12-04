@@ -40,6 +40,8 @@ public class Account {
     private String gender;
     @Column(name = "imageUrl")
     private String imageUrl;
+
+
     @OneToMany (mappedBy = "account", cascade = CascadeType.ALL)
     @JsonIgnore
     @JsonManagedReference
@@ -61,6 +63,11 @@ public class Account {
     @JsonIgnore
     @JsonManagedReference
     private List<Cart> carts;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JsonManagedReference
+    private List<Favorite> favorites;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     @JsonIgnore
