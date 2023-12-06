@@ -64,9 +64,8 @@ public class CartService {
 
             if(cart!=null)
             {
-                int newQuantity=cart.getQuantity()+newCartQuantity;
-                cart.setQuantity(newQuantity);
-                cart.setTotal(newQuantity*cart.getDish().getPrice());
+                cart.setQuantity(newCartQuantity);
+                cart.setTotal(newCartQuantity*cart.getDish().getPrice());
                 cartRepository.save(cart);
                 return new ResponseModel("UpdatedCart",cart);
             }
