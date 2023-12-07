@@ -19,6 +19,7 @@ public class TransactionController
     {
         if(apiKeyService.isApiValid(clientId,apiKey))
         {
+            System.out.println(dto);
             return transactionService.beginTransaction(dto);
         }
         return new ResponseModel("401","Bạn không có quyền sử dụng API này!");

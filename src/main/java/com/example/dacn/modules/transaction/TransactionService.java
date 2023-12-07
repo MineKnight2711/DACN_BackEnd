@@ -19,6 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TransactionService
 {
+    final String statusPending="Chờ thanh toán";
+    final String cancelUrl="http://localhost:6969/api/transaction/cancel";
+    final String returnUrl="http://localhost:6969/api/transaction/success";
+
     @Autowired
     private OrdersService orderService;
     @Autowired
@@ -31,7 +35,7 @@ public class TransactionService
     public ResponseModel beginTransaction(TransactionDTO dto) {
         try
         {
-
+            dto.getOrdersDTO().setStatus(statusPending);
             Orders savedOrder = orderService.createOrder(dto.getAccountId(),dto.getOrdersDTO());
 
             if(savedOrder==null)
@@ -39,12 +43,17 @@ public class TransactionService
                 return catchTransactionError("SaveOrderFail");
             }
             detailService.saveOrderDetails(savedOrder,dto.getOrdersDTO().getDishes());
+            dto.getPaymentDetailsDTO().setStatus(statusPending);
+            dto.getPaymentDetailsDTO().setInfo("Thanh toán đơn hàng - "+savedOrder.getOrderID());
             PaymentDetails savedPaymentDetails = paymentService.savePayment(savedOrder,dto.getPaymentDetailsDTO());
             if(savedPaymentDetails==null)
             {
                 return catchTransactionError("SavePaymentFail");
             }
             PaymentRequestBody paymentRequestBody=dto.getPaymentRequestBody();
+            paymentRequestBody.setCancelUrl(cancelUrl);
+            paymentRequestBody.setReturnUrl(returnUrl);
+            paymentRequestBody.setDescription("Thanh toán đơn hàng - "+savedOrder.getOrderID());
             paymentRequestBody.setOrderCode(savedPaymentDetails.getPaymentDetailsId());
             PaymentResponse response= payOSService.getPaymentLink(paymentRequestBody);
             if(response.getCode().equals("231"))
