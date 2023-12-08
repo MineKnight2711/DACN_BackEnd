@@ -1,4 +1,4 @@
-package com.example.dacn.modules.transaction;
+package com.example.dacn.modules.transaction.dto;
 
 import com.example.dacn.entity.OrderDetail;
 import com.example.dacn.entity.Orders;

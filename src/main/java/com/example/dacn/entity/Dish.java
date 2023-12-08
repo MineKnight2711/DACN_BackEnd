@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Min;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -29,6 +30,8 @@ public class Dish {
     private int inStock;
     @Column(name = "imageUrl")
     private String imageUrl;
+    @Column(name = "dateCreate")
+    private Date dateCreate;
     // quan he nhieu nhieu tới bảng orders
     @ManyToMany
     @JoinTable(name = "OrderDetail",

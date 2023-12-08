@@ -33,23 +33,30 @@ public class PaymentService
         }
         return null;
     }
-    public PaymentDetails findDetailById(Long detailsId)
+    public boolean cancelPayment(Long detailsId)
     {
         PaymentDetails details=paymentDetailsRepository.findById(detailsId).orElse(null);
         if(details!=null)
         {
-            return details;
+            paymentDetailsRepository.delete(details);
+            return true;
         }
-        return null;
+        return false;
     }
-    public PaymentDetails updatePaymentDetails(PaymentDetails detail) {
+    public boolean updatePaymentDetails(Long paymentDetailsId) {
         try{
-            PaymentDetails details=paymentDetailsRepository.save(detail);
-            return details;
+            PaymentDetails details=paymentDetailsRepository.findById(paymentDetailsId).orElse(null);
+            if(details!=null)
+            {
+                paymentDetailsRepository.save(details);
+                return true;
+            }
+            return false;
         }catch (Exception ex){
-            return null;
+            return false;
         }
     }
+
     public ResponseModel getAllPayment()
     {
         return new ResponseModel("Success",paymentRepository.findAll());

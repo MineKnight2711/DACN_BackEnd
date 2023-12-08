@@ -8,6 +8,7 @@ import com.example.dacn.modules.orders.dto.OrdersDTO;
 
 import com.example.dacn.modules.orders.repository.OrdersRepository;
 
+import com.example.dacn.modules.transaction.OrderStatus;
 import com.google.gson.Gson;
 import jakarta.persistence.criteria.Order;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,21 +41,22 @@ public class OrdersService {
             return newOrder;
 
     }
-    public Orders findById(String orderId) {
-        Orders orders=ordersRepository.findById(orderId).orElse(null);
-        if(orders!=null){
-
-            return orders;
+    public boolean updateOrder(String orderId) {
+        Orders order=ordersRepository.findById(orderId).orElse(null);
+        if(order!=null){
+            ordersRepository.save(order);
+            return true;
         }
-        return null;
+        return false;
     }
-    public Orders updateOrder(Orders order) {
-        try{
-            Orders orders=ordersRepository.save(order);
-            return orders;
-        }catch (Exception ex){
-            return null;
+    public boolean cancelOrder(String orderId) {
+        Orders order=ordersRepository.findById(orderId).orElse(null);
+        if(order!=null){
+            order.setStatus(OrderStatus.STATUSCANCEL);
+            ordersRepository.save(order);
+            return true;
         }
+        return false;
     }
 
     public ResponseModel getOrderByAccountID(String accountId)
