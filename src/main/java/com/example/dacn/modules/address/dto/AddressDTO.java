@@ -1,9 +1,6 @@
 package com.example.dacn.modules.address.dto;
 
-import com.example.dacn.entity.Account;
 import com.example.dacn.entity.Address;
-import com.example.dacn.entity.Review;
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

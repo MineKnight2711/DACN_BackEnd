@@ -54,10 +54,6 @@ public class Account {
 //    @JsonManagedReference
     private List<Voucher> vouchers;
 
-    @OneToMany (mappedBy = "account", cascade = CascadeType.ALL)
-    @JsonIgnore
-    @JsonManagedReference
-    private List<Review> reviews;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     @JsonIgnore

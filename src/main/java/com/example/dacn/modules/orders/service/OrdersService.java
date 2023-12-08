@@ -9,6 +9,7 @@ import com.example.dacn.modules.orders.dto.OrdersDTO;
 import com.example.dacn.modules.orders.repository.OrdersRepository;
 
 import com.google.gson.Gson;
+import jakarta.persistence.criteria.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,9 +40,39 @@ public class OrdersService {
             return newOrder;
 
     }
+    public Orders findById(String orderId) {
+        Orders orders=ordersRepository.findById(orderId).orElse(null);
+        if(orders!=null){
 
+            return orders;
+        }
+        return null;
+    }
+    public Orders updateOrder(Orders order) {
+        try{
+            Orders orders=ordersRepository.save(order);
+            return orders;
+        }catch (Exception ex){
+            return null;
+        }
+    }
 
-//
-//
-//    }
+    public ResponseModel getOrderByAccountID(String accountId)
+    {
+        List<Orders> ordersList=ordersRepository.findOrdersByAccountId(accountId);
+        if(!ordersList.isEmpty())
+        {
+            return new ResponseModel("Success",ordersList);
+        }
+        return new ResponseModel("Fail","Tài khoản chưa có đơn hàng!");
+    }
+    public ResponseModel getOrderByOrderState(String accountId,String orderState)
+    {
+        List<Orders> ordersList=ordersRepository.findOrdersByOrderState(accountId,orderState);
+        if(!ordersList.isEmpty())
+        {
+            return new ResponseModel("Success",ordersList);
+        }
+        return new ResponseModel("Fail","Tài khoản chưa có đơn hàng!");
+    }
 }

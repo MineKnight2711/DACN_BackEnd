@@ -1,9 +1,11 @@
 package com.example.dacn.entity;
 
+import com.example.dacn.utils.DataConvert;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -31,6 +33,12 @@ public class Orders {
     private String deliveryInfo;
     @Column(name = "quantity")
     private int quantity;
+    @Column(name = "score")
+    private Double score;
+    @Column(name = "feedBack")
+    private String feedBack;
+    @Column(name = "dateFeedBack")
+    private Date dateFeedBack;
     // quan he nhieu nhieu toi bang dish
     @ManyToMany
     @JoinTable(name = "OrderDetail",
@@ -47,15 +55,6 @@ public class Orders {
     @JoinColumn(name = "accountID",nullable = false)
     private Account account;
 
-//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    @JsonManagedReference
-//    private List<OrderDetail> orderDetails;
-//    Quan hệ 1 nhiều tới bảng review
-    @OneToMany(mappedBy = "order_review", cascade = CascadeType.ALL)
-    @JsonIgnore
-    @JsonManagedReference
-    private List<Review> reviews;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     @JsonIgnore

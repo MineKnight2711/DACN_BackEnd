@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TransactionService
 {
     final String statusPending="Chờ thanh toán";
+    final String statusPaid="Đã thanh toán";
     final String cancelUrl="http://localhost:6969/api/transaction/cancel";
     final String returnUrl="http://localhost:6969/api/transaction/success";
 
@@ -53,16 +54,18 @@ public class TransactionService
             PaymentRequestBody paymentRequestBody=dto.getPaymentRequestBody();
             paymentRequestBody.setCancelUrl(cancelUrl);
             paymentRequestBody.setReturnUrl(returnUrl);
-            paymentRequestBody.setDescription("Thanh toán đơn hàng - "+savedOrder.getOrderID());
+            paymentRequestBody.setDescription("ĐTT"+savedOrder.getOrderID());
             paymentRequestBody.setOrderCode(savedPaymentDetails.getPaymentDetailsId());
             PaymentResponse response= payOSService.getPaymentLink(paymentRequestBody);
             if(response.getCode().equals("231"))
             {
-
                 return catchTransactionError("OrderCodeExisted");
-
             }
-            return new ResponseModel("Success",response);
+            TransactionResponse transactionResponse=new TransactionResponse();
+            transactionResponse.setOrderId(savedOrder.getOrderID());
+            transactionResponse.setPaymentDetailsId(savedPaymentDetails.getPaymentDetailsId());
+            transactionResponse.setPaymentResponse(response);
+            return new ResponseModel("Success",transactionResponse);
         }
         catch (Exception ex)
         {
@@ -71,6 +74,36 @@ public class TransactionService
         }
 
 
+    }
+    @Transactional
+    public ResponseModel updateTransaction(String orderId,Long paymentDetailsId) {
+        try
+        {
+            Orders orders=orderService.findById(orderId);
+            if(orders!=null)
+            {
+                PaymentDetails paymentDetails=paymentService.findDetailById(paymentDetailsId);
+                if(paymentDetails!=null)
+                {
+                    orders.setStatus(statusPaid);
+                    paymentDetails.setStatus(statusPaid);
+                    Orders savedOrder= orderService.updateOrder(orders);
+                    PaymentDetails savedPaymentDetails=paymentService.updatePaymentDetails(paymentDetails);
+                    if (savedOrder!=null&&savedPaymentDetails!=null)
+                    {
+                        return new ResponseModel("Success",statusPaid);
+                    }
+                    return new ResponseModel("Fail","Có lỗi xảy ra");
+                }
+                return new ResponseModel("PaymentDetailsNotFound","Không tìm thấy chi tiết thanh toán!");
+            }
+            return new ResponseModel("PaymentDetailsNotFound","Không tìm thấy đơn hàng !");
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return catchTransactionError("");
+        }
     }
     private ResponseModel catchTransactionError(String error){
         switch (error) {

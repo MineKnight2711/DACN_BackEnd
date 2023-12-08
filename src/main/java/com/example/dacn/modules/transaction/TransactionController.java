@@ -19,8 +19,19 @@ public class TransactionController
     {
         if(apiKeyService.isApiValid(clientId,apiKey))
         {
-            System.out.println(dto);
             return transactionService.beginTransaction(dto);
+        }
+        return new ResponseModel("401","Bạn không có quyền sử dụng API này!");
+    }
+    @PutMapping
+    public ResponseModel updateTransaction(@RequestHeader(name="X-Client-Id") String clientId,
+                                           @RequestHeader(name="X-Api-Key") String apiKey,
+                                           @RequestParam("orderId") String orderId,
+                                           @RequestParam("paymentDetailsId") Long paymentDetailsId)
+    {
+        if(apiKeyService.isApiValid(clientId,apiKey))
+        {
+            return transactionService.updateTransaction(orderId,paymentDetailsId);
         }
         return new ResponseModel("401","Bạn không có quyền sử dụng API này!");
     }

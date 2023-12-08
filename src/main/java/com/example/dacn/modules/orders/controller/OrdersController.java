@@ -12,10 +12,16 @@ import org.springframework.web.bind.annotation.*;
 public class OrdersController {
     @Autowired
     private OrdersService ordersService;
-
+    @GetMapping("/{accountId}")
+    public ResponseModel getOrderByAccountID(@PathVariable("accountId") String accountId)
+    { return ordersService.getOrderByAccountID(accountId); }
+    @GetMapping("/get-by-orderState/{accountId}")
+    public ResponseModel getOrderByOrderState(@PathVariable("accountId") String accountId, @RequestParam("orderState") String orderState)
+    { return ordersService.getOrderByOrderState(accountId,orderState); }
     @PostMapping("/{accountId}")
     public ResponseModel createOrder(@PathVariable("accountId") String accountId,
-                                     @RequestBody OrdersDTO ordersDTO) {
+                                     @RequestBody OrdersDTO ordersDTO)
+    {
         Orders orders=ordersService.createOrder(accountId,ordersDTO);
         if(orders!=null)
         {

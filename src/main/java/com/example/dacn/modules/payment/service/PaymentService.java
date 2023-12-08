@@ -28,9 +28,27 @@ public class PaymentService
             newPaymentDetails.setOrders(order);
             newPaymentDetails.setPayment(payment);
             PaymentDetails savedPamentDetails= paymentDetailsRepository.save(newPaymentDetails);
+
             return savedPamentDetails;
         }
         return null;
+    }
+    public PaymentDetails findDetailById(Long detailsId)
+    {
+        PaymentDetails details=paymentDetailsRepository.findById(detailsId).orElse(null);
+        if(details!=null)
+        {
+            return details;
+        }
+        return null;
+    }
+    public PaymentDetails updatePaymentDetails(PaymentDetails detail) {
+        try{
+            PaymentDetails details=paymentDetailsRepository.save(detail);
+            return details;
+        }catch (Exception ex){
+            return null;
+        }
     }
     public ResponseModel getAllPayment()
     {
