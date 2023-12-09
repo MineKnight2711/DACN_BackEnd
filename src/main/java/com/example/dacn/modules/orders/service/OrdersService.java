@@ -4,6 +4,7 @@ import com.example.dacn.entity.*;
 
 import com.example.dacn.modules.account.service.AccountService;
 
+import com.example.dacn.modules.orders.dto.OrderDetailsDTO;
 import com.example.dacn.modules.orders.dto.OrdersDTO;
 
 import com.example.dacn.modules.orders.repository.OrdersRepository;
@@ -11,10 +12,15 @@ import com.example.dacn.modules.orders.repository.OrdersRepository;
 import com.example.dacn.modules.transaction.OrderStatus;
 import com.google.gson.Gson;
 import jakarta.persistence.criteria.Order;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class OrdersService {
@@ -23,7 +29,10 @@ public class OrdersService {
     private OrdersRepository ordersRepository;
     @Autowired
     private AccountService accountService;
-
+    @Autowired
+    private OrderDetailsService orderDetailsService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public Orders createOrder(String accountID, OrdersDTO ordersDTO) {
         ordersDTO.setOrderID("");
@@ -44,6 +53,7 @@ public class OrdersService {
     public boolean updateOrder(String orderId) {
         Orders order=ordersRepository.findById(orderId).orElse(null);
         if(order!=null){
+            order.setStatus(OrderStatus.STATUSPAID);
             ordersRepository.save(order);
             return true;
         }
@@ -61,10 +71,26 @@ public class OrdersService {
 
     public ResponseModel getOrderByAccountID(String accountId)
     {
-        List<Orders> ordersList=ordersRepository.findOrdersByAccountId(accountId);
+        List<OrderDetailsDTO> resultOrders = new ArrayList<>();
+        List<Orders> ordersList = ordersRepository.findOrdersByAccountId(accountId);
+
+        for (Orders order : ordersList) {
+
+
+            List<OrderDetail> orderDetailList = ordersRepository.findOrdersDetailByOrderID(order.getOrderID());
+
+            OrderDetailsDTO orderDetailsDTO=new OrderDetailsDTO();
+            orderDetailsDTO.setOrder(order);
+
+            List<OrderDetailsDTO.DetailsDTO> detailsDTOs = modelMapper.map(orderDetailList, new TypeToken<List<OrderDetailsDTO.DetailsDTO>>() {}.getType());
+
+            orderDetailsDTO.setDetailList(detailsDTOs);
+
+            resultOrders.add(orderDetailsDTO);
+        }
         if(!ordersList.isEmpty())
         {
-            return new ResponseModel("Success",ordersList);
+            return new ResponseModel("Success",resultOrders);
         }
         return new ResponseModel("Fail","Tài khoản chưa có đơn hàng!");
     }

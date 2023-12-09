@@ -1,6 +1,7 @@
 package com.example.dacn.entity;
 
 import com.example.dacn.entity.ids.OrderDetailsId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;

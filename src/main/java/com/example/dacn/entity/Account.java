@@ -40,8 +40,12 @@ public class Account {
     private String gender;
     @Column(name = "imageUrl")
     private String imageUrl;
-
-
+    @Column(name = "points", columnDefinition = "integer default 0")
+    private Integer points;
+    @Column(name = "lifetimePoints", columnDefinition = "integer default 0")
+    private Integer lifetimePoints;
+    @Column(name = "tier", columnDefinition = "varchar(255) default 'Bronze'")
+    private String tier;
     @OneToMany (mappedBy = "account", cascade = CascadeType.ALL)
     @JsonIgnore
     @JsonManagedReference

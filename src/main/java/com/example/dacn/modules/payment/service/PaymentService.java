@@ -8,6 +8,7 @@ import com.example.dacn.modules.payment.dto.PaymentDTO;
 import com.example.dacn.modules.payment.dto.PaymentDetailsDTO;
 import com.example.dacn.modules.payment.repository.PaymentDetailsRepository;
 import com.example.dacn.modules.payment.repository.PaymentRepository;
+import com.example.dacn.modules.transaction.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,7 @@ public class PaymentService
             PaymentDetails details=paymentDetailsRepository.findById(paymentDetailsId).orElse(null);
             if(details!=null)
             {
+                details.setStatus(OrderStatus.STATUSPAID);
                 paymentDetailsRepository.save(details);
                 return true;
             }
