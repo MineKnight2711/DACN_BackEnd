@@ -10,6 +10,7 @@ import com.example.dacn.modules.account.service.AccountService;
 import com.example.dacn.modules.voucher.dto.VoucherDTO;
 import com.example.dacn.modules.voucher.repository.VoucherRepository;
 import com.example.dacn.modules.voucher_account.service.AccountVoucherService;
+import com.example.dacn.utils.DataConvert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +22,15 @@ import java.util.Optional;
 public class VoucherService {
     @Autowired
     private VoucherRepository voucherRepository;
-    @Autowired
-    private AccountService accountService;
 
-    public ResponseModel createVoucher(String accountID, VoucherDTO dto) {
+    public ResponseModel createVoucher(VoucherDTO dto) {
         dto.setVoucherID("");
         try {
-            Account acc = accountService.findById(accountID);
-            if (acc == null) {
-                return new ResponseModel("AccountNotFound", null);
-            }
 
             Voucher newVoucher = dto.toEntity();
+            newVoucher.setStartDate(newVoucher.getStartDate());
+            newVoucher.setExpDate(newVoucher.getExpDate());
             voucherRepository.save(newVoucher);
-
             return new ResponseModel("Success", newVoucher);
         } catch (Exception ex) {
             System.out.println(ex.toString());
@@ -43,7 +39,7 @@ public class VoucherService {
     }
 
     public ResponseModel getAllVouchersSortedByDiscount() {
-        return new ResponseModel("SortList", voucherRepository.findAllByOrderByDiscountDesc());
+        return new ResponseModel("Success", voucherRepository.findAllByOrderByDiscountAmountDesc());
     }
 
     public Voucher findById(String voucherId)

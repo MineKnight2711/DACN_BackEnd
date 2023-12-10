@@ -33,8 +33,16 @@ public class Voucher {
     private Date expDate;
     @Column(name = "voucherName")
     private String voucherName;
-    @Column(name = "discount")
-    private double discount;
+    @Column(name = "discountAmount")
+    private Double discountAmount;
+    @Column(name = "discountPercent")
+    private Integer discountPercent;
+    @Column(name = "pointsRequired",columnDefinition = "integer default 0")
+    private Integer pointsRequired;
+    @Column(name = "type",length = 20)
+    private String type;
+
+
     @ManyToMany
     @JoinTable(name = "AccountVoucher",
             joinColumns = @JoinColumn(name = "voucher_id"),

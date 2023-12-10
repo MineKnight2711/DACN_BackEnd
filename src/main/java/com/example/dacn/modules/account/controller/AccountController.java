@@ -35,7 +35,11 @@ public class AccountController {
     @PostMapping("/create-user")
     public ResponseModel sendVerificationEmail(@ModelAttribute UserDTO dto) {
         ResponseModel result = vertificationService.createEmailVerificationLink(dto.getEmail(), dto.getPassword());
-        return vertificationService.sendVerificationLinkToEmail(result.getData().toString(),dto.getEmail());
+        if(result.getMessage().equals("Success"))
+        {
+            return vertificationService.sendVerificationLinkToEmail(result.getData().toString(),dto.getEmail());
+        }
+        return new ResponseModel("Fail","Không thể tạo tài khoản mới, có lỗi xảy ra");
     }
     @GetMapping("/{accountId}")
     public ResponseModel getAccountById(@PathVariable String accountId)
@@ -71,15 +75,18 @@ public class AccountController {
     }
     @PutMapping("/update-account")
     public ResponseModel updateAccount(
-            @ModelAttribute AccountDTO dto) {
+            @ModelAttribute AccountDTO dto)
+    {
         return accountService.updateAccount(dto);
     }
     @PostMapping("/sign-in")
-    public ResponseModel managerSignIn(@ModelAttribute UserDTO userDTO) throws IOException {
+    public ResponseModel managerSignIn(@ModelAttribute UserDTO userDTO) throws IOException
+    {
         return accountService.signInUser(userDTO);
     }
     @PostMapping("/get-user-info")
-    public ResponseModel lookupUser(@RequestParam("email") String email, @RequestParam("idToken") String idToken) {
+    public ResponseModel lookupUser(@RequestParam("email") String email, @RequestParam("idToken") String idToken)
+    {
         return accountService.lookupUserByEmail(email, idToken);
     }
     @PostMapping("/sign-out/{userId}")

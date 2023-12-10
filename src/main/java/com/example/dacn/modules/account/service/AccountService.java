@@ -79,6 +79,7 @@ public class AccountService {
                 return new ResponseModel("EmailAlreadyExist",dto.getEmail());
             }
             dto.setImageUrl(Constant.DEFAULT_AVATAR);
+            dto.setRole("User");
             Account result= accountRepository.save(dto.toEntity());
             return new ResponseModel("Success",result);
         }

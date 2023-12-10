@@ -44,6 +44,7 @@ public class DishService {
             String imageUrl=imageService.uploadImage(dishDTO.getImage(),"dishImage/",dishId);
             newDish.setDishID(dishId);
             newDish.setImageUrl(imageUrl);
+
             Dish savedDish = dishRepository.save(newDish);
             return new ResponseModel("Success",savedDish);
         }

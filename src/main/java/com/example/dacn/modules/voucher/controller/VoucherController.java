@@ -15,9 +15,9 @@ public class VoucherController
 {
     @Autowired
     private VoucherService voucherService;
-    @PostMapping("/{accountID}")
-    public ResponseModel createVoucher(@PathVariable("accountID") String accountID, @ModelAttribute VoucherDTO dto) {
-        return voucherService.createVoucher(accountID, dto);
+    @PostMapping
+    public ResponseModel createVoucher(@RequestBody VoucherDTO dto) {
+        return voucherService.createVoucher(dto);
     }
     @GetMapping("/all")
     public ResponseModel getAllVouchersSortedByDiscount() {

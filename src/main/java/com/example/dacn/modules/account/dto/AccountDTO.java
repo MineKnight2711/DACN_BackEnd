@@ -31,6 +31,7 @@ public class AccountDTO
     private String gender;
     private String phoneNumber;
     private String imageUrl;
+    private String role;
 
 
     public Account toEntity()
@@ -43,6 +44,7 @@ public class AccountDTO
         account.setGender(this.gender);
         account.setPhoneNumber(this.phoneNumber);
         account.setImageUrl(this.imageUrl);
+        account.setRole(this.role);
         return account;
     }
 }

@@ -22,7 +22,10 @@ public class VoucherDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expDate;
     private String voucherName;
-    private double discount;
+    private String type;
+    private double discountAmount;
+    private Integer discountPercent;
+    private Integer pointsRequired;
 
     public Voucher toEntity() {
         Voucher voucher = new Voucher();
@@ -30,7 +33,10 @@ public class VoucherDTO {
         voucher.setStartDate(this.startDate);
         voucher.setExpDate(this.expDate);
         voucher.setVoucherName(this.voucherName);
-        voucher.setDiscount(this.discount);
+        voucher.setPointsRequired(this.pointsRequired);
+        voucher.setDiscountAmount(this.discountAmount);
+        voucher.setDiscountPercent(this.discountPercent);
+        voucher.setType(this.type);
         return voucher;
     }
 }

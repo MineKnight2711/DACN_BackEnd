@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserSignInResponse {
-    private String kind;
     private String localId;
     private String email;
     private String displayName;
