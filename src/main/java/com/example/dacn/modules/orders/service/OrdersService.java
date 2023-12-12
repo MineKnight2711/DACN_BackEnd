@@ -7,6 +7,7 @@ import com.example.dacn.modules.account.service.AccountService;
 import com.example.dacn.modules.orders.dto.OrderDetailsDTO;
 import com.example.dacn.modules.orders.dto.OrdersDTO;
 
+import com.example.dacn.modules.orders.dto.ReviewOrderDTO;
 import com.example.dacn.modules.orders.repository.OrdersRepository;
 
 import com.example.dacn.modules.transaction.OrderStatus;
@@ -17,9 +18,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -96,11 +95,43 @@ public class OrdersService {
     }
     public ResponseModel getOrderByOrderState(String accountId,String orderState)
     {
+        List<OrderDetailsDTO> resultOrders = new ArrayList<>();
         List<Orders> ordersList=ordersRepository.findOrdersByOrderState(accountId,orderState);
+
+        for (Orders order : ordersList) {
+
+            List<OrderDetail> orderDetailList = ordersRepository.findOrdersDetailByOrderID(order.getOrderID());
+
+            OrderDetailsDTO orderDetailsDTO=new OrderDetailsDTO();
+            orderDetailsDTO.setOrder(order);
+
+            List<OrderDetailsDTO.DetailsDTO> detailsDTOs = modelMapper.map(orderDetailList, new TypeToken<List<OrderDetailsDTO.DetailsDTO>>() {}.getType());
+
+            orderDetailsDTO.setDetailList(detailsDTOs);
+
+            resultOrders.add(orderDetailsDTO);
+        }
         if(!ordersList.isEmpty())
         {
-            return new ResponseModel("Success",ordersList);
+            return new ResponseModel("Success",resultOrders);
         }
         return new ResponseModel("Fail","Tài khoản chưa có đơn hàng!");
+
+    }
+    public ResponseModel reviewOrder(ReviewOrderDTO dto)
+    {
+        Orders order=ordersRepository.findById(dto.getOrderId()).orElse(null);
+        if(order!=null)
+        {
+            Calendar calendar = Calendar.getInstance();
+            Date currentDate = calendar.getTime();
+            order.setFeedBack(dto.getFeedBack());
+            order.setScore(dto.getScore());
+            order.setStatus(OrderStatus.STATUSRATED);
+            order.setDateFeedBack(currentDate);
+            ordersRepository.save(order);
+            return new ResponseModel("Success",order);
+        }
+        return new ResponseModel("Fail","Không tìm thấy đơn hàng");
     }
 }

@@ -39,11 +39,35 @@ public class VoucherService {
     }
 
     public ResponseModel getAllVouchersSortedByDiscount() {
-        return new ResponseModel("Success", voucherRepository.findAllByOrderByDiscountAmountDesc());
+        return new ResponseModel("Success", voucherRepository.findAllByOrderByPointsRequiredDesc());
     }
 
     public Voucher findById(String voucherId)
     {
         return voucherRepository.findById(voucherId).orElse(null);
+    }
+
+    public ResponseModel deleteVoucher(String voucherId)
+    {
+        Voucher voucher=voucherRepository.findById(voucherId).orElse(null);
+        if(voucher != null)
+        {
+            voucherRepository.delete(voucher);
+            return  new ResponseModel("Success","Xoá voucher thành công");
+        }
+        return  new ResponseModel("Fail","Có lỗi xảy ra");
+    }
+
+    public ResponseModel updateVoucher(VoucherDTO dto)
+    {
+        Voucher voucher=voucherRepository.findById(dto.getVoucherID()).orElse(null);
+        if(voucher!=null)
+        {
+            voucher=dto.toEntity();
+            voucher.setVoucherID(dto.getVoucherID());
+            voucherRepository.save(voucher);
+            return  new ResponseModel("Success","Cập nhật voucher thành công");
+        }
+        return  new ResponseModel("Fail","Có lỗi xảy ra");
     }
 }

@@ -3,6 +3,7 @@ package com.example.dacn.modules.orders.controller;
 import com.example.dacn.entity.Orders;
 import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.modules.orders.dto.OrdersDTO;
+import com.example.dacn.modules.orders.dto.ReviewOrderDTO;
 import com.example.dacn.modules.orders.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +31,9 @@ public class OrdersController {
         }
         return new ResponseModel("Fail","Không thể tạo đơn hàng");
     }
-
+    @PutMapping("/rate")
+    public ResponseModel rateOrder(@ModelAttribute ReviewOrderDTO dto)
+    {
+       return ordersService.reviewOrder(dto);
+    }
 }
