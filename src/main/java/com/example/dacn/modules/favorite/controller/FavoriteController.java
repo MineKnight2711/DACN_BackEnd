@@ -30,6 +30,11 @@ public class FavoriteController {
     {
         return favoriteService.getFavoritesByAccountID(accountID);
     }
+    @GetMapping("/get-by-dishId/{dishId}")
+    public ResponseModel getFavoritesByDishID(@PathVariable("dishId") String dishId)
+    {
+        return favoriteService.getFavoritesByDishID(dishId);
+    }
     @PostMapping
     public ResponseModel addToFavorites(@ModelAttribute FavoriteDTO favoriteDTO)
     {

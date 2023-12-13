@@ -80,6 +80,9 @@ public class AccountService {
             }
             dto.setImageUrl(Constant.DEFAULT_AVATAR);
             dto.setRole("User");
+            dto.setPoints(0);
+            dto.setLifetimePoints(0);
+            dto.setTier("Bronze");
             Account result= accountRepository.save(dto.toEntity());
             return new ResponseModel("Success",result);
         }
@@ -288,6 +291,25 @@ public class AccountService {
 
             Account updatedAccount=accountRepository.save(acc);
             return new ResponseModel("Success",updatedAccount);
+        }
+        return new ResponseModel("AccountNotFound","Không tìm thấy tài khoản!");
+    }
+    private int calculatePoints(double orderValue)
+    {
+        //Chiết khấu 50%
+        orderValue=orderValue*0.5;
+        //Tạm tính 2 điểm mỗi 10000 chiết khấu
+        return (int) (orderValue / 10000 * 2);
+    }
+    public ResponseModel updateAccountPoints(String accountId ,double orderTotal){
+        Account acc=accountRepository.findById(accountId).orElse(null);
+        if(acc!=null)
+        {
+            if(accountRepository.addPointsToAccount(acc.getAccountID(),calculatePoints(orderTotal))>0)
+            {
+                return new ResponseModel("Success","Đã cộng điểm");
+            }
+            return new ResponseModel("Fail","Có lỗi xảy ra");
         }
         return new ResponseModel("AccountNotFound","Không tìm thấy tài khoản!");
     }

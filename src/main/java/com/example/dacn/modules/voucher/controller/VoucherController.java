@@ -20,7 +20,7 @@ public class VoucherController
         return voucherService.createVoucher(dto);
     }
     @DeleteMapping("/{voucherId}")
-    public ResponseModel createVoucher(@PathVariable("voucherId") String voucherId)
+    public ResponseModel deleteVoucher(@PathVariable("voucherId") String voucherId)
     {
         return voucherService.deleteVoucher(voucherId);
     }
@@ -31,6 +31,6 @@ public class VoucherController
     }
     @GetMapping("/all")
     public ResponseModel getAllVouchersSortedByDiscount() {
-        return voucherService.getAllVouchersSortedByDiscount();
+        return voucherService.getAllVouchersSortedByDExpDate();
     }
 }

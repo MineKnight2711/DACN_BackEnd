@@ -12,7 +12,7 @@ import java.util.List;
 public interface VoucherRepository extends JpaRepository<Voucher,String> {
     @Query(value = "SELECT @generated_id", nativeQuery = true)
     String findLatestVoucherId();
-    @Query("SELECT v FROM Voucher v ORDER BY v.pointsRequired DESC")
-    List<Voucher> findAllByOrderByPointsRequiredDesc();
+    @Query("SELECT v FROM Voucher v ORDER BY v.expDate DESC")
+    List<Voucher> findAllByOrderByExpDateDesc();
 }
 

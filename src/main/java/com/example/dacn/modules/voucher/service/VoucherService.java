@@ -38,8 +38,8 @@ public class VoucherService {
         }
     }
 
-    public ResponseModel getAllVouchersSortedByDiscount() {
-        return new ResponseModel("Success", voucherRepository.findAllByOrderByPointsRequiredDesc());
+    public ResponseModel getAllVouchersSortedByDExpDate() {
+        return new ResponseModel("Success", voucherRepository.findAllByOrderByExpDateDesc());
     }
 
     public Voucher findById(String voucherId)

@@ -29,8 +29,6 @@ public class OrdersService {
     @Autowired
     private AccountService accountService;
     @Autowired
-    private OrderDetailsService orderDetailsService;
-    @Autowired
     private ModelMapper modelMapper;
 
     public Orders createOrder(String accountID, OrdersDTO ordersDTO) {
@@ -53,6 +51,16 @@ public class OrdersService {
         Orders order=ordersRepository.findById(orderId).orElse(null);
         if(order!=null){
             order.setStatus(OrderStatus.STATUSPAID);
+            List<OrderDetail> detailList=ordersRepository.findOrdersDetailByOrderID(orderId);
+            if(!detailList.isEmpty())
+            {
+                double orderTotal=0.0;
+                for (OrderDetail detail:detailList)
+                {
+                    orderTotal+=detail.getPrice();
+                }
+                accountService.updateAccountPoints(order.getAccount().getAccountID(),orderTotal);
+            }
             ordersRepository.save(order);
             return true;
         }
@@ -62,6 +70,7 @@ public class OrdersService {
         Orders order=ordersRepository.findById(orderId).orElse(null);
         if(order!=null){
             order.setStatus(OrderStatus.STATUSCANCEL);
+
             ordersRepository.save(order);
             return true;
         }

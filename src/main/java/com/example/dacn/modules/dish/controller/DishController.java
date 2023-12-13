@@ -4,6 +4,7 @@ import com.example.dacn.entity.Dish;
 import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.modules.dish.dto.DishDTO;
 import com.example.dacn.modules.dish.service.DishService;
+import com.example.dacn.modules.favorite.service.FavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ import java.util.List;
 public class DishController {
     @Autowired
     private DishService dishService;
+    @Autowired
+    private FavoriteService favoriteService;
     @PostMapping
     public ResponseModel addDish(@ModelAttribute DishDTO dishDTO)
     {
@@ -35,6 +38,11 @@ public class DishController {
     public ResponseModel getAllDishes()
     {
         return dishService.getAllDishes();
+    }
+    @GetMapping("/with-favorite")
+    public ResponseModel getAllDishesWithFavorite()
+    {
+        return dishService.getAllDishesWithFavorite();
     }
     @GetMapping("/get-by-categoryId/{categoryID}")
     public ResponseModel getByCategoryID(@PathVariable("categoryID") String categoryID)
