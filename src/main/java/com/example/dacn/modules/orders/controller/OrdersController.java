@@ -39,4 +39,9 @@ public class OrdersController {
     {
        return ordersService.reviewOrder(dto);
     }
+//    @PutMapping("/update-order-status")
+//    public ResponseModel updateOrderStatus(@ModelAttribute ReviewOrderDTO dto)
+//    {
+//        return ordersService.updateOrderStatus(dto);
+//    }
 }

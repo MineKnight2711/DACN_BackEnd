@@ -32,10 +32,13 @@ public class OrdersDTO {
         Orders orders = new Orders();
         orders.setOrderID(this.orderID);
         orders.setStatus(this.status);
-        for(OrderDishDTO dish : dishes)
+        int quantity=0;
+        for(OrderDishDTO dish : this.dishes)
         {
-            orders.setQuantity(this.quantity+=dish.getQuantity());
+            quantity+=dish.getQuantity();
+
         }
+        orders.setQuantity(quantity);
         orders.setOrderDate(this.orderDate);
         orders.setDeliveryInfo(this.deliveryInfo);
         return orders;

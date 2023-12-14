@@ -13,7 +13,10 @@ public interface AccountRepository extends JpaRepository<Account, String>
     Account findByEmail(@Param("email") String email);
     @Transactional
     @Modifying
-    @Query("UPDATE Account a SET a.points = a.points + :points, a.lifetimePoints = a.lifetimePoints + :points WHERE a.accountID = :accountId")
+    @Query("UPDATE Account a SET " +
+            "a.points = COALESCE(a.points, 0) + :points, " +
+            "a.lifetimePoints = COALESCE(a.lifetimePoints, 0) + :points " +
+            "WHERE a.accountID = :accountId")
     int addPointsToAccount( String accountId, int points);
 
 }
