@@ -7,14 +7,18 @@ import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.modules.category.repository.CategoryRepository;
 import com.example.dacn.modules.category.service.CategoryService;
 import com.example.dacn.modules.dish.dto.DishDTO;
+import com.example.dacn.modules.dish.dto.DishFavoriteCountDTO;
 import com.example.dacn.modules.dish.repository.DishRepository;
 import com.example.dacn.utils.ImageService;
+import jakarta.persistence.Tuple;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DishService {
@@ -24,6 +28,8 @@ public class DishService {
     private CategoryService categoryService;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public ResponseModel addDish(DishDTO dishDTO)
     {
@@ -44,6 +50,7 @@ public class DishService {
             String imageUrl=imageService.uploadImage(dishDTO.getImage(),"dishImage/",dishId);
             newDish.setDishID(dishId);
             newDish.setImageUrl(imageUrl);
+
             Dish savedDish = dishRepository.save(newDish);
             return new ResponseModel("Success",savedDish);
         }
@@ -111,7 +118,7 @@ public class DishService {
         return new ResponseModel("NoDish", "Không có món ăn");
     }
     public ResponseModel getByCategoryId(String categoryId) {
-        List<Dish> dishes = dishRepository.getByCategory(categoryId);
+        List<DishFavoriteCountDTO> dishes=mapTuplesToDTO(dishRepository.getAllDishesWithFavoriteAndByCategory(categoryId));
         if(!dishes.isEmpty())
         {
             return new ResponseModel("Success", dishes);
@@ -127,5 +134,18 @@ public class DishService {
             return null;
         }
         return dish.get();
+    }
+    List<DishFavoriteCountDTO> mapTuplesToDTO(List<Tuple> tuples) {
+        return tuples.stream().map(tuple -> {
+            DishFavoriteCountDTO dto = new DishFavoriteCountDTO();
+            dto.setDish(tuple.get("dish", Dish.class));
+            dto.setFavoriteCount(tuple.get("favoriteCount", Long.class));
+            return dto;
+        }).collect(Collectors.toList());
+    }
+    public ResponseModel getAllDishesWithFavorite()
+    {
+//        List<DishFavoriteCountDTO> favoriteCountDTOS=modelMapper.map(dishRepository.getAllDishesWithFavoriteAndCount(),List.class);
+        return new ResponseModel("Success",mapTuplesToDTO(dishRepository.getAllDishesWithFavoriteAndCount()));
     }
 }

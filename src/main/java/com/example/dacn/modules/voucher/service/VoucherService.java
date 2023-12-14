@@ -10,6 +10,7 @@ import com.example.dacn.modules.account.service.AccountService;
 import com.example.dacn.modules.voucher.dto.VoucherDTO;
 import com.example.dacn.modules.voucher.repository.VoucherRepository;
 import com.example.dacn.modules.voucher_account.service.AccountVoucherService;
+import com.example.dacn.utils.DataConvert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +22,15 @@ import java.util.Optional;
 public class VoucherService {
     @Autowired
     private VoucherRepository voucherRepository;
-    @Autowired
-    private AccountService accountService;
 
-    public ResponseModel createVoucher(String accountID, VoucherDTO dto) {
+    public ResponseModel createVoucher(VoucherDTO dto) {
         dto.setVoucherID("");
         try {
-            Account acc = accountService.findById(accountID);
-            if (acc == null) {
-                return new ResponseModel("AccountNotFound", null);
-            }
 
             Voucher newVoucher = dto.toEntity();
+            newVoucher.setStartDate(newVoucher.getStartDate());
+            newVoucher.setExpDate(newVoucher.getExpDate());
             voucherRepository.save(newVoucher);
-
             return new ResponseModel("Success", newVoucher);
         } catch (Exception ex) {
             System.out.println(ex.toString());
@@ -42,12 +38,36 @@ public class VoucherService {
         }
     }
 
-    public ResponseModel getAllVouchersSortedByDiscount() {
-        return new ResponseModel("SortList", voucherRepository.findAllByOrderByDiscountDesc());
+    public ResponseModel getAllVouchersSortedByDExpDate() {
+        return new ResponseModel("Success", voucherRepository.findAllByOrderByExpDateDesc());
     }
 
     public Voucher findById(String voucherId)
     {
         return voucherRepository.findById(voucherId).orElse(null);
+    }
+
+    public ResponseModel deleteVoucher(String voucherId)
+    {
+        Voucher voucher=voucherRepository.findById(voucherId).orElse(null);
+        if(voucher != null)
+        {
+            voucherRepository.delete(voucher);
+            return  new ResponseModel("Success","Xoá voucher thành công");
+        }
+        return  new ResponseModel("Fail","Có lỗi xảy ra");
+    }
+
+    public ResponseModel updateVoucher(VoucherDTO dto)
+    {
+        Voucher voucher=voucherRepository.findById(dto.getVoucherID()).orElse(null);
+        if(voucher!=null)
+        {
+            voucher=dto.toEntity();
+            voucher.setVoucherID(dto.getVoucherID());
+            voucherRepository.save(voucher);
+            return  new ResponseModel("Success","Cập nhật voucher thành công");
+        }
+        return  new ResponseModel("Fail","Có lỗi xảy ra");
     }
 }

@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 public class UserLookUpResponse {
-    private String kind;
     private List<UserResponse> users;
     @Data
     @Getter

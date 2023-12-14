@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/voucher-account")
 public class AccountVoucherController
 {
+
     @Autowired
     private AccountVoucherService accountVoucherService;
     @GetMapping("/{accountId}")
@@ -20,6 +21,8 @@ public class AccountVoucherController
     @PostMapping
     public ResponseModel createAccountVoucher(@ModelAttribute AccountVoucherDTO dto)
     {
-        return accountVoucherService.createaccounVoucher(dto);
+        return accountVoucherService.createAccountVoucher(dto);
     }
+//    @PostMapping("/save-account-voucher")
+//    public ResponseModel saveAccountVoucher
 }

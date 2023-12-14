@@ -1,5 +1,6 @@
 package com.example.dacn.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -30,7 +31,9 @@ public class Dish {
     private int inStock;
     @Column(name = "imageUrl")
     private String imageUrl;
+
     @Column(name = "dateCreate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone="Asia/Ho_Chi_Minh")
     private Date dateCreate;
     // quan he nhieu nhieu tới bảng orders
     @ManyToMany

@@ -9,10 +9,13 @@ import com.example.dacn.modules.account.service.AccountService;
 import com.example.dacn.modules.dish.repository.DishRepository;
 import com.example.dacn.modules.dish.service.DishService;
 import com.example.dacn.modules.favorite.dto.FavoriteDTO;
+import com.example.dacn.modules.favorite.dto.FavoriteWithCountAccountDTO;
 import com.example.dacn.modules.favorite.repository.FavoriteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -77,9 +80,12 @@ public class FavoriteService {
     }
     public ResponseModel getFavoritesByAccountID(String accountID)
     {
-        return new ResponseModel("Success",favoriteRepository.getFavoriteById(accountID));
+        return new ResponseModel("Success",favoriteRepository.getFavoriteByAccountId(accountID));
     }
-
+    public ResponseModel getFavoritesByDishID(String dishID)
+    {
+        return new ResponseModel("Success",favoriteRepository.getFavoriteByDishId(dishID));
+    }
     public ResponseModel getAccountFavoriteDish(String dishID, String accountID)
     {
         Favorite favorite = favoriteRepository.getDuplicateFavorite(accountID,dishID);

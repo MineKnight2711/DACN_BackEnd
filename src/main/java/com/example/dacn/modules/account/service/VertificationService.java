@@ -39,10 +39,10 @@ public class VertificationService {
                     .setAndroidPackageName("com.example.fooddelivery_fe")
                     .build();
             String verificationLink=firebaseAuth.generateEmailVerificationLink(user.getEmail(), actionCodeSettings);
-            return new ResponseModel("Succes",verificationLink) ;
+            return new ResponseModel("Success",verificationLink) ;
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
-            return new ResponseModel("Fail                                                     cxx",e.getMessage());
+            return new ResponseModel("Fail",e.getMessage());
         }
 
     }

@@ -31,7 +31,10 @@ public class AccountDTO
     private String gender;
     private String phoneNumber;
     private String imageUrl;
-
+    private String role;
+    private Integer points;
+    private Integer lifetimePoints;
+    private String tier;
 
     public Account toEntity()
     {
@@ -43,6 +46,10 @@ public class AccountDTO
         account.setGender(this.gender);
         account.setPhoneNumber(this.phoneNumber);
         account.setImageUrl(this.imageUrl);
+        account.setRole(this.role);
+        account.setPoints(this.points);
+        account.setLifetimePoints(this.lifetimePoints);
+        account.setTier(this.tier);
         return account;
     }
 }

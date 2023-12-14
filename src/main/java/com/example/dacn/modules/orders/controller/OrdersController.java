@@ -3,6 +3,7 @@ package com.example.dacn.modules.orders.controller;
 import com.example.dacn.entity.Orders;
 import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.modules.orders.dto.OrdersDTO;
+import com.example.dacn.modules.orders.dto.ReviewOrderDTO;
 import com.example.dacn.modules.orders.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class OrdersController {
     @Autowired
     private OrdersService ordersService;
+    @GetMapping
+    public ResponseModel getAllOrders()
+    { return ordersService.getAllOrders(); }
     @GetMapping("/{accountId}")
     public ResponseModel getOrderByAccountID(@PathVariable("accountId") String accountId)
     { return ordersService.getOrderByAccountID(accountId); }
@@ -30,5 +34,14 @@ public class OrdersController {
         }
         return new ResponseModel("Fail","Không thể tạo đơn hàng");
     }
-
+    @PutMapping("/rate")
+    public ResponseModel rateOrder(@ModelAttribute ReviewOrderDTO dto)
+    {
+       return ordersService.reviewOrder(dto);
+    }
+//    @PutMapping("/update-order-status")
+//    public ResponseModel updateOrderStatus(@ModelAttribute ReviewOrderDTO dto)
+//    {
+//        return ordersService.updateOrderStatus(dto);
+//    }
 }

@@ -15,12 +15,22 @@ public class VoucherController
 {
     @Autowired
     private VoucherService voucherService;
-    @PostMapping("/{accountID}")
-    public ResponseModel createVoucher(@PathVariable("accountID") String accountID, @ModelAttribute VoucherDTO dto) {
-        return voucherService.createVoucher(accountID, dto);
+    @PostMapping
+    public ResponseModel createVoucher(@RequestBody VoucherDTO dto) {
+        return voucherService.createVoucher(dto);
+    }
+    @DeleteMapping("/{voucherId}")
+    public ResponseModel deleteVoucher(@PathVariable("voucherId") String voucherId)
+    {
+        return voucherService.deleteVoucher(voucherId);
+    }
+    @PutMapping
+    public ResponseModel updateVoucher(@RequestBody VoucherDTO dto)
+    {
+        return voucherService.updateVoucher(dto);
     }
     @GetMapping("/all")
     public ResponseModel getAllVouchersSortedByDiscount() {
-        return voucherService.getAllVouchersSortedByDiscount();
+        return voucherService.getAllVouchersSortedByDExpDate();
     }
 }

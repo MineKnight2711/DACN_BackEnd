@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Calendar;
+import java.util.Date;
+
 @Data
 @Getter
 @Setter
@@ -17,6 +20,7 @@ public class DishDTO {
     private int inStock;
     private MultipartFile image;
     private String categoryID;
+    private Date dateCreate;
 
     public Dish convertToEntity()
     {
@@ -26,6 +30,10 @@ public class DishDTO {
         dish.setDescription(this.description);
         dish.setPrice(this.price);
         dish.setInStock(this.inStock);
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+        dish.setDateCreate(currentDate);
+
         return dish;
     }
 }
