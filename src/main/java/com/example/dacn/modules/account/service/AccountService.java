@@ -83,6 +83,7 @@ public class AccountService {
             dto.setPoints(0);
             dto.setLifetimePoints(0);
             dto.setTier("Bronze");
+
             Account result= accountRepository.save(dto.toEntity());
             return new ResponseModel("Success",result);
         }
@@ -301,6 +302,7 @@ public class AccountService {
         //Tạm tính 2 điểm mỗi 10000 chiết khấu
         return (int) (orderValue / 10000 * 2);
     }
+
     public ResponseModel updateAccountPoints(String accountId ,double orderTotal){
         Account acc=accountRepository.findById(accountId).orElse(null);
         if(acc!=null)

@@ -79,6 +79,12 @@ public class AccountController {
     {
         return accountService.updateAccount(dto);
     }
+    @PutMapping("/update-account-points")
+    public ResponseModel updateAccountpoints(
+            @RequestParam("accountId") String accountId,@RequestParam("orderTotal") double orderTotal)
+    {
+        return accountService.updateAccountPoints(accountId,orderTotal);
+    }
     @PostMapping("/sign-in")
     public ResponseModel managerSignIn(@ModelAttribute UserDTO userDTO) throws IOException
     {

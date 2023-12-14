@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class OrdersController {
     @Autowired
     private OrdersService ordersService;
+    @GetMapping
+    public ResponseModel getAllOrders()
+    { return ordersService.getAllOrders(); }
     @GetMapping("/{accountId}")
     public ResponseModel getOrderByAccountID(@PathVariable("accountId") String accountId)
     { return ordersService.getOrderByAccountID(accountId); }

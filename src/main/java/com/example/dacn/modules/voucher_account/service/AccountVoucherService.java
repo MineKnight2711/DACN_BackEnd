@@ -32,7 +32,7 @@ public class AccountVoucherService {
         }
         return new ResponseModel("Success",accountVouchers);
     }
-    public ResponseModel createaccounVoucher(AccountVoucherDTO dto)
+    public ResponseModel createAccountVoucher(AccountVoucherDTO dto)
     {
         try
         {
@@ -45,12 +45,17 @@ public class AccountVoucherService {
             Voucher voucher=voucherService.findById(dto.getVoucherId());
             if(voucher==null)
             {
-                return new ResponseModel("AccountNotFound","Không tìm thấy voucher!");
+                return new ResponseModel("VoucherNotFound","Không tìm thấy voucher!");
             }
             if(accountVoucherRepository.findDuplicateAccountVoucher(dto.getAccountId(), dto.getVoucherId()))
             {
-                return new ResponseModel("DuplicateVoucher","Voucher bị trùng vui lòng tăng số lượng!");
+                return new ResponseModel("DuplicatedVoucher","Voucher bị trùng vui lòng tăng số lượng!");
             }
+            if(account.getPoints()<voucher.getPointsRequired())
+            {
+                return new ResponseModel("NotEnoughPoints","Bạn chưa đủ điểm để nhận voucher này!");
+            }
+            account.setPoints(account.getPoints()-voucher.getPointsRequired());
             accountVoucher.setAccount(account);
             accountVoucher.setVoucher(voucher);
             AccountVoucher savedAccountVoucher= accountVoucherRepository.save(accountVoucher);

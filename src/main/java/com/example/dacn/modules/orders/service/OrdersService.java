@@ -30,7 +30,27 @@ public class OrdersService {
     private AccountService accountService;
     @Autowired
     private ModelMapper modelMapper;
+    public ResponseModel getAllOrders()
+    {
+        List<OrderDetailsDTO> resultOrders = new ArrayList<>();
+        List<Orders> ordersList = ordersRepository.findAll();
 
+        for (Orders order : ordersList) {
+
+
+            List<OrderDetail> orderDetailList = ordersRepository.findOrdersDetailByOrderID(order.getOrderID());
+
+            OrderDetailsDTO orderDetailsDTO=new OrderDetailsDTO();
+            orderDetailsDTO.setOrder(order);
+
+            List<OrderDetailsDTO.DetailsDTO> detailsDTOs = modelMapper.map(orderDetailList, new TypeToken<List<OrderDetailsDTO.DetailsDTO>>() {}.getType());
+
+            orderDetailsDTO.setDetailList(detailsDTOs);
+
+            resultOrders.add(orderDetailsDTO);
+        }
+        return new ResponseModel("Success",resultOrders);
+    }
     public Orders createOrder(String accountID, OrdersDTO ordersDTO) {
         ordersDTO.setOrderID("");
 
