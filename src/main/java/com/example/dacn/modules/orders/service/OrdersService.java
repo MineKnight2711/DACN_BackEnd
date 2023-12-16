@@ -11,6 +11,7 @@ import com.example.dacn.modules.orders.dto.ReviewOrderDTO;
 import com.example.dacn.modules.orders.repository.OrdersRepository;
 
 import com.example.dacn.modules.transaction.OrderStatus;
+import com.example.dacn.modules.voucher.service.VoucherService;
 import com.google.gson.Gson;
 import jakarta.persistence.criteria.Order;
 import org.modelmapper.ModelMapper;
@@ -28,6 +29,8 @@ public class OrdersService {
     private OrdersRepository ordersRepository;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private VoucherService voucherService;
     @Autowired
     private ModelMapper modelMapper;
     public ResponseModel getAllOrders()
@@ -59,6 +62,14 @@ public class OrdersService {
                 return null;
             }
             Orders newOrder=ordersDTO.toEntity();
+            if(!ordersDTO.getVoucherId().isEmpty())
+            {
+                Voucher voucher=voucherService.findById(ordersDTO.getVoucherId());
+                if(voucher!=null)
+                {
+                    newOrder.setVoucher(voucher);
+                }
+            }
             newOrder.setAccount(acc);
             ordersRepository.save(newOrder);
             String newOrderId=ordersRepository.findLatestOrderId();

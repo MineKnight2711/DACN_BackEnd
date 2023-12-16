@@ -81,4 +81,14 @@ public class AccountVoucherService {
         }
     }
 
+    public ResponseModel deleteVoucher(String accountId, String voucherId)
+    {
+        AccountVoucher av=accountVoucherRepository.findAccountVoucher(accountId,voucherId);
+        if(av!=null)
+        {
+            accountVoucherRepository.delete(av);
+            return new ResponseModel("Success","Đã xoá voucher");
+        }
+        return new ResponseModel("Fail","Không thể xoá voucher");
+    }
 }

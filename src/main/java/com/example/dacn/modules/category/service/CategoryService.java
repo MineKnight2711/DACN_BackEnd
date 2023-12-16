@@ -106,14 +106,12 @@ public class CategoryService
         if (!categoryOptional.isEmpty())
         {
             Category existingCategory = categoryOptional.get();
-            if(imageService.deleteExistImage("categoryImage/",existingCategory.getCategoryName()))
+            if(imageService.deleteExistImage("categoryImage/",existingCategory.getCategoryID()))
             {
-                System.out.println("Đã xoá hình"+ existingCategory.getCategoryName());
-                categoryRepository.delete(existingCategory);
-                return new ResponseModel("Success", existingCategory);
+                System.out.println("Đã xoá hình"+ existingCategory.getCategoryID());
             }
-
-            return new ResponseModel("Fail", "Lỗi khi xoá ảnh của danh mục");
+            categoryRepository.delete(existingCategory);
+            return new ResponseModel("Success", existingCategory);
         }
         return new ResponseModel("CategoryNotFound", "Không tìm thấy danh mục");
 

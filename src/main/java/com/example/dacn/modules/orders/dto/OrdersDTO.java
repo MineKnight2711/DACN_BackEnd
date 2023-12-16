@@ -20,6 +20,7 @@ public class OrdersDTO {
 
     private String orderID;
     private String status;
+    private String voucherId;
     private int quantity;
     @JsonProperty("orderDate")
 
