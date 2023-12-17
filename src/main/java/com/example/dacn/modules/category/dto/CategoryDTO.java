@@ -9,7 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @Getter
 @Setter
-public class CategoryDTO {
+public class CategoryDTO
+{
     private String categoryID;
     private MultipartFile image;
     private String categoryName;

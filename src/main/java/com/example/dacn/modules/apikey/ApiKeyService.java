@@ -1,6 +1,5 @@
 package com.example.dacn.modules.apikey;
 
-import com.example.dacn.entity.ApiKey;
 import com.example.dacn.entity.ResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,8 +14,6 @@ public class ApiKeyService {
     @Value("${client.id}")
     private String storedClientId;
     private final BCryptPasswordEncoder passwordEncoder;
-    @Autowired
-    private ApiKeyRepository apiKeyRepository;
 
     public ApiKeyService() {
         this.passwordEncoder = new BCryptPasswordEncoder();

@@ -23,7 +23,7 @@ public class CategoryController {
         return categoryService.findById(categoryID);
     }
     @PostMapping
-    public ResponseModel createCategory( @ModelAttribute CategoryDTO categoryDTO)
+    public ResponseModel createCategory(@ModelAttribute CategoryDTO categoryDTO)
     {
         return categoryService.createCategory(categoryDTO);
     }

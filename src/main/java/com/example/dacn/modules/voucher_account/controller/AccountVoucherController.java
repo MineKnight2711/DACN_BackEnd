@@ -18,6 +18,11 @@ public class AccountVoucherController
     {
         return accountVoucherService.getAccountVoucherByAccountId(accountId);
     }
+    @DeleteMapping
+    public ResponseModel deleteAccountVoucher(@RequestParam("accountId") String accountId,@RequestParam("voucherId") String voucherId)
+    {
+        return accountVoucherService.deleteVoucher(accountId,voucherId);
+    }
     @PostMapping
     public ResponseModel createAccountVoucher(@ModelAttribute AccountVoucherDTO dto)
     {

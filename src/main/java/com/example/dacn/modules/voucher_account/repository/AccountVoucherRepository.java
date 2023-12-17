@@ -16,4 +16,6 @@ public interface AccountVoucherRepository extends JpaRepository<AccountVoucher, 
     boolean findDuplicateAccountVoucher(String accountId,  String voucherId);
     @Query("SELECT av FROM AccountVoucher av WHERE av.account.accountID = :accountId")
     List<AccountVoucher> findAllByAccountId(String accountId);
+    @Query("SELECT av FROM AccountVoucher av WHERE av.account.accountID = :accountId AND av.voucher.voucherID = :voucherId")
+    AccountVoucher findAccountVoucher(String accountId,  String voucherId);
 }

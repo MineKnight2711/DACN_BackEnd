@@ -53,7 +53,7 @@ public class Voucher {
     private List<Account> accounts;
 
     //Quan hệ 1 nhiều tới bảng order
-    @OneToMany(mappedBy = "voucher", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "voucher", cascade = CascadeType.REMOVE)
     @JsonIgnore
     @JsonManagedReference
     private List<Orders> orders;
