@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Data
 @Getter
@@ -22,6 +24,7 @@ public class OrderDetail {
     private Dish dish;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "order_id",nullable = false,insertable=false,updatable=false)
     private Orders order;
     @Column(name = "amount")

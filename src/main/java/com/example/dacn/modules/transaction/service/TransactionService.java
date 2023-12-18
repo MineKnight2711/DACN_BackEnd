@@ -60,7 +60,7 @@ public class TransactionService
             PaymentResponse response= payOSService.getPaymentLink(paymentRequestBody);
             if(response.getCode().equals("231"))
             {
-                return catchTransactionError("OrderCodeExisted");
+                return rollBackTransaction(savedOrder.getOrderID(), savedPaymentDetails.getPaymentDetailsId());
             }
             TransactionResponse transactionResponse=new TransactionResponse();
             transactionResponse.setOrderId(savedOrder.getOrderID());
@@ -73,6 +73,14 @@ public class TransactionService
             ex.printStackTrace();
             return catchTransactionError("");
         }
+    }
+    private ResponseModel rollBackTransaction(String orderId,Long paymentDetailsId)
+    {
+        if(orderService.deleteOrder(orderId)&&paymentService.cancelPayment(paymentDetailsId))
+        {
+            return catchTransactionError("TransactionFail") ;
+        }
+        return catchTransactionError("RollBackFail");
     }
     @Transactional
     public ResponseModel performCODTransaction(CODTransactionDTO dto)
@@ -141,6 +149,10 @@ public class TransactionService
         switch (error) {
             case "SaveOrderFail":
                 return new ResponseModel("SaveOrderFail","Lỗi khi lưu đơn hàng!");
+            case "TransactionFail":
+                return new ResponseModel("TransactionFail","Đã tồn tại mã giao dịch trên hệ thống PAYOS");
+            case "RollBackFail":
+                return new ResponseModel("RollBackFail","Huỷ giao dịch thất bại!");
             case "SavePaymentFail":
                 return new ResponseModel("SavePaymentFail","Lỗi khi lưu giao dịch!");
             case "OrderCodeExisted":
