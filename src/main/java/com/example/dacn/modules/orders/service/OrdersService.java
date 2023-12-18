@@ -12,6 +12,7 @@ import com.example.dacn.modules.orders.repository.OrdersRepository;
 
 import com.example.dacn.modules.transaction.OrderStatus;
 import com.example.dacn.modules.voucher.service.VoucherService;
+import com.example.dacn.modules.voucher_account.service.AccountVoucherService;
 import com.google.gson.Gson;
 import jakarta.persistence.criteria.Order;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,8 @@ public class OrdersService {
     private AccountService accountService;
     @Autowired
     private VoucherService voucherService;
+    @Autowired
+    private AccountVoucherService accountVoucherService;
     @Autowired
     private ModelMapper modelMapper;
     public ResponseModel getAllOrders()
@@ -82,6 +85,10 @@ public class OrdersService {
         Orders order=ordersRepository.findById(orderId).orElse(null);
         if(order!=null){
             order.setStatus(OrderStatus.STATUSPAID);
+            if(order.getVoucher()!=null)
+            {
+                accountVoucherService.deleteVoucher(order.getAccount().getAccountID(),order.getVoucher().getVoucherID());
+            }
             List<OrderDetail> detailList=ordersRepository.findOrdersDetailByOrderID(orderId);
             if(!detailList.isEmpty())
             {
@@ -173,6 +180,17 @@ public class OrdersService {
             return new ResponseModel("Success",order);
         }
         return new ResponseModel("Fail","Không tìm thấy đơn hàng");
+    }
+
+    public boolean deleteOrder(String orderId)
+    {
+        Orders order=ordersRepository.findById(orderId).orElse(null);
+        if(order!=null){
+
+            ordersRepository.delete(order);
+            return true;
+        }
+        return false;
     }
 
 //    public ResponseModel updateOrderStatus(ReviewOrderDTO dto)
