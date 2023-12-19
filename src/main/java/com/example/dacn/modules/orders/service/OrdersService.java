@@ -65,7 +65,7 @@ public class OrdersService {
                 return null;
             }
             Orders newOrder=ordersDTO.toEntity();
-            if(!ordersDTO.getVoucherId().isEmpty())
+            if(ordersDTO.getVoucherId()!=null)
             {
                 Voucher voucher=voucherService.findById(ordersDTO.getVoucherId());
                 if(voucher!=null)
