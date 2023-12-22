@@ -1,10 +1,8 @@
 package com.example.dacn.modules.dish.service;
 
-import com.example.dacn.entity.Account;
 import com.example.dacn.entity.Category;
 import com.example.dacn.entity.Dish;
 import com.example.dacn.entity.ResponseModel;
-import com.example.dacn.modules.category.repository.CategoryRepository;
 import com.example.dacn.modules.category.service.CategoryService;
 import com.example.dacn.modules.dish.dto.DishDTO;
 import com.example.dacn.modules.dish.dto.DishFavoriteCountDTO;
@@ -13,8 +11,8 @@ import com.example.dacn.utils.ImageService;
 import jakarta.persistence.Tuple;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -108,7 +106,10 @@ public class DishService {
             return new ResponseModel("Fail", "Xoá món ăn thất bại");
         }
     }
-
+    public ResponseModel searchDishByName(String dishName)
+    {
+        return new ResponseModel("Success",mapTuplesToDTO(dishRepository.searchDishByDishName(dishName, PageRequest.of(0, 10))));//Giới hạn 10 item mỗi query
+    }
     public ResponseModel getAllDishes() {
         List<Dish> dishes = dishRepository.findAll();
         if(!dishes.isEmpty())

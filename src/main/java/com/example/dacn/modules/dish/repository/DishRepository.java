@@ -3,6 +3,7 @@ package com.example.dacn.modules.dish.repository;
 import com.example.dacn.entity.Dish;
 import com.example.dacn.modules.dish.dto.DishFavoriteCountDTO;
 import jakarta.persistence.Tuple;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -20,4 +21,6 @@ public interface DishRepository extends JpaRepository<Dish, String> {
     // ta sử dụng LEFT JOIN giữa bảng Dish và bảng Favorite
     @Query("SELECT d AS dish, COUNT(f) AS favoriteCount FROM Dish d LEFT JOIN Favorite f ON d.dishID = f.dish.dishID GROUP BY d")
     List<Tuple> getAllDishesWithFavoriteAndCount();
+    @Query("SELECT d AS dish, COUNT(f) AS favoriteCount FROM Dish d LEFT JOIN Favorite f ON d.dishID = f.dish.dishID WHERE d.dishName LIKE %:dishName% GROUP BY d")
+    List<Tuple> searchDishByDishName(String dishName, Pageable pageable);
 }
