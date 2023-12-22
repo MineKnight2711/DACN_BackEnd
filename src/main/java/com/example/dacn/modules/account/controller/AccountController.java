@@ -6,14 +6,9 @@ import com.example.dacn.modules.account.dto.UserDTO;
 import com.example.dacn.modules.account.service.AccountService;
 import com.example.dacn.modules.account.service.VertificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-
+import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 
 @RestController
@@ -24,14 +19,16 @@ public class AccountController {
     private AccountService accountService;
     @Autowired
     private VertificationService vertificationService;
-
-    private JavaMailSender mailSender;
     @PostMapping
     public ResponseModel createAccount(@ModelAttribute AccountDTO dto)
     {
         return accountService.createAccount(dto);
     }
-
+    @PostMapping("/create-staff")
+    public ResponseModel createNewStaff(@ModelAttribute AccountDTO dto)
+    {
+        return accountService.createNewStaff(dto);
+    }
     @PostMapping("/create-user")
     public ResponseModel sendVerificationEmail(@ModelAttribute UserDTO dto) {
         ResponseModel result = vertificationService.createEmailVerificationLink(dto.getEmail(), dto.getPassword());
@@ -41,16 +38,37 @@ public class AccountController {
         }
         return new ResponseModel("Fail","Không thể tạo tài khoản mới, có lỗi xảy ra");
     }
+    @PutMapping("/change-email/{accountId}")
+    public ResponseModel updateEmail(@PathVariable("accountId") String accountId,@RequestParam("email") String email, @RequestParam("newEmail") String newEmail)
+    {
+        ResponseModel response=vertificationService.updateUserEmail(accountId,email, newEmail);
+        if(response.getMessage().equals("Success"))
+        {
+            return vertificationService.sendVerificationLinkToEmail(response.getData().toString(),newEmail);
+        }
+        return new ResponseModel("Fail","Có lỗi xảy ra");
+    }
+    @GetMapping("/verifiedEmail/{accountId}")
+    public ModelAndView verifyEmailRedirect(@PathVariable("accountId") String accountId,@RequestParam("newEmail") String newEmail) {
+
+        ModelAndView model = new ModelAndView();
+        model.setViewName("email-verified");
+        model.addObject("email", newEmail);
+        accountService.changeEmail(accountId,newEmail);
+        return model;
+    }
+
+
     @GetMapping("/{accountId}")
     public ResponseModel getAccountById(@PathVariable String accountId)
     {
         return accountService.getAccountById(accountId);
     }
-    @PutMapping("/{email}")
+
+    @PutMapping("change-password/{email}")
     public ResponseModel changePassword(
             @PathVariable("email") String email,
-            @RequestParam("newPassword") String newPassword
-    )
+            @RequestParam("newPassword") String newPassword)
     {
         return accountService.changePassword(email, newPassword);
     }
@@ -61,7 +79,7 @@ public class AccountController {
     {
         return accountService.sendPasswordResetLink(email);
     }
-    @GetMapping("/login-by-email/{email}")
+    @GetMapping("/get-by-email/{email}")
     public ResponseModel login(@PathVariable String email)
     {
         return accountService.login(email);
@@ -69,7 +87,8 @@ public class AccountController {
     @PutMapping("/update-image/{accountId}")
     public ResponseModel changeImage(
             @PathVariable("accountId") String accountId,
-            @RequestParam("image") MultipartFile image) {
+            @RequestParam("image") MultipartFile image)
+    {
         System.out.println("accountId"+accountId);
         return accountService.changeImage(accountId, image);
     }
@@ -86,8 +105,9 @@ public class AccountController {
         return accountService.updateAccountPoints(accountId,orderTotal);
     }
     @PostMapping("/sign-in")
-    public ResponseModel managerSignIn(@ModelAttribute UserDTO userDTO) throws IOException
+    public ResponseModel signIn(@ModelAttribute UserDTO userDTO) throws IOException
     {
+        System.out.println(userDTO);
         return accountService.signInUser(userDTO);
     }
     @PostMapping("/get-user-info")

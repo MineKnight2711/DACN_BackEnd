@@ -94,7 +94,38 @@ public class AccountService {
         }
 
     }
+    public ResponseModel createNewStaff(AccountDTO dto)
+    {
+        dto.setAccountID("");
+        if(dto.getBirthday()!=null)
+        {
+            dto.setBirthday(DataConvert.parseBirthday(dto.getBirthday()));
+        }
+        else
+        {
+            dto.setBirthday(null);
+        }
+        try
+        {
+            if(accountRepository.findByEmail(dto.getEmail())!=null)
+            {
+                return new ResponseModel("EmailAlreadyExist",dto.getEmail());
+            }
+            dto.setImageUrl(Constant.DEFAULT_AVATAR);
+            dto.setPoints(0);
+            dto.setLifetimePoints(0);
+            dto.setTier("Bronze");
 
+            Account result= accountRepository.save(dto.toEntity());
+            return new ResponseModel("Success",result);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+            return new ResponseModel("SomethingWrong",null);
+        }
+
+    }
 //    private boolean validatePassword(String passwordHashed,String passwordInput)
 //    {
 //        return BCrypt.checkpw(passwordInput,passwordHashed);
@@ -127,6 +158,17 @@ public class AccountService {
             return new ResponseModel("AccountNotFound",null);
         }
         return new ResponseModel("Success",account);
+    }
+    public ResponseModel changeEmail(String accountId,String newEmail)
+    {
+        Account account= accountRepository.findById(accountId).orElse(null);
+        if(account!=null)
+        {
+            account.setEmail(newEmail);
+            accountRepository.save(account);
+            return new ResponseModel("Success","Cập nhật email thành công");
+        }
+        return new ResponseModel("AccountNotFound","Không tìm thấy tài khoản");
     }
     public ResponseModel lookupUserByEmail(String email, String idToken) {
         try {

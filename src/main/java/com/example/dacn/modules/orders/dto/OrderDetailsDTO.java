@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 public class OrderDetailsDTO {
     private Orders order;
+    private String paymentMethod;
     private List<DetailsDTO> detailList;
     @Data
     @Getter

@@ -29,8 +29,8 @@ class ApiKeyAuthFilter extends OncePerRequestFilter {
         String clientId = request.getHeader("X-Client-Id");
         String apiKey = request.getHeader("X-Api-Key");
 
-        if (request.getRequestURI().equals("/api/transaction")) {
-            if (clientId == null || apiKey == null || !apiKeyService.isApiValid(clientId, apiKey)) {
+        if (request.getRequestURI().contains("/api/transaction")) {
+            if (clientId == null || apiKey == null || !apiKeyService.isApiValid(apiKey, clientId)) {
                 sendErrorResponse(response);
                 return;
             }
