@@ -49,4 +49,9 @@ public class DishController {
     {
         return dishService.getByCategoryId(categoryID);
     }
+    @GetMapping("/search-dish-by-name/{dishName}")
+    public ResponseModel searchDishByName(@PathVariable("dishName") String dishName)
+    {
+        return dishService.searchDishByName(dishName);
+    }
 }
