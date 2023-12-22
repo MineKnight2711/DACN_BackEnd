@@ -39,9 +39,19 @@ public class OrdersController {
     {
        return ordersService.reviewOrder(dto);
     }
-//    @PutMapping("/update-order-status")
-//    public ResponseModel updateOrderStatus(@ModelAttribute ReviewOrderDTO dto)
-//    {
-//        return ordersService.updateOrderStatus(dto);
-//    }
+    @DeleteMapping("/{orderId}")
+    public ResponseModel deleteOrder(@PathVariable("orderId") String orderId)
+    {
+        if(ordersService.deleteOrder(orderId))
+        {
+            return new ResponseModel("Success","Đã xoá đơn hàng");
+        }
+        return new ResponseModel("Fail","Xoá đơn hàng thất bại");
+    }
+    @PutMapping("/update-order-status")
+    public ResponseModel updateOrderStatus(@RequestParam("orderId") String orderId,
+                                           @RequestParam("orderStatus") String orderStatus)
+    {
+        return ordersService.updateOrderStatus(orderId,orderStatus);
+    }
 }

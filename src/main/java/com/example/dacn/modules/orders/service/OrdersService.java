@@ -10,6 +10,7 @@ import com.example.dacn.modules.orders.dto.OrdersDTO;
 import com.example.dacn.modules.orders.dto.ReviewOrderDTO;
 import com.example.dacn.modules.orders.repository.OrdersRepository;
 
+import com.example.dacn.modules.payment.service.PaymentService;
 import com.example.dacn.modules.transaction.OrderStatus;
 import com.example.dacn.modules.voucher.service.VoucherService;
 import com.example.dacn.modules.voucher_account.service.AccountVoucherService;
@@ -35,6 +36,8 @@ public class OrdersService {
     @Autowired
     private AccountVoucherService accountVoucherService;
     @Autowired
+    private PaymentService paymentService;
+    @Autowired
     private ModelMapper modelMapper;
     public ResponseModel getAllOrders()
     {
@@ -45,10 +48,10 @@ public class OrdersService {
 
 
             List<OrderDetail> orderDetailList = ordersRepository.findOrdersDetailByOrderID(order.getOrderID());
-
+            PaymentDetails paymentDetails=paymentService.getPaymentDetailsByOrderId(order.getOrderID());
             OrderDetailsDTO orderDetailsDTO=new OrderDetailsDTO();
             orderDetailsDTO.setOrder(order);
-
+            orderDetailsDTO.setPaymentMethod(paymentDetails.getPayment().getPaymentMethod());
             List<OrderDetailsDTO.DetailsDTO> detailsDTOs = modelMapper.map(orderDetailList, new TypeToken<List<OrderDetailsDTO.DetailsDTO>>() {}.getType());
 
             orderDetailsDTO.setDetailList(detailsDTOs);
@@ -65,7 +68,7 @@ public class OrdersService {
                 return null;
             }
             Orders newOrder=ordersDTO.toEntity();
-            if(!ordersDTO.getVoucherId().isEmpty())
+            if(ordersDTO.getVoucherId()!=null)
             {
                 Voucher voucher=voucherService.findById(ordersDTO.getVoucherId());
                 if(voucher!=null)
@@ -124,10 +127,10 @@ public class OrdersService {
 
 
             List<OrderDetail> orderDetailList = ordersRepository.findOrdersDetailByOrderID(order.getOrderID());
-
+            PaymentDetails paymentDetails=paymentService.getPaymentDetailsByOrderId(order.getOrderID());
             OrderDetailsDTO orderDetailsDTO=new OrderDetailsDTO();
             orderDetailsDTO.setOrder(order);
-
+            orderDetailsDTO.setPaymentMethod(paymentDetails.getPayment().getPaymentMethod());
             List<OrderDetailsDTO.DetailsDTO> detailsDTOs = modelMapper.map(orderDetailList, new TypeToken<List<OrderDetailsDTO.DetailsDTO>>() {}.getType());
 
             orderDetailsDTO.setDetailList(detailsDTOs);
@@ -193,8 +196,14 @@ public class OrdersService {
         return false;
     }
 
-//    public ResponseModel updateOrderStatus(ReviewOrderDTO dto)
-//    {
-//
-//    }
+    public ResponseModel updateOrderStatus(String orderId ,String status)
+    {
+        Orders order=ordersRepository.findById(orderId).orElse(null);
+        if(order!=null){
+            order.setStatus(status);
+            ordersRepository.save(order);
+            return new ResponseModel("Success","Cập nhật đơn hàng thành công");
+        }
+        return new ResponseModel("Fail","Cập nhật đơn hàng thất bại");
+    }
 }

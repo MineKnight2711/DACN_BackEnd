@@ -40,7 +40,7 @@ public class Orders {
     @Column(name = "dateFeedBack")
     private Date dateFeedBack;
     // quan he nhieu nhieu toi bang dish
-    @ManyToMany
+    @ManyToMany( cascade = CascadeType.ALL)
     @JoinTable(name = "OrderDetail",
             joinColumns = @JoinColumn(name = "dish_id"),
             inverseJoinColumns = @JoinColumn(name = "order_id"))

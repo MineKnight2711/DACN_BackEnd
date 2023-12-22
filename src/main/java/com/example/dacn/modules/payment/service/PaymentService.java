@@ -4,7 +4,6 @@ import com.example.dacn.entity.Orders;
 import com.example.dacn.entity.Payment;
 import com.example.dacn.entity.PaymentDetails;
 import com.example.dacn.entity.ResponseModel;
-import com.example.dacn.modules.payment.dto.PaymentDTO;
 import com.example.dacn.modules.payment.dto.PaymentDetailsDTO;
 import com.example.dacn.modules.payment.repository.PaymentDetailsRepository;
 import com.example.dacn.modules.payment.repository.PaymentRepository;
@@ -19,7 +18,15 @@ public class PaymentService
     private PaymentRepository paymentRepository;
     @Autowired
     private PaymentDetailsRepository paymentDetailsRepository;
-
+    public PaymentDetails getPaymentDetailsByOrderId(String orderId)
+    {
+        PaymentDetails paymentDetails=paymentDetailsRepository.getPaymentDetailsByOrderId(orderId);
+        if(paymentDetails!=null)
+        {
+           return paymentDetails;
+        }
+        return null;
+    }
     public PaymentDetails savePayment(Orders order, PaymentDetailsDTO dto)
     {
         Payment payment=paymentRepository.findById(dto.getPaymentId()).orElse(null);
@@ -39,7 +46,8 @@ public class PaymentService
         PaymentDetails details=paymentDetailsRepository.findById(detailsId).orElse(null);
         if(details!=null)
         {
-            paymentDetailsRepository.delete(details);
+            details.setStatus(OrderStatus.STATUSCANCEL);
+            paymentDetailsRepository.save(details);
             return true;
         }
         return false;

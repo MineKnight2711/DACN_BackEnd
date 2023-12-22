@@ -65,4 +65,16 @@ public class TransactionController
         }
         return new ResponseModel("401","Bạn không có quyền sử dụng API này!");
     }
+    @DeleteMapping
+    public ResponseModel rollBackTransaction(@RequestHeader(name="X-Api-Key") String apiKey,
+                                             @RequestHeader(name="X-Client-Id") String clientId,
+                                             @RequestParam("orderId") String orderId,
+                                             @RequestParam("paymentDetailsId") Long paymentDetailsId)
+    {
+        if(apiKeyService.isApiValid(apiKey,clientId))
+        {
+            return transactionService.rollBackTransaction(orderId,paymentDetailsId);
+        }
+        return new ResponseModel("401","Bạn không có quyền sử dụng API này!");
+    }
 }

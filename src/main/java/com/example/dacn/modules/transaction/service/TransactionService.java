@@ -74,7 +74,7 @@ public class TransactionService
             return catchTransactionError("");
         }
     }
-    private ResponseModel rollBackTransaction(String orderId,Long paymentDetailsId)
+    public ResponseModel rollBackTransaction(String orderId,Long paymentDetailsId)
     {
         if(orderService.deleteOrder(orderId)&&paymentService.cancelPayment(paymentDetailsId))
         {
