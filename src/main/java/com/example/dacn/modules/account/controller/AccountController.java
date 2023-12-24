@@ -5,6 +5,7 @@ import com.example.dacn.modules.account.dto.AccountDTO;
 import com.example.dacn.modules.account.dto.UserDTO;
 import com.example.dacn.modules.account.service.AccountService;
 import com.example.dacn.modules.account.service.VertificationService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,9 +26,9 @@ public class AccountController {
         return accountService.createAccount(dto);
     }
     @PostMapping("/create-staff")
-    public ResponseModel createNewStaff(@ModelAttribute AccountDTO dto)
+    public ResponseModel createNewStaff(@RequestParam("image") MultipartFile image, @ModelAttribute AccountDTO dto)
     {
-        return accountService.createNewStaff(dto);
+        return accountService.createNewStaff(image,dto);
     }
     @PostMapping("/create-user")
     public ResponseModel sendVerificationEmail(@ModelAttribute UserDTO dto) {
@@ -64,7 +65,11 @@ public class AccountController {
     {
         return accountService.getAccountById(accountId);
     }
-
+    @GetMapping("/get-all-admin/{role}")
+    public ResponseModel getAllAdmin(@PathVariable("role") String role)
+    {
+        return accountService.getAllAdminAccount(role);
+    }
     @PutMapping("change-password/{email}")
     public ResponseModel changePassword(
             @PathVariable("email") String email,
@@ -107,7 +112,6 @@ public class AccountController {
     @PostMapping("/sign-in")
     public ResponseModel signIn(@ModelAttribute UserDTO userDTO) throws IOException
     {
-        System.out.println(userDTO);
         return accountService.signInUser(userDTO);
     }
     @PostMapping("/get-user-info")

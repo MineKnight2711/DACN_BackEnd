@@ -61,5 +61,11 @@ public class Orders {
     @JsonManagedReference
     private List<PaymentDetails> paymentDetails;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "DeliveryDetails",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "delivery_id"))
+    @JsonIgnore
+    private List<Delivery> deliveries;
 
 }

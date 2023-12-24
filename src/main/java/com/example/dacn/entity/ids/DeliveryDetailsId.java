@@ -12,11 +12,10 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Embeddable
-public class OrderDetailsId implements Serializable
+public class DeliveryDetailsId implements Serializable
 {
-    @Column(name = "dish_id")
-    private String dish_id;
+    @Column(name = "delivery_id")
+    private String delivery_id;
     @Column(name = "order_id")
     private String order_id;
-
 }

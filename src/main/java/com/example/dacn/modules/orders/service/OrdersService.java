@@ -14,15 +14,14 @@ import com.example.dacn.modules.payment.service.PaymentService;
 import com.example.dacn.modules.transaction.OrderStatus;
 import com.example.dacn.modules.voucher.service.VoucherService;
 import com.example.dacn.modules.voucher_account.service.AccountVoucherService;
-import com.google.gson.Gson;
-import jakarta.persistence.criteria.Order;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 @Service
 public class OrdersService {
@@ -39,6 +38,15 @@ public class OrdersService {
     private PaymentService paymentService;
     @Autowired
     private ModelMapper modelMapper;
+    public Orders getOrderById(String orderID)
+    {
+        Orders resultOrders=ordersRepository.findById(orderID).orElse(null);
+        if(resultOrders!=null)
+        {
+            return resultOrders;
+        }
+        return null;
+    }
     public ResponseModel getAllOrders()
     {
         List<OrderDetailsDTO> resultOrders = new ArrayList<>();

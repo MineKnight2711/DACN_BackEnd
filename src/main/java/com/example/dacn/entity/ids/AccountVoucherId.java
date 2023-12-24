@@ -12,7 +12,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Embeddable
-public class AccountVoucherId implements Serializable {
+public class AccountVoucherId implements Serializable
+{
     @Column(name = "account_id")
     private String account_id;
     @Column(name = "voucher_id")

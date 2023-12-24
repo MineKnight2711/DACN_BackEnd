@@ -34,6 +34,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -60,7 +61,72 @@ public class AccountService {
         return new ResponseModel("Success",account);
 
     }
+    public ResponseModel getAllAdminAccount(String role)
+    {
+        List<Account> account=accountRepository.getAllAdmin(role);
+        if(account!=null)
+        {
+            return new ResponseModel("Success",account);
 
+        }
+        return new ResponseModel("NoAccount",null);
+    }
+    public ResponseModel createNewStaff(MultipartFile image,AccountDTO dto)
+    {
+        dto.setAccountID("");
+        if(dto.getBirthday()!=null)
+        {
+            dto.setBirthday(DataConvert.parseBirthday(dto.getBirthday()));
+        }
+        else
+        {
+            dto.setBirthday(null);
+        }
+
+            if(accountRepository.findByEmail(dto.getEmail())!=null)
+            {
+                return new ResponseModel("EmailAlreadyExist",dto.getEmail());
+            }
+
+            dto.setImageUrl(Constant.DEFAULT_AVATAR);
+            dto.setRole("Admin");
+            dto.setPoints(0);
+            dto.setLifetimePoints(0);
+            dto.setTier("Bronze");
+            try
+            {
+                try
+                {
+                    UserRecord user = firebaseAuth.getUserByEmail(dto.getEmail());
+                    if (user != null) {
+                        return new ResponseModel("Success", "User already exists");
+                    }
+                }
+                catch (FirebaseAuthException e)
+                {
+                    System.out.println("Chưa có email này trên hệ thống firebase");
+                }
+
+                UserRecord.CreateRequest userCreate=new UserRecord.CreateRequest().setEmail(dto.getEmail())
+                        .setPassword(dto.getPassword());
+                firebaseAuth.createUser(userCreate);
+                Account newAccount=dto.toEntity();
+                accountRepository.save(newAccount);
+                String newAccountId=accountRepository.findLatestAccountId();
+                String imageUrl = imageService.uploadImage(image,"staffImage/",newAccountId);
+                newAccount.setAccountID(newAccountId);
+                newAccount.setImageUrl(imageUrl);
+                Account acc= accountRepository.save(newAccount);
+                return new ResponseModel("Success",acc);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                return new ResponseModel("SomethingWrong","Có lỗi xảy ra");
+            }
+
+
+    }
     public ResponseModel createAccount(AccountDTO dto)
     {
         dto.setAccountID("");
@@ -94,38 +160,7 @@ public class AccountService {
         }
 
     }
-    public ResponseModel createNewStaff(AccountDTO dto)
-    {
-        dto.setAccountID("");
-        if(dto.getBirthday()!=null)
-        {
-            dto.setBirthday(DataConvert.parseBirthday(dto.getBirthday()));
-        }
-        else
-        {
-            dto.setBirthday(null);
-        }
-        try
-        {
-            if(accountRepository.findByEmail(dto.getEmail())!=null)
-            {
-                return new ResponseModel("EmailAlreadyExist",dto.getEmail());
-            }
-            dto.setImageUrl(Constant.DEFAULT_AVATAR);
-            dto.setPoints(0);
-            dto.setLifetimePoints(0);
-            dto.setTier("Bronze");
 
-            Account result= accountRepository.save(dto.toEntity());
-            return new ResponseModel("Success",result);
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.toString());
-            return new ResponseModel("SomethingWrong",null);
-        }
-
-    }
 //    private boolean validatePassword(String passwordHashed,String passwordInput)
 //    {
 //        return BCrypt.checkpw(passwordInput,passwordHashed);
