@@ -16,6 +16,11 @@ public class DeliveryController
     {
         return deliveryService.getDeliveryByAccountId(accountId);
     }
+    @GetMapping("/check-order/{orderId}")
+    public ResponseModel checkOrder(@PathVariable("orderId") String orderId)
+    {
+        return deliveryService.checkOrder(orderId);
+    }
     @PostMapping
     public ResponseModel acceptedOrder(@RequestParam("orderId") String orderId,
                                        @RequestParam("accountId") String accountId)

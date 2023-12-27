@@ -65,10 +65,15 @@ public class AccountController {
     {
         return accountService.getAccountById(accountId);
     }
-    @GetMapping("/get-all-admin/{role}")
+    @GetMapping("/get-all-staff")
+    public ResponseModel getAllAdmin()
+    {
+        return accountService.getAllStaff();
+    }
+    @GetMapping("/get-all-deliver/{role}")
     public ResponseModel getAllAdmin(@PathVariable("role") String role)
     {
-        return accountService.getAllAdminAccount(role);
+        return accountService.getAllDeliver(role);
     }
     @PutMapping("change-password/{email}")
     public ResponseModel changePassword(

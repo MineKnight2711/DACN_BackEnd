@@ -15,8 +15,8 @@ public interface AccountRepository extends JpaRepository<Account, String>
     String findLatestAccountId();
     @Query("SELECT a FROM Account a WHERE a.email = :email")
     Account findByEmail(@Param("email") String email);
-    @Query("SELECT a FROM Account a WHERE a.role = :role")
-    List<Account> getAllAdmin(String role);
+    @Query("SELECT a FROM Account a WHERE a.role != :role")
+    List<Account> getAllStaff(String role);
     @Transactional
     @Modifying
     @Query("UPDATE Account a SET " +
@@ -24,5 +24,6 @@ public interface AccountRepository extends JpaRepository<Account, String>
             "a.lifetimePoints = COALESCE(a.lifetimePoints, 0) + :points " +
             "WHERE a.accountID = :accountId")
     int addPointsToAccount( String accountId, int points);
-
+    @Query("SELECT a FROM Account a WHERE a.role = :role")
+    List<Account> getAllDeliver(String role);
 }

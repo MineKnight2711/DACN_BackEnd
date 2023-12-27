@@ -12,14 +12,10 @@ import com.example.dacn.utils.DataConvert;
 
 
 import com.example.dacn.utils.ImageService;
-import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.zaxxer.hikari.util.ClockSource;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -27,16 +23,11 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
 
 
 @Service
@@ -61,9 +52,19 @@ public class AccountService {
         return new ResponseModel("Success",account);
 
     }
-    public ResponseModel getAllAdminAccount(String role)
+    public ResponseModel getAllStaff()
     {
-        List<Account> account=accountRepository.getAllAdmin(role);
+        List<Account> account=accountRepository.getAllStaff("User");
+        if(account!=null)
+        {
+            return new ResponseModel("Success",account);
+
+        }
+        return new ResponseModel("NoAccount",null);
+    }
+    public ResponseModel getAllDeliver(String role)
+    {
+        List<Account> account=accountRepository.getAllDeliver(role);
         if(account!=null)
         {
             return new ResponseModel("Success",account);
@@ -89,7 +90,6 @@ public class AccountService {
             }
 
             dto.setImageUrl(Constant.DEFAULT_AVATAR);
-            dto.setRole("Admin");
             dto.setPoints(0);
             dto.setLifetimePoints(0);
             dto.setTier("Bronze");
@@ -108,7 +108,7 @@ public class AccountService {
                 }
 
                 UserRecord.CreateRequest userCreate=new UserRecord.CreateRequest().setEmail(dto.getEmail())
-                        .setPassword(dto.getPassword());
+                        .setPassword(dto.getPassword()).setEmailVerified(true);
                 firebaseAuth.createUser(userCreate);
                 Account newAccount=dto.toEntity();
                 accountRepository.save(newAccount);

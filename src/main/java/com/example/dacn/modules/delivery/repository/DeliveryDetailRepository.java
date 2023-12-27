@@ -14,5 +14,7 @@ public interface DeliveryDetailRepository extends JpaRepository<DeliveryDetails,
     @Query("SELECT details FROM DeliveryDetails details WHERE details.order.orderID=:orderId AND details.delivery.account.accountID=:accountId")
     DeliveryDetails findExistsDelivery(String orderId, String accountId);
     @Query("SELECT details FROM DeliveryDetails details WHERE details.delivery.deliveryId=:deliveryId")
-    List<DeliveryDetails> findByDeliveryId(String deliveryId);
+    DeliveryDetails findByDeliveryId(String deliveryId);
+    @Query("SELECT details FROM DeliveryDetails details WHERE details.order.orderID=:orderId")
+    DeliveryDetails findByOrderId(String orderId);
 }

@@ -16,7 +16,6 @@ public class DeliveryDTO
     private String deliveryId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateAccepted;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateDelivered;
 }
