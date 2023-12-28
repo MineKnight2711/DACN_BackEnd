@@ -135,6 +135,32 @@ public class DishService {
         }
         return dish.get();
     }
+    public Dish checkInstock(String dishId,int usedInStock)
+    {
+        Dish dish=dishRepository.findById(dishId).orElse(null);
+        if(dish!=null)
+        {
+            if(dish.getInStock()<usedInStock)
+            {
+                return dish;
+            }
+            return null;
+        }
+        return null;
+    }
+    public ResponseModel updateInstock(String dishId,int usedInStock)
+    {
+        Dish dish=dishRepository.findById(dishId).orElse(null);
+        if(usedInStock>dish.getInStock())
+        {
+            return new ResponseModel("NotEnoughInStock",dish);
+        }
+        int newInStock=dish.getInStock()-usedInStock;
+        dish.setInStock(newInStock);
+        dishRepository.save(dish);
+        return new ResponseModel("Success",null);
+    }
+
     List<DishFavoriteCountDTO> mapTuplesToDTO(List<Tuple> tuples) {
         return tuples.stream().map(tuple -> {
             DishFavoriteCountDTO dto = new DishFavoriteCountDTO();

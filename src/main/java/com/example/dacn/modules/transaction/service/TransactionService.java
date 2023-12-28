@@ -1,9 +1,12 @@
 package com.example.dacn.modules.transaction.service;
 
+import com.example.dacn.entity.Dish;
 import com.example.dacn.entity.Orders;
 import com.example.dacn.entity.PaymentDetails;
 import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.modules.account.service.AccountService;
+import com.example.dacn.modules.dish.service.DishService;
+import com.example.dacn.modules.orders.dto.OrderDishDTO;
 import com.example.dacn.modules.orders.service.OrderDetailsService;
 import com.example.dacn.modules.orders.service.OrdersService;
 import com.example.dacn.modules.payment.service.PaymentService;
@@ -17,6 +20,9 @@ import com.example.dacn.modules.transaction.dto.TransactionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TransactionService
@@ -33,6 +39,8 @@ public class TransactionService
     private PaymentService paymentService;
     @Autowired
     private PayOSService payOSService;
+    @Autowired
+    private DishService dishService;
     @Transactional
     public ResponseModel performVietQRTransaction(VietQRTransactionDTO dto) {
         try
@@ -43,6 +51,14 @@ public class TransactionService
             if(savedOrder==null)
             {
                 return catchTransactionError("SaveOrderFail");
+            }
+            for(OrderDishDTO dish :dto.getOrdersDTO().getDishes())
+            {
+                ResponseModel response=dishService.updateInstock(dish.getDishId(), dish.getQuantity());
+                if(!response.getMessage().equals("Success"))
+                {
+                    return response;
+                }
             }
             detailService.saveOrderDetails(savedOrder,dto.getOrdersDTO().getDishes());
             dto.getPaymentDetailsDTO().setStatus(OrderStatus.STATUSPENDING);
@@ -93,6 +109,16 @@ public class TransactionService
             if(savedOrder==null)
             {
                 return catchTransactionError("SaveOrderFail");
+            }
+            for(OrderDishDTO dish :dto.getOrdersDTO().getDishes())
+            {
+
+                ResponseModel response=dishService.updateInstock(dish.getDishId(), dish.getQuantity());
+                if(!response.getMessage().equals("Success"))
+                {
+                    List<Dish> exceededQuantityList=new ArrayList<>();
+                    return response;
+                }
             }
             detailService.saveOrderDetails(savedOrder,dto.getOrdersDTO().getDishes());
             dto.getPaymentDetailsDTO().setStatus(OrderStatus.STATUSPENDING);
@@ -165,4 +191,17 @@ public class TransactionService
     }
 
 
+    public ResponseModel checkInstock(List<OrderDishDTO> dto)
+    {
+        List<Dish> exceededListDish=new ArrayList<>();
+        for(OrderDishDTO dish :dto)
+        {
+            Dish dishResult=dishService.checkInstock(dish.getDishId(), dish.getQuantity());
+            if(dishResult!=null)
+            {
+                exceededListDish.add(dishResult);
+            }
+        }
+        return new ResponseModel("ExceededInstockDishes",exceededListDish);
+    }
 }

@@ -2,12 +2,15 @@ package com.example.dacn.modules.transaction.controller;
 
 import com.example.dacn.entity.ResponseModel;
 import com.example.dacn.modules.apikey.ApiKeyService;
+import com.example.dacn.modules.orders.dto.OrderDishDTO;
 import com.example.dacn.modules.transaction.dto.CODTransactionDTO;
 import com.example.dacn.modules.transaction.service.TransactionService;
 import com.example.dacn.modules.transaction.dto.VietQRTransactionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/transaction")
@@ -18,6 +21,17 @@ public class TransactionController
     private TransactionService transactionService;
     @Autowired
     private ApiKeyService apiKeyService;
+    @PostMapping("/check-instock")
+    public ResponseModel checkInStock(@RequestHeader(name="X-Api-Key") String apiKey,
+                                           @RequestHeader(name="X-Client-Id") String clientId,
+                                           @RequestBody List<OrderDishDTO> dto)
+    {
+        if(apiKeyService.isApiValid(apiKey,clientId))
+        {
+            return transactionService.checkInstock(dto);
+        }
+        return new ResponseModel("401","Bạn không có quyền sử dụng API này!");
+    }
     @PostMapping("/VietQR-PAYOS")
     public ResponseModel vietQRTransaction(@RequestHeader(name="X-Api-Key") String apiKey,
                                            @RequestHeader(name="X-Client-Id") String clientId,

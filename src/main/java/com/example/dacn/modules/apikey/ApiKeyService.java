@@ -42,8 +42,6 @@ public class ApiKeyService {
     {
         if(apiKey.equals(storedApiKey)&&clientId.equals(storedClientId))
         {
-            System.out.println("Api key truyen vao :"+apiKey+"-"+"Client id truyen vao"+clientId);
-            System.out.println("Api key luu tru :"+storedApiKey+"-"+"Client id luu tru"+storedClientId);
             return true;
         }
         return false;
