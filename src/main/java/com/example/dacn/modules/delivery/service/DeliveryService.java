@@ -64,7 +64,7 @@ public class DeliveryService
         }
         return new ResponseModel("OK",null);
     }
-    public ResponseModel acceptOrder(String orderId,String accountId)
+    public ResponseModel asignOrder(String orderId,String accountId)
     {
         try
         {
@@ -118,4 +118,18 @@ public class DeliveryService
 
         deliveryDetailRepository.save(newDeliveryDetails);
     }
+    public ResponseModel completeDelivery(String deliveryId){
+
+        Delivery currentDelivery=deliveryRepository.findById(deliveryId).orElse(null);
+        if(currentDelivery!=null)
+        {
+            Calendar calendar = Calendar.getInstance();
+            Date currentDate = calendar.getTime();
+            currentDelivery.setDateDelivered(currentDate);
+            deliveryRepository.save(currentDelivery);
+            return new ResponseModel("Success","Giao hàng thành công!");
+        }
+        return new ResponseModel("Fail","Có lỗi xảy ra");
+    }
+
 }
