@@ -29,6 +29,10 @@ public class CartService {
             Dish dish= dishService.findById(dto.getDishID());
             if(dish!=null)
             {
+                if(dish.getInStock()<1)
+                {
+                    return new ResponseModel("OutOfStock","Món ăn hết hàng!");
+                }
                 Cart newCartItem=dto.toEntity();
                 newCartItem.setCartID("");
                 newCartItem.setAccount(acc);
