@@ -25,6 +25,11 @@ public class DeliveryController
     public ResponseModel acceptedOrder(@RequestParam("orderId") String orderId,
                                        @RequestParam("accountId") String accountId)
     {
-        return deliveryService.acceptOrder(orderId,accountId);
+        return deliveryService.asignOrder(orderId,accountId);
+    }
+    @PostMapping("/complete-delivery/{deliveryId}")
+    public ResponseModel acceptedOrder(@PathVariable("deliveryId") String deliveryId)
+    {
+        return deliveryService.completeDelivery(deliveryId);
     }
 }
