@@ -75,7 +75,7 @@ public class AccountController {
     {
         return accountService.getAllDeliver(role);
     }
-    @PutMapping("change-password/{email}")
+    @PutMapping("/change-password/{email}")
     public ResponseModel changePassword(
             @PathVariable("email") String email,
             @RequestParam("newPassword") String newPassword)
@@ -101,6 +101,12 @@ public class AccountController {
     {
         System.out.println("accountId"+accountId);
         return accountService.changeImage(accountId, image);
+    }
+    @PutMapping("/update-staff")
+    public ResponseModel updateStaff(
+            @RequestBody AccountDTO dto)
+    {
+        return accountService.updateAccount(dto);
     }
     @PutMapping("/update-account")
     public ResponseModel updateAccount(
