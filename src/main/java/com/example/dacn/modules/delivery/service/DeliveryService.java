@@ -36,7 +36,10 @@ public class DeliveryService
             DeliveryWithDetailsDTO dto=new DeliveryWithDetailsDTO();
             DeliveryDetails deliveryDetails = deliveryDetailRepository.findByDeliveryId(delivery.getDeliveryId());
             DeliveryDetailsDTO detailsDTOs = new DeliveryDetailsDTO();
-            detailsDTOs.setOrder(deliveryDetails.getOrder());
+            if(deliveryDetails!=null)
+            {
+                detailsDTOs.setOrder(deliveryDetails.getOrder());
+            }
             dto.setDelivery(delivery);
             dto.setDetails(detailsDTOs);
 
