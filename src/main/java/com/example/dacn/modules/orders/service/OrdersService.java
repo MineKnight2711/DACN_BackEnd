@@ -62,7 +62,12 @@ public class OrdersService {
             PaymentDetails paymentDetails=paymentService.getPaymentDetailsByOrderId(order.getOrderID());
             OrderDetailsDTO orderDetailsDTO=new OrderDetailsDTO();
             orderDetailsDTO.setOrder(order);
-            orderDetailsDTO.setPaymentMethod(paymentDetails.getPayment().getPaymentMethod());
+            if(paymentDetails!=null){
+                orderDetailsDTO.setPaymentMethod(paymentDetails.getPayment().getPaymentMethod());
+            }
+            else{
+                orderDetailsDTO.setPaymentMethod("COD");
+            }
             List<OrderDetailsDTO.DetailsDTO> detailsDTOs = modelMapper.map(orderDetailList, new TypeToken<List<OrderDetailsDTO.DetailsDTO>>() {}.getType());
 
             orderDetailsDTO.setDetailList(detailsDTOs);

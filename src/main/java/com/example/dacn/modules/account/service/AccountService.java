@@ -50,7 +50,6 @@ public class AccountService {
             return new ResponseModel("NoAccount",null);
         }
         return new ResponseModel("Success",account);
-
     }
     public ResponseModel getAllStaff()
     {
@@ -364,9 +363,7 @@ public class AccountService {
             dto.setEmail(acc.getEmail());
             dto.setGender(acc.getGender());
             dto.setImageUrl(acc.getImageUrl());
-//            dto.setBirthday(DataConvert.parseBirthday(dto.getBirthday()));
             acc=dto.toEntity();
-
             Account updatedAccount=accountRepository.save(acc);
             return new ResponseModel("Success",updatedAccount);
         }
